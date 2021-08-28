@@ -1,0 +1,325 @@
+{% extends 'main.html' %}
+
+{% block sidebar %}
+{% include 'include/sidebar.html' with active='trades' %}
+{% endblock sidebar %}
+
+{% block header %}
+{% include 'include/header.html' %}
+{% endblock header %}
+
+{% block content %}
+
+<div id="NEW_TRADE" class="overflow-y-auto flex">
+
+
+    <div class="overflow-y-auto flex bg-color-dark shadow ml-4 mb-4 mr-2 p-4 border-2 border-gray-700 border-opacity-20 rounded-lg">
+      {% include "include/tradeForm.html" with btn='Update'%}
+    </div>
+
+
+    {% comment %} <div id="All_TRADE" class="flex-1 text-gray-200 bg-color-dark shadow ml-2 mr-4 mb-4 border-2 border-gray-700 border-opacity-20 rounded-lg py-14"> {% endcomment %}
+
+        <div class="flex flex-col flex-1">
+            <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
+                <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                    <div class="shadow overflow-hidden border-b border-gray-900 ">
+                        <table class="min-w-full divide-y divide-gray-600">
+                            <thead class="bg-gray-700">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                        Symbol
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                        Date and Time
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                        Price
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                        Side
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                        Size
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                        Leverage
+                                    </th>
+                                    <th scope="col" class="relative px-6 py-3">
+                                        <span class="sr-only">Edit</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-color-dark divide-y divide-gray-700 divide-opacity-40">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-500">
+                                            {{trade.symbol}}
+                                        </div>
+                                    </td>
+                                    
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <div class="text-sm text-gray-500"> {{trade.date}}</div>
+                                        <div class="text-sm text-gray-500"> {{trade.time}}</div>
+                                    </td>
+                                    
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <div class="text-sm text-gray-500"> {{trade.price}} </div>
+                                    </td>
+                                    
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {% if trade.side == 'Long' %}
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-300 text-green-800">
+                                            {{trade.side}}
+                                        </span>
+                                        {% else %}
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-300 text-green-800">
+                                            {{trade.side}}
+                                        </span>
+                                        {% endif %}
+
+                                    </td>
+                                    
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                        <div class="text-sm text-gray-500"> {{trade.size}} </div>
+                                    </td>
+                                    
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                        <div class="text-sm text-gray-500"> {{trade.leverage}} </div>
+                                    </td>
+
+                                    <td class="flex items-center justify-center px-6 py-6 whitespace-nowrap text-right text-sm font-medium">
+                                        <a class=" mx-3" href="{% url 'delete_trade' trade.id %}">
+                                          <svg class="text-gray-600 hover:text-red-600 stroke-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4c4c4c" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                        </a>
+                                        <a class="mx-3" href="{% url 'update_trade' trade.id %}">
+                                          <svg class="text-gray-600 hover:text-indigo-600 stroke-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4c4c4c" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                                        </a>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    {% comment %} </div> {% endcomment %}
+</div>
+
+
+
+
+<!-- <div id="-HARMONIC_PATTERN_CATERGORY">
+          <div>
+            <label for="Harmonic_Patterns" class="w-72 flex items-center justify-between my-2 text-gray-300 bg-gray-800 p-4 rounded-lg cursor-pointer">Harmonic Patterns</label>
+            <input id="Harmonic_Patterns" name="Harmonic_Patterns" type="checkbox">
+          </div>
+          <div>
+            <label for="ABCD" class="text-gray-300">AB=CD</label>
+            <input id="ABCD" name="ABCD" type="checkbox">
+          </div>
+          <div>
+            <label for="Three_Drives" class="text-gray-300">Three Drives</label>
+            <input id="Three_Drives" name="Three_Drives" type="checkbox">
+          </div>
+          <div>
+            <label for="Gartley" class="text-gray-300">Gartley</label>
+            <input id="Gartley" name="Gartley" type="checkbox">
+          </div>
+          <div>
+            <label for="Bat" class="text-gray-300">Bat</label>
+            <input id="Bat" name="Bat" type="checkbox">
+          </div>
+          <div>
+            <label for="Butterfly" class="text-gray-300">Butterfly</label>
+            <input id="Butterfly" name="Butterfly" type="checkbox">
+          </div>
+          <div>
+            <label for="Crab" class="text-gray-300">Crab</label>
+            <input id="Crab" name="Crab" type="checkbox">
+          </div>
+          <div>
+            <label for="Cypher" class="text-gray-300">Cypher</label>
+            <input id="Cypher" name="Cypher" type="checkbox">
+          </div>
+          <div>
+            <label for="5_0" class="text-gray-300">5-0</label>
+            <input id="5_0" name="5_0" type="checkbox">
+          </div>
+          <div>
+            <label for="Shark" class="text-gray-300">Shark</label>
+            <input id="Shark" name="Shark" type="checkbox">
+          </div>
+        </div>
+
+          <div id="-CHART_PATTERNS_CATEGORY">
+          <div>
+            <label for="Chart_Patterns" class="text-gray-300">Chart Patterns</label>
+            <input id="Chart_Patterns" name="Chart_Patterns" type="checkbox">
+          </div>
+          <div>
+            <label for="Double_Top_or_Bottom" class="text-gray-300">Double Top or Bottom</label>
+            <input id="Double_Top_or_Bottom" name="Double_Top_or_Bottom" type="checkbox">
+          </div>
+          <div>
+            <label for="Head_and_Shoulders" class="text-gray-300">Head and Shoulders</label>
+            <input id="Head_and_Shoulders" name="Head_and_Shoulders" type="checkbox">
+          </div>
+          <div>
+            <label for="Cup_and_Handle" class="text-gray-300">Cup and Handle</label>
+            <input id="Cup_and_Handle" name="Cup_and_Handle" type="checkbox">
+          </div>
+          <div>
+            <label for="Flag" class="text-gray-300">Flag</label>
+            <input id="Flag" name="Flag" type="checkbox">
+          </div>
+          <div>
+            <label for="Rectangle" class="text-gray-300">Rectangle</label>
+            <input id="Rectangle" name="Rectangle" type="checkbox">
+          </div>
+          <div>
+            <label for="Parallel_Channel" class="text-gray-300">Parallel Channel</label>
+            <input id="Parallel_Channel" name="Parallel_Channel" type="checkbox">
+          </div>
+          <div>
+            <label for="Pitchforks" class="text-gray-300">Pitchforks</label>
+            <input id="Pitchforks" name="Pitchforks" type="checkbox">
+          </div>
+          <div>
+            <label for="Triangle" class="text-gray-300">Triangle</label>
+            <input id="Triangle" name="Triangle" type="checkbox">
+          </div>
+          <div>
+            <label for="Gan" class="text-gray-300">Gan</label>
+            <input id="Gan" name="Gan" type="checkbox">
+          </div>
+      </div>
+
+      <div id="-TECHNICAL_INDICATOR_CATEGORY">
+        <div>
+          <label for="Technical_Indicators" class="text-gray-300">Technical Indicators</label>
+          <input id="Technical_Indicators" name="Technical_Indicators" type="checkbox">
+        </div>
+
+        <div>
+          <label for="Oscilators" class="text-gray-300">Oscilators</label>
+          <input id="Oscilators" name="Oscilators" type="checkbox">
+        </div>
+        <div>
+          <label for="Volatility" class="text-gray-300">Volatility</label>
+          <input id="Volatility" name="Volatility" type="checkbox">
+        </div>
+        <div>
+          <label for="Volume" class="text-gray-300">Volume</label>
+          <input id="Volume" name="Volume" type="checkbox">
+        </div>
+        <div>
+          <label for="Moving_Average" class="text-gray-300">Moving Average</label>
+          <input id="Moving_Average" name="Moving_Average" type="checkbox">
+        </div>
+        <div>
+          <label for="Bill_Wiliams" class="text-gray-300">Bill Wiliams</label>
+          <input id="Bill_Wiliams" name="Bill_Wiliams" type="checkbox">
+        </div>
+      </div>
+
+      <div id="-WAVE_ANALYSIS_CATEGORY">
+        <div>
+          <label for="Wave_Analysis" class="text-gray-300">Wave Analysis</label>
+          <input id="Wave_Analysis" name="Wave_Analysis" type="checkbox">
+        </div>
+        <div>
+          <label for="Neo_Wave" class="text-gray-300">Neo Wave</label>
+          <input id="Neo_Wave" name="Neo_Wave" type="checkbox">
+        </div>
+        <div>
+          <label for="Sine_Wave" class="text-gray-300">Sine Wave</label>
+          <input id="Sine_Wave" name="Sine_Wave" type="checkbox">
+        </div>
+        <div>
+          <label for="Wolfe_Wave" class="text-gray-300">Wolfe Wave</label>
+          <input id="Wolfe_Wave" name="Wolfe_Wave" type="checkbox">
+        </div>
+      </div>
+
+
+      <div id="-FUNDAMENTAL_ANALYSIS_CATEGORY">
+        <div>
+          <label for="Fundamental_Analysis" class="text-gray-300">Fundamental Analysis</label>
+          <input id="Fundamental_Analysis" name="Fundamental_Analysis" type="checkbox">
+        </div>
+      </div>
+
+      </div>
+    </div> -->
+
+
+
+</div>
+</div>
+<script type="text/javascript">
+    let Trend_Analysis_List = document.body.querySelector('#-TREND_ANALYSIS_LIST')
+    let Trend_Analysis_Button = document.body.querySelector('#-TREND_ANALYSIS_BUTTON')
+
+
+    function Trend_Analysis_Popup() {
+        Trend_Analysis_List.classList.toggle('hidden');
+        Trend_Analysis_Button.classList.toggle('bg-blue-700');
+    }
+
+
+    /* Range Slider for leverage*/
+    function sliderChangeGet(val) {
+        document.getElementById('output').value = val;
+    }
+
+    function sliderChangeSet(val) {
+        if (val <= 500 && val >= 1) {
+            val = document.getElementById('output').value;
+            document.getElementById('slider').value = val;
+        } else if (val > 500) {
+            document.getElementById('output').value = 500
+            document.getElementById('slider').value = 500
+        } else if (val < 1) {
+            document.getElementById('output').value = 1
+            document.getElementById('slider').value = 1
+        }
+    }
+
+    /* update output for range slider when page load  */
+    document.addEventListener("DOMContentLoaded", function () {
+        val = document.getElementById('slider').value
+        document.getElementById('output').value = val
+
+        /* Set Background Color for Slide */
+        Side = document.getElementById('SIDE')
+        if (Side.value == "Long") {
+            Side.classList.remove('bg-red-700')
+            Side.classList.add('bg-green-700')
+        } else if (Side.value == 'Short') {
+            Side.classList.remove('bg-green-700')
+            Side.classList.add('bg-red-700')
+        }
+    });
+
+    /* Click on Long */
+
+    function ChangeValueSide() {
+        Side = document.getElementById('SIDE')
+        if (Side.value == "Long") {
+            Side.value = 'Short';
+            Side.classList.remove('bg-green-700')
+            Side.classList.add('bg-red-700')
+        } else if (Side.value == 'Short') {
+            Side.value = 'Long';
+            Side.classList.remove('bg-red-700')
+            Side.classList.add('bg-green-700')
+        }
+    }
+
+</script>
+
+{% endblock %}

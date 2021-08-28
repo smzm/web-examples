@@ -1,0 +1,265 @@
+{% load static %}  
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'style.css' %}" rel="stylesheet">
+    {% comment %} <style>
+    .Inter{
+      font-family: 'Inter', sans-serif;
+    }
+
+   
+    .spin_words{
+      animation: spin_words 5s infinite alternate ;
+      animation-timing-function: ease-in-out;
+    }
+    @keyframes spin_words{
+      0%{
+        transform: translateY(0%);
+      }
+      50%{
+        transform: translateY(0%);
+      }
+      55%{
+        transform: translateY(-100%);
+      }
+      100%{
+        transform: translateY(-100%);
+      }
+    }
+
+
+/*======= Scrollbar =======*/
+    /* width */
+div::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+div::-webkit-scrollbar-track {
+  background: #171A1F;
+}
+
+/* Handle */
+div::-webkit-scrollbar-thumb {
+  background: #303846;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+div::-webkit-scrollbar-thumb:hover {
+  background: #373e4a;
+    border-radius: 10px;
+}
+
+div::-webkit-scrollbar-corner{
+    background: #171A1F;
+
+}
+
+/*======= Arrow in inputs =======*/
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/*======= Auto Fill input style =======*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 2px solid #374151;
+  -webkit-text-fill-color: gray;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Datepicker */
+input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(30%); 
+}
+
+/* range slider */
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  /*width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+  padding-top: 15px;
+  outline: none;
+}
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+input[type=range]::-ms-track {
+  /* width: 100%; */
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent; 
+  border-color: transparent;
+  color: transparent;
+  outline: none;
+}
+
+/*===== Side Checkbox =======*/
+#TOGGLE_SIDE_CHECKBOX{
+  /* opacity: 0; */
+  width: 0;
+  height: 0;
+}
+
+#SIDE_POSITION::after{
+  position: absolute;
+  content: "Short";
+  background-color: #c24a00;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+#TOGGLE_SIDE_CHECKBOX:checked ~ #SIDE_POSITION::after{
+  position: absolute;
+  content: "Long";
+  background-color: #00c29e;
+}
+
+#TOGGLE_SIDE_BUTTON{
+  position: relative;
+  content: "";
+  width: 40px;
+  padding: 5px;
+}
+
+
+/*====== Side checkbox ==========*/
+.checkbox_side{
+  width: 0;
+}
+.checkbox_side:checked::after{
+  width: 5rem;
+  text-align: center;
+  position: absolute;
+  content: 'Short';
+  background-color: rgb(129, 0, 0);
+  padding: 5px;
+  border-radius: 60px;
+  transform: translateX(-50%) translateY(-25%);
+  transition: all 0.5s;
+}
+.checkbox_side::after{
+  width: 5rem;
+  text-align: center;
+  position: absolute;
+  content: 'Long';
+  background-color: #006b2e;
+  padding: 5px;
+  border-radius: 60px;
+  transform: translateX(-50%) translateY(-25%);
+  transition: all 0.5s;
+}
+
+    </style> {% endcomment %}
+<style>
+{% block style %}
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap');
+    .poppins-font{
+      font-family: 'Poppins', sans-serif;
+    }
+
+   .bg-color-light1{
+      background-color: #EDF1F4;
+    }
+    .bg-color-light2{
+      background-color: #D8DEE5;
+    }
+    .bg-color-light3{
+      background-color: #F5F9FC;
+    }
+
+{% endblock style %}
+</style>
+  </head>
+<body class="poppins-font">
+
+
+  <div id="CONTAINER" class="flex flex-grow w-full min-h-screen max-h-screen bg-color-light1">
+
+        {% block sidebar %}
+        {% endblock sidebar %} 
+
+      
+      <div id="MAIN" class="flex flex-col flex-1 max-h-full">
+      {% comment %} {% block header %}
+      {% endblock header %} {% endcomment %}
+      
+      {% block content%}
+      {% endblock %}
+
+      {% block userSidebar %}
+      {% endblock userSidebar %}
+      
+      </div>
+ </div>
+
+    
+<script>
+      let user = document.body.querySelector('#--POPUP')
+      let hum_icon = document.body.querySelector('#HUMBERICON')
+      let sidebar = document.body.querySelector('#SIDEBAR')
+
+      function menuSwitch(){
+        sidebar.classList.toggle('hidden')
+      }
+
+
+      let userMenu = document.body.querySelector('#--POPUP')
+      let userPic =  document.getElementById("--PICTURE")
+      let userName =  document.getElementById("--NAME")
+      window.addEventListener('mouseup', function(event){
+        if((event.target == userPic) | (event.target == userName)){
+          if(userMenu.classList.contains('hidden')){
+            userMenu.classList.remove('hidden') ;
+            setTimeout(function () {
+              userMenu.classList.remove('opacity-0');
+            }, 20);
+          }
+          else {
+            userMenu.classList.add('opacity-0');
+            userMenu.addEventListener('transitionend', function(e) {
+              userMenu.classList.add('hidden') ;
+            }, {
+                capture: false,
+                once: true,
+                passive: false
+               })
+          }
+        }
+        else if ((event.target != userMenu) & (!userMenu.classList.contains('hidden'))) {
+           userMenu.classList.add('opacity-0');
+           userMenu.addEventListener('transitionend', function(e) {
+           userMenu.classList.add('hidden');
+            }, {
+            capture: false,
+            once: true,
+            passive: false
+            });
+          }
+      },false);
+
+
+
+  </script>
+</body>
+</html>

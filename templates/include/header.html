@@ -1,0 +1,67 @@
+{% load static %}
+{% block header %}
+<div id="-HEADER" class="bg-white flex justify-between items-center p-5 ml-4 mr-4 my-4 ">
+
+    <button type="button" id="HUMBERICON" onclick="menuSwitch()" class="lg:hidden z-20">
+        <svg class="stroke-current text-gray-600 hover:text-blue-700" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#4c4c4c" stroke-width="2.5"
+            stroke-linecap="square" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+
+    <div id="LOGO_MOBILE" class="lg:hidden flex justify-center items-center ">
+        <img src="{% static 'logo.png'%}" alt="logo" class="w-10 h-10 mr-2">
+        <h1 class='text-gray-50 whitespace-nowrap AndadaFont font-bold antialiased tracking-wide text-xl'>TradeJournal</h1>
+    </div>
+
+    <div id="-STATUS" class="hidden lg:block">
+        <svg class="text-blue-600 fill-current" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#006ce8" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="8.5" cy="7" r="4"></circle>
+            <polyline points="17 11 19 13 23 9"></polyline>
+        </svg>
+        <h2 class="top-3 text-blue-600 font-bold tracking-tighter text-xs"> Connected</h2>
+    </div>
+
+    <div id="-USER" class="flex items-center">
+
+        <svg id="-NOTIFICATION" class="hidden lg:inline mx-5 cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#4c4c4c"
+            stroke-width="2.5" stroke-linecap="square" stroke-linejoin="round">
+            <path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"></path>
+        </svg>
+
+        <div id="-PROFILE" class="">
+            <button id="--USERBUTTON" type="button">
+                <img id="--PICTURE" class="rounded-full w-10 mx-3 cursor-pointer" src="{% static 'profile.jpg' %}" alt="profile picture">
+                <h2 id="--NAME" class="hidden lg:inline text-gray-400 font-bold cursor-pointer"> Alberto </h2>
+            </button on>
+
+            <div id="--POPUP"
+                class="hidden opacity-0 absolute right-10 bg-color-light shadow w-40 h-32 flex flex-col justify-center items-center p-4 border-4 border-gray-700 border-opacity-20 transition-all duration-200">
+                <div class="my-4 w-full text-center text-gray-400 flex justify-evenly items-center hover:text-blue-700 cursor-pointer transition-all duration-200">
+                    <svg class="stroke-current" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4c4c4c" stroke-width="2.5" stroke-linecap="square"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                        </path>
+                    </svg>
+                    <span class="font-medium">Settings</span>
+                </div>
+                <hr class="border-gray-700 w-full">
+                <div class="my-4 w-full text-center text-gray-400 flex justify-evenly items-center hover:text-blue-700 cursor-pointer transition-all duration-200">
+                    <svg class="stroke-current" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4c4c4c" stroke-width="2.5" stroke-linecap="square"
+                        stroke-linejoin="round">
+                        <path d="M16 17l5-5-5-5M19.8 12H9M10 3H4v18h6" />
+                    </svg>
+                    <span class="font-medium">Logout</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock header %}
