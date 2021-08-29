@@ -1,99 +1,44 @@
 {% load static %} {% block sidebar %}
 
-  <div id="SIDEBAR" class="w-20 min-h-screen max-h-screen bg-white ">
+<div id="SIDEBAR" class="w-20 min-h-full bg-white ">
 
-
-  <ul class="h-full mt-48">
-
-    <li id="DASHBOARD" class="list-none w-full relative leading-10 my-8">
-      <a href="{% url 'dashboard' %}" class="w-full flex items-center">
-        <span class="w-12 ml-4 p-3 hover:bg-indigo-100 hover:text-gray-400 rounded-lg
-                      {% if active == 'dashboard' %}text-blue-400 bg-indigo-50{%else%}text-gray-300 {% endif %}">
-          <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M4 11h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm10 0h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zM4 21h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm10 0h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1z"></path></svg>
-        </span>
-      </a>
-      <span id="dashboard_tooltip" class="absolute font-med bg-gray-300 text-gray-400 text-center rounded-lg opacity-0 top-0 left-full ml-4 w-28 whitespace-nowrap font-normal transition-all duration-200">Dashboard</span>
-    </li>
-
-    <li id="STRATEGY" class="list-none w-full relative leading-10 my-8">
-      <a href="" class="w-full flex items-center">
-        <span class="w-12 ml-4 p-3 hover:bg-indigo-100 text-gray-300 hover:text-gray-400 rounded-lg
-                    {% if active == 'strategy' %}text-blue-400 bg-indigo-50{%else%}text-gray-300 {% endif %} ">
-          <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="m2.295 12.707 8.978 9c.389.39 1.025.391 1.414.002l9.021-9a1 1 0 0 0 0-1.416l-9.021-9a.999.999 0 0 0-1.414.002l-8.978 9a.998.998 0 0 0 0 1.412zm6.707-2.706h5v-2l3 3-3 3v-2h-3v4h-2v-6z"></path></svg>
-        </span>
-      </a>
-      <span id="strategy_tooltip" class="absolute bg-gray-300 text-gray-400 text-center rounded-lg opacity-0 top-0 left-full ml-4 w-28 whitespace-nowrap font-normal transition-all duration-200">Strategy</span>
-    </li>
-    
-    <li id="HISTORY" class="list-none w-full relative leading-10 my-8">
-      <a href="{% url 'history' %}" class="w-full flex items-center">
-        <span class="w-12 ml-4 p-3 hover:bg-indigo-100 text-gray-300 hover:text-gray-400 rounded-lg
-        {% if active == 'history' %}text-blue-400 bg-indigo-50{%else%}text-gray-300 {% endif %}">
-          <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M21 20V6c0-1.103-.897-2-2-2h-2V2h-2v2H9V2H7v2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2zM9 18H7v-2h2v2zm0-4H7v-2h2v2zm4 4h-2v-2h2v2zm0-4h-2v-2h2v2zm4 4h-2v-2h2v2zm0-4h-2v-2h2v2zm2-5H5V7h14v2z"></path></svg>
-        </span>
-      </a>
-      <span id="history_tooltip" class="absolute bg-gray-300 text-gray-400 text-center rounded-lg opacity-0 top-0 left-full ml-4 w-28 whitespace-nowrap font-normal transition-all duration-200">History</span>
-    </li>
-        
-    <li id="TRADES" class="list-none w-full relative leading-10 my-8">
-      <a href="{% url 'trades' %}" class="w-full flex items-center">
-        <span class="w-12 ml-4 p-3 hover:bg-indigo-100 text-gray-300 hover:text-gray-400 rounded-lg
-        {% if active == 'trades' %}text-blue-400 bg-indigo-50{%else%}text-gray-300 {% endif %}">
-            <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M19 21c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14zM9.553 9.658l4 2 1.553-3.105 1.789.895-2.447 4.895-4-2-1.553 3.105-1.789-.895 2.447-4.895z"></path></svg>   
-        </span>
-      </a>
-      <span id="trades_tooltip" class="absolute bg-gray-300 text-gray-400 text-center rounded-lg opacity-0 top-0 left-full ml-4 w-28 whitespace-nowrap font-normal transition-all duration-200">Trades</span>
-    </li>
-
-    <li id="ANALYSIS" class="list-none w-full relative leading-10 my-8">
-      <a href="" class="w-full flex items-center">
-        <span class="w-12 ml-4 p-3 hover:bg-indigo-100 text-gray-300 hover:text-gray-400 rounded-lg
-        {% if active == 'analysis' %}text-blue-400 bg-indigo-50{% else %}text-gray-300 {% endif %}">
-          <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M6 21H3a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1zm7 0h-3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v17a1 1 0 0 1-1 1zm7 0h-3a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1z"></path></svg>
-        </span>
-      </a>
-      <span id="analysis_tooltip" class="absolute bg-gray-300 text-gray-400 text-center rounded-lg opacity-0 top-0 left-full ml-4 w-28 whitespace-nowrap font-normal transition-all duration-200">Analysis</span>
-    </li>
-
+  <ul class="h-full pt-32">
+  {% for item, icon in sidebar.items  %}
+      <li id="{{item|upper }}" class="list-none w-full relative leading-10 my-8">
+        <a href="{% url item %}" class="w-full flex items-center">
+          <span class="w-12 ml-4 p-3 hover:bg-blue-50 hover:text-gray-400 rounded-lg
+                        {% if active == item  %}text-blue-400 bg-indigo-50{%else%}text-gray-300 {% endif %}">
+            {{icon|safe}}
+          </span>
+        </a>
+        <span id="{{item}}_tooltip" class="antialiased absolute font-med bg-color-light3 text-gray-400 text-center rounded-lg opacity-0 top-0 left-full ml-4 w-28 whitespace-nowrap font-normal transition-all duration-200">{{item|title}}</span>
+      </li>
+  {% endfor %} 
   </ul>
+
 </div>
 
 
 <script type="text/javascript">
+{% for item in sidebar  %}
 
-let sidebar_dashboard = document.querySelector('#DASHBOARD')
-let sidebar_strategy = document.querySelector('#STRATEGY')
-let sidebar_history = document.querySelector('#HISTORY')
-let sidebar_trades = document.querySelector('#TRADES')
-let sidebar_analysis = document.querySelector('#ANALYSIS')
+let {{item}} = document.querySelector('#{{item|upper}}')
+let tooltip_{{item}} = document.querySelector('#{{item}}_tooltip')
 
-let tooltip_dashboard = document.querySelector('#dashboard_tooltip')
-let tooltip_strategy = document.querySelector('#strategy_tooltip')
-let tooltip_history = document.querySelector('#history_tooltip')
-let tooltip_trades = document.querySelector('#trades_tooltip')
-let tooltip_analysis = document.querySelector('#analysis_tooltip')
+{{item}}.addEventListener('mouseenter', () => {  
+    tooltip_{{item}}.classList.remove('opacity-0')
+    tooltip_{{item}}.classList.add('opacity-1')
+    tooltip_{{item}}.classList.remove('-top-4')
+    tooltip_{{item}}.classList.add('top-0')
+})
+{{item}}.addEventListener('mouseleave', () => {
+    tooltip_{{item}}.classList.remove('opacity-1')
+    tooltip_{{item}}.classList.add('opacity-0')
+    tooltip_{{item}}.classList.remove('top-0')
+    tooltip_{{item}}.classList.add('-top-4')
+})
 
-sidebar_menu = [sidebar_dashboard, sidebar_strategy, sidebar_history, sidebar_trades, sidebar_analysis]
-tooltip_menu = [tooltip_dashboard, tooltip_strategy, tooltip_history, tooltip_trades, tooltip_analysis]
-
-
-for (let index = 0; index < sidebar_menu.length; index++) {
-  sidebar_menu[index].addEventListener('mouseenter', () => {  
-    tooltip_menu[index].classList.remove('opacity-0')
-    tooltip_menu[index].classList.add('opacity-1')
-    tooltip_menu[index].classList.remove('-top-4')
-    tooltip_menu[index].classList.add('top-0')
-  })
-  sidebar_menu[index].addEventListener('mouseleave', () => {
-    tooltip_menu[index].classList.remove('opacity-1')
-    tooltip_menu[index].classList.add('opacity-0')
-    tooltip_menu[index].classList.remove('top-0')
-    tooltip_menu[index].classList.add('-top-4')
-  })
-}
-
-
-
+{% endfor %}
 
 </script>
 

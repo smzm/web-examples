@@ -4,21 +4,24 @@
 {% include 'include/sidebar.html' with active='history' %}
 {% endblock sidebar %}
 
-{% block header %}
-{% include 'include/header.html' %}
-{% endblock header %}
-
-
 {% block content %}
-<h1 class="text-gray-200 ">Filter based on : </h1>
-<p class="text-gray-200">Date</p>
-<p class="text-gray-200">side</p>
-<p class="text-gray-200">Analysis Category</p>
-<p class="text-gray-200">Symbol</p>
-<p class="text-gray-200">Mistakes</p>
-<p class="text-gray-200">Tiem of days</p>
-<p class="text-gray-200">Weekdays</p>
-<p class="text-gray-200">emotions</p>
-<p class="text-gray-200">wins</p>
-<p class="text-gray-200">loss</p>
+<div id="MAIN" class="flex flex-col flex-1 bg-color-light1 py-5 px-20">
+
+    <h1 class="text-gray-600 ">Filter based on : </h1>
+    <p class="text-gray-600">Date</p>
+    <p class="text-gray-600">side</p>
+    <p class="text-gray-600">Analysis Category</p>
+    <p class="text-gray-600">Symbol</p>
+    <p class="text-gray-600">Mistakes</p>
+    <p class="text-gray-600">Tiem of days</p>
+    <p class="text-gray-600">Weekdays</p>
+    <p class="text-gray-600">emotions</p>
+    <p class="text-gray-600">wins</p>
+    <p class="text-gray-600">loss</p>
+</div>
 {% endblock content %}
+
+
+{% block userSidebar %}
+{% include 'include/userSidebar.html' %}
+{% endblock userSidebar %}

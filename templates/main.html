@@ -7,31 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="{% static 'style.css' %}" rel="stylesheet">
     {% comment %} <style>
-    .Inter{
-      font-family: 'Inter', sans-serif;
-    }
-
    
-    .spin_words{
-      animation: spin_words 5s infinite alternate ;
-      animation-timing-function: ease-in-out;
-    }
-    @keyframes spin_words{
-      0%{
-        transform: translateY(0%);
-      }
-      50%{
-        transform: translateY(0%);
-      }
-      55%{
-        transform: translateY(-100%);
-      }
-      100%{
-        transform: translateY(-100%);
-      }
-    }
-
-
 /*======= Scrollbar =======*/
     /* width */
 div::-webkit-scrollbar {
@@ -172,12 +148,11 @@ input[type=range]::-ms-track {
 
     </style> {% endcomment %}
 <style>
-{% block style %}
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap');
-    .poppins-font{
-      font-family: 'Poppins', sans-serif;
-    }
-
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;700&display=swap');
+   .comfortaa-font{
+    font-family: 'Comfortaa', cursive; 
+   } 
+   
    .bg-color-light1{
       background-color: #EDF1F4;
     }
@@ -185,32 +160,46 @@ input[type=range]::-ms-track {
       background-color: #D8DEE5;
     }
     .bg-color-light3{
-      background-color: #F5F9FC;
+      background-color: #FCFEFF;
     }
 
-{% endblock style %}
+/* ======================  Spin Word*/
+    .spin_words{
+      animation: spin_words 5s infinite alternate ;
+      animation-timing-function: ease-in-out;
+    }
+    @keyframes spin_words{
+      0%{
+        transform: translateY(0%);
+      }
+      50%{
+        transform: translateY(0%);
+      }
+      55%{
+        transform: translateY(-100%);
+      }
+      100%{
+        transform: translateY(-100%);
+      }
+    }
+
 </style>
   </head>
-<body class="poppins-font">
+<body class="comfortaa-font">
 
 
-  <div id="CONTAINER" class="flex flex-grow w-full min-h-screen max-h-screen bg-color-light1">
+  <div id="CONTAINER" class="flex w-full min-h-screen max-h-screen overflow-hidden">
 
-        {% block sidebar %}
-        {% endblock sidebar %} 
-
-      
-      <div id="MAIN" class="flex flex-col flex-1 max-h-full">
-      {% comment %} {% block header %}
-      {% endblock header %} {% endcomment %}
-      
+      {% block sidebar %}
+      {% endblock sidebar %} 
+     
       {% block content%}
       {% endblock %}
 
       {% block userSidebar %}
       {% endblock userSidebar %}
       
-      </div>
+      {% comment %} </div> {% endcomment %}
  </div>
 
     

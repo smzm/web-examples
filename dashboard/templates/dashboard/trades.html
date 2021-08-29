@@ -4,11 +4,12 @@
 {% include 'include/sidebar.html' with active='trades' %}
 {% endblock sidebar %}
 
-{% block header %}
-{% include 'include/header.html' %}
-{% endblock header %}
 
 {% block content %}
-<div id="" class="bg-color-dark flex-1 shadow mx-4 mb-4 border-2 border-gray-700 border-opacity-20 rounded-lg py-14">
+<div id="MAIN" class="flex flex-col flex-1 bg-color-light1 py-5 px-20">
 </div>
 {% endblock content %}
+
+{% block userSidebar %}
+{% include 'include/userSidebar.html' %}
+{% endblock userSidebar %}
