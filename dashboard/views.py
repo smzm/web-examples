@@ -5,6 +5,7 @@ from .forms import NewTradeForm
 from .models import TradePosition
 from django.urls import reverse
 from django.forms import ModelForm
+from django.contrib.auth.decorators import login_required
 
 
 sidebar = {
@@ -16,14 +17,19 @@ sidebar = {
 }
 
 
+@login_required(login_url="/login/")
 def dashboard(request):
-    return render(request, 'dashboard/dashboard.html', {'sidebar': sidebar})
+    profile = request.user.profile
+    return render(request, 'dashboard/dashboard.html', {'sidebar': sidebar, 'profile': profile})
 
 
+@login_required(login_url="/login/")
 def trades(request):
-    return render(request, 'dashboard/trades.html',  {'sidebar': sidebar})
+    profile = request.user.profile
+    return render(request, 'dashboard/trades.html',  {'sidebar': sidebar, 'profile': profile})
 
 
+@login_required(login_url="/login/")
 def newTrade(request):
     if request.method == 'POST':
         form = NewTradeForm(request.POST)
@@ -40,10 +46,12 @@ def newTrade(request):
             obj.save()
     else:
         form = NewTradeForm()
+    profile = request.user.profile
     trades = TradePosition.objects.all().order_by('date', 'time').reverse()
-    return render(request, 'dashboard/newTrade/newTrade.html', {'form': form, 'trades': trades})
+    return render(request, 'dashboard/newTrade/newTrade.html', {'sidebar': sidebar, 'form': form, 'trades': trades, 'profile': profile})
 
 
+@login_required(login_url="/login/")
 def delete_trade(request, pk):
     trade = TradePosition.objects.get(id=pk)
     trade.delete()
@@ -51,6 +59,7 @@ def delete_trade(request, pk):
     return HttpResponseRedirect(dynamicPath_newtrade)
 
 
+@login_required(login_url="/login/")
 def update_trade(request, pk):
     trade = TradePosition.objects.get(id=pk)
     form = NewTradeForm({
@@ -77,9 +86,12 @@ def update_trade(request, pk):
             trade.save()
             dynamicPath_newtrade = reverse('newtrade')
             return HttpResponseRedirect(dynamicPath_newtrade)
+    profile = request.user.profile
     # trades = TradePosition.objects.all().order_by('date', 'time').reverse()
-    return render(request, 'dashboard/newTrade/detailTrade.html', {'form': form, 'trade': trade})
+    return render(request, 'dashboard/newTrade/detailTrade.html', {'sidebar': sidebar, 'form': form, 'trade': trade, 'profile': profile})
 
 
+@login_required(login_url="/login/")
 def history(request):
-    return render(request, 'dashboard/history.html',  {'sidebar': sidebar})
+    profile = request.user.profile
+    return render(request, 'dashboard/history.html',  {'sidebar': sidebar, 'profile': profile})

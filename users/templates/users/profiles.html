@@ -1,9 +1,11 @@
 {% extends "main.html" %}
-
+{% load static %}
 {% block sidebar %}
     {% include 'include/sidebar.html' %}
 {% endblock sidebar %}
 
 {% block content %}
-    <h1>Profile Page</h1>
+    {{profile.username}}
+    {{profile.email}}
+    <img src="{% static profile.profile_image %}" class="w-24 h-24" alt="Profile Picture">
 {% endblock content %}

@@ -1,7 +1,7 @@
 {% extends 'main.html' %}
 
 {% block sidebar %}
-    {% include 'include/sidebar.html' with active='dashboard' sidebar=sidebar %}
+    {% include 'include/sidebar.html' with active='dashboard' sidebar=sidebar  %}
 {% endblock sidebar %}
 
 
@@ -15,7 +15,6 @@
             <input spellcheck="false" type="text" class="bg-color-light3 pl-12 p-2 w-10/12 rounded-lg outline-none border border-gray-300 border-opacity-20 focus:border-blue-300 text-gray-400 transition-all duration-200">
             </div>
     </div>
-
 
     <div id="LATEST_TRADES" class="bg-color-light1 min-h-full my-14">
         <h2 class="text-gray-600 text-2xl font-bold tracking-wider px-10 pb-10 antialiased"> LATEST TRADES </h2>
@@ -92,5 +91,5 @@
 
 
 {% block userSidebar %}
-{% include 'include/userSidebar.html' %}
+{% include 'include/userSidebar.html' with profile=profile %}
 {% endblock userSidebar %}

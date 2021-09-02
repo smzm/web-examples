@@ -3,5 +3,8 @@ from . import views
 
 
 urlpatterns = [
-    path('<str:pk>/', views.profiles, name="profile")
+    path('register/', views.registerUser, name="register"),
+    path('login/', views.loginUser, name="login"),
+    path('logout/', views.logoutUser, name="logout"),
+    path('@<str:username>', views.profile, name="profile"),
 ]

@@ -1,0 +1,46 @@
+{% extends "main.html" %}
+
+
+{% block content %}
+    {% if page == 'register' %}
+        <form method="POST" action="{% url 'register' %}">
+            {% csrf_token %}
+            {% for field in form  %}
+            <div class="m-4">
+                <label for=""> {{field.label}} </label>
+                {{field}}
+                {% if field.help_text %}
+                    <small> {{field.help_text}} </small>
+                {% endif %}
+                {% for error in field.errors  %}
+                    {{error}}
+                {% endfor %}
+
+             </div>
+            {% endfor %}
+
+            <input type="submit" value="register" class="border w-24 cursor-pointer">
+        </form>
+        <p> 
+            Already have an account? 
+            <a class="text-red-600" href="{% url 'login' %}"> Sign In </a>
+        </p>
+    {% else %}
+        <form action="{% url 'login' %}" method="POST" class="flex flex-col">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username" class="border m-2">
+            <input type="password" name="password" placeholder="Enter Password" class="border m-2">
+            <input type="submit" value="login" class="border m-2">
+
+            <p> dont have an account? <a class="text-red-600" href="{% url 'register' %}"> Sign Up </a></p>
+
+            {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        </form>
+    {% endif %} 
+{% endblock content %}
