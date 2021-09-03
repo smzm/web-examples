@@ -1,3 +1,4 @@
+from users.models import Profile
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -14,3 +15,9 @@ class CustomUserCreationForm(UserCreationForm):
 
         for name, field in self.fields.items():
             field.widget.attrs.update({'class': 'border border-gray-300'})
+
+class ProfileForm(ModelForm):
+    class Meta:
+        model = Profile
+        fields = "__all__"
+        exclude = ["user"]

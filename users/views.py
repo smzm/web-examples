@@ -1,18 +1,32 @@
 from django.shortcuts import render, redirect
-
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from .models import Profile
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, ProfileForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
 
+login_required(login_url="/login/")
 def profile(request, username):
-    profile = Profile.objects.get(username=username)
+    profile = Profile.objects.get(username=username)   
     context = {'profile': profile}
     return render(request, 'users/profiles.html', context)
+
+def editProfile(request):
+    profile = request.user.profile
+    form = ProfileForm(instance=profile)
+    
+    if request.method == "POST" :     
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/@{profile.username}')
+
+    context = {'form':form}
+    return render(request, 'users/editProfile.html', context)
 
 
 def registerUser(request):
@@ -37,7 +51,7 @@ def registerUser(request):
 
 def loginUser(request):
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirect('/dashboard')
 
     if request.method == "POST":
         username = request.POST['username']
