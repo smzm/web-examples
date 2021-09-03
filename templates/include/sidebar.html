@@ -5,7 +5,7 @@
   <ul class="h-full pt-32">
   {% for item, icon in sidebar.items  %}
       <li id="{{item|upper }}" class="list-none w-full relative leading-10 my-8">
-        <a href="{% url item %}" class="w-full flex items-center">
+        <a id="{{item}}_trigger" href="{% url item %}" class="w-full flex items-center">
           <span class="w-12 ml-4 p-3 hover:bg-blue-50 hover:text-gray-400 rounded-lg
                         {% if active == item  %}text-blue-400 bg-indigo-50{%else%}text-gray-300 {% endif %}">
             {{icon|safe}}
@@ -25,7 +25,7 @@
 let {{item}} = document.querySelector('#{{item|upper}}')
 let tooltip_{{item}} = document.querySelector('#{{item}}_tooltip')
 
-{{item}}.addEventListener('mouseenter', () => {  
+{{item}}_trigger.addEventListener('mouseenter', () => {  
     tooltip_{{item}}.classList.remove('opacity-0')
     tooltip_{{item}}.classList.add('opacity-1')
     tooltip_{{item}}.classList.remove('-top-4')
