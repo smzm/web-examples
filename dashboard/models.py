@@ -1,22 +1,23 @@
 import uuid
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+from users.models import Profile
 
 # Create your models here.
 
 
 class TradePosition(models.Model):
+    owner = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.SET_NULL)
     id = models.UUIDField(default=uuid.uuid4,
                           unique=True,
                           primary_key=True,
                           editable=False)
     symbol = models.CharField(max_length=200)
-    price = models.FloatField()
+    price = models.FloatField(validators=[MinValueValidator(0)])
     side = models.CharField(max_length=200)
-    size = models.FloatField()
-    leverage = models.IntegerField(
-        default=1, validators=[MinValueValidator(1), MaxValueValidator(500)])
+    size = models.FloatField(validators=[MinValueValidator(0)])
+    # leverage = models.IntegerField(
+    #     default=1, validators=[MinValueValidator(1), MaxValueValidator(500)])
     comment = models.TextField(max_length=1000, null=True, blank=True)
     date = models.DateField()
     time = models.TimeField()

@@ -31,23 +31,25 @@ def trades(request):
 
 @login_required(login_url="/login/")
 def newTrade(request):
+    profile = request.user.profile
+    trades = profile.tradeposition_set.all()
+
     if request.method == 'POST':
         form = NewTradeForm(request.POST)
         if form.is_valid():
-            obj = TradePosition()
+            obj = TradePosition(owner=request.user.profile)
             obj.symbol = form.cleaned_data['symbol']
             obj.date = form.cleaned_data['date']
             obj.time = form.cleaned_data['time']
             obj.price = form.cleaned_data['price']
             obj.size = form.cleaned_data['size']
             obj.side = form.cleaned_data['side']
-            obj.leverage = form.cleaned_data['leverage']
+            # obj.leverage = form.cleaned_data['leverage']
             obj.comment = form.cleaned_data['comment']
             obj.save()
     else:
         form = NewTradeForm()
-    profile = request.user.profile
-    trades = TradePosition.objects.all().order_by('date', 'time').reverse()
+
     return render(request, 'dashboard/newTrade/newTrade.html', {'sidebar': sidebar, 'form': form, 'trades': trades, 'profile': profile})
 
 
@@ -61,7 +63,9 @@ def delete_trade(request, pk):
 
 @login_required(login_url="/login/")
 def update_trade(request, pk):
-    trade = TradePosition.objects.get(id=pk)
+    profile = request.user.profile
+    trade = profile.tradeposition_set.get(id=pk)
+    # trade = TradePosition.objects.get(id=pk)
     form = NewTradeForm({
         'symbol': trade.symbol,
         'price': trade.price,
@@ -69,7 +73,7 @@ def update_trade(request, pk):
         'time': trade.time,
         'size': trade.size,
         'side': trade.side,
-        'leverage': trade.leverage,
+        # 'leverage': trade.leverage,
         'comment': trade.comment})
 
     if request.method == 'POST':
@@ -81,7 +85,7 @@ def update_trade(request, pk):
             trade.price = form.cleaned_data['price']
             trade.size = form.cleaned_data['size']
             trade.side = form.cleaned_data['side']
-            trade.leverage = form.cleaned_data['leverage']
+            # trade.leverage = form.cleaned_data['leverage']
             trade.comment = form.cleaned_data['comment']
             trade.save()
             dynamicPath_newtrade = reverse('newtrade')
