@@ -6,7 +6,7 @@
     <div id="-PROFILE" class='mt-10'>
         <div class="flex flex-col items-center justify-center">
             <a href="{% url 'profile' profile.username %}" class="flex justify-center items-center bg-color-light1 rounded-full w-44 h-44 p-4">
-                <img src="{% static profile.profile_image %}" class="w-32 h-32 object-cover rounded-full border-2 border-gray-50 hover:border-gray-300 transition-all duration-300 transform hover:scale-105 cursor-pointer shadow-lg " alt="Profile Picture">
+                <img src="/{{profile.profile_image}}" class="w-32 h-32 object-cover rounded-full border-2 border-gray-50 hover:border-gray-300 transition-all duration-300 transform hover:scale-105 cursor-pointer shadow-lg " alt="Profile Picture">
             </a>
                 <h1 class="my-3 text-lg font-bold text-gray-700 cursor-default antialiased">{{profile.name}}</h1>
                 <hr class="my-1 w-full border-gray-400 border-opacity-10">
