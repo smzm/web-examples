@@ -1,12 +1,12 @@
 {% load static %} {% block sidebar %}
 
-<div id="SIDEBAR" class="w-20 min-h-full bg-white ">
+<div id="SIDEBAR" class="p-3 min-h-full bg-white">
 
-  <ul class="h-full pt-32">
+  <ul class="h-full flex flex-col justify-center">
   {% for item, icon in sidebar.items  %}
-      <li id="{{item|upper }}" class="list-none w-full relative leading-10 my-8">
+      <li id="{{item|upper }}" class="list-none w-full relative leading-10 my-5">
         <a id="{{item}}_trigger" href="{% url item %}" class="w-full flex items-center">
-          <span class="w-12 ml-4 p-3 hover:bg-blue-50 hover:text-gray-400 rounded-lg
+          <span class="w-12 p-3 hover:bg-blue-50 hover:text-gray-400 rounded-lg
                         {% if active == item  %}text-blue-400 bg-indigo-50{%else%}text-gray-300 {% endif %}">
             {{icon|safe}}
           </span>
