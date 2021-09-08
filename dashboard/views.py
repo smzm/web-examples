@@ -1,10 +1,9 @@
 from django.http import request
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
-from .forms import NewTradeForm
-from .models import TradePosition
+from .forms import NewTradeForm, ReviewForm
+from .models import TradePosition, Review
 from django.urls import reverse
-from django.forms import ModelForm
 from django.contrib.auth.decorators import login_required
 from users.models import Profile
 from .utils import searchTrade, paginateTrades
@@ -72,7 +71,7 @@ def delete_trade(request, pk):
 def update_trade(request, pk):
     profile = request.user.profile
     trade = profile.tradeposition_set.get(id=pk)
-    # trade = TradePosition.objects.get(id=pk)
+    reviews = trade.review_set.all()
     form = NewTradeForm({
         'symbol': trade.symbol,
         'price': trade.price,
@@ -84,6 +83,7 @@ def update_trade(request, pk):
         'comment': trade.comment})
 
     if request.method == 'POST':
+        if request.POST == 
         form = NewTradeForm(request.POST)
         if form.is_valid():
             trade.symbol = form.cleaned_data['symbol']
@@ -99,7 +99,11 @@ def update_trade(request, pk):
             return HttpResponseRedirect(dynamicPath_newtrade)
     profile = request.user.profile
     # trades = TradePosition.objects.all().order_by('date', 'time').reverse()
-    return render(request, 'dashboard/newTrade/detailTrade.html', {'sidebar': sidebar, 'form': form, 'trade': trade, 'profile': profile})
+    return render(request, 'dashboard/newTrade/detailTrade.html', {'sidebar': sidebar, 
+                                                                   'form': form, 
+                                                                   'trade': trade,
+                                                                   'profile': profile,
+                                                                   'reviews': reviews})
 
 
 @login_required(login_url="/login/")

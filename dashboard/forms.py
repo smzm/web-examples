@@ -2,6 +2,7 @@ from django import forms
 from datetime import datetime
 from django.forms.widgets import DateTimeInput, Widget
 import pytz
+from .models import Review
 
 
 def get_now():
@@ -33,3 +34,14 @@ class NewTradeForm(forms.Form):
 
     comment = forms.CharField(required=False, label="comment", widget=forms.widgets.TextInput(attrs={
         'class': 'text-center w-36 bg-color-darker m-2 p-2 text-gray-400 border-2 focus:border-blue-800 border-gray-700 border-opacity-60 rounded-3xl outline-none transition-all duration-200'}))
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model= Review
+        fields = ['emotion', 'body']
+        labels = {'emotion':'Place your emotion about this trade', 'body':'Add your review'}
+        def __init__(self, *args, **kwargs):
+            super(ReviewForm, self).__init__(*args, **kwargs)
+            for name, field in self.fields.items():
+                field.widget.attrs.update({'class':''})
