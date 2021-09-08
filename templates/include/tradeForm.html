@@ -2,7 +2,7 @@
     {% csrf_token %}
 
     <div id="FORM_DATA" class="">
-            {% for field in form %}
+            {% for field in tradeForm %}
                 <label id="FORM_LABEL" class="place-self-end m-4 flex items-center text-gray-500 p-1 text-base focus:text-blue-600">
                     {{field.label | title}} :
                 </label>
@@ -27,7 +27,7 @@
             {% endcomment %}
     </div>
 
-    <button class="w-64 self-center my-10 text-gray-200 bg-blue-700 rounded-lg p-4 hover:bg-blue-800" type="submit" form="NEW_TRADE_FORM" value="submit">
+    <button name="tradeForm" type="submit" form="NEW_TRADE_FORM" value="submit" class="w-64 self-center my-10 text-gray-200 bg-blue-700 rounded-lg p-4 hover:bg-blue-800">
         {% if btn == 'Update' %}
             Update
         {% elif btn == 'Submit' %}

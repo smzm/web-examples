@@ -41,7 +41,10 @@ class ReviewForm(forms.ModelForm):
         model= Review
         fields = ['emotion', 'body']
         labels = {'emotion':'Place your emotion about this trade', 'body':'Add your review'}
-        def __init__(self, *args, **kwargs):
-            super(ReviewForm, self).__init__(*args, **kwargs)
-            for name, field in self.fields.items():
-                field.widget.attrs.update({'class':''})
+
+    def __init__(self, *args, **kwargs):
+        super(ReviewForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'm-2 border h-10'
+
+        

@@ -72,7 +72,8 @@ def update_trade(request, pk):
     profile = request.user.profile
     trade = profile.tradeposition_set.get(id=pk)
     reviews = trade.review_set.all()
-    form = NewTradeForm({
+    
+    trade_form = NewTradeForm({
         'symbol': trade.symbol,
         'price': trade.price,
         'date': trade.date,
@@ -81,28 +82,36 @@ def update_trade(request, pk):
         'side': trade.side,
         # 'leverage': trade.leverage,
         'comment': trade.comment})
+    review_form = ReviewForm()
 
     if request.method == 'POST':
-        if request.POST == 
-        form = NewTradeForm(request.POST)
-        if form.is_valid():
-            trade.symbol = form.cleaned_data['symbol']
-            trade.date = form.cleaned_data['date']
-            trade.time = form.cleaned_data['time']
-            trade.price = form.cleaned_data['price']
-            trade.size = form.cleaned_data['size']
-            trade.side = form.cleaned_data['side']
-            # trade.leverage = form.cleaned_data['leverage']
-            trade.comment = form.cleaned_data['comment']
-            trade.save()
-            dynamicPath_newtrade = reverse('newtrade')
-            return HttpResponseRedirect(dynamicPath_newtrade)
-    profile = request.user.profile
-    # trades = TradePosition.objects.all().order_by('date', 'time').reverse()
+        if 'tradeForm' in request.POST:
+            form = NewTradeForm(request.POST)
+            if form.is_valid():
+                trade.symbol = form.cleaned_data['symbol']
+                trade.date = form.cleaned_data['date']
+                trade.time = form.cleaned_data['time']
+                trade.price = form.cleaned_data['price']
+                trade.size = form.cleaned_data['size']
+                trade.side = form.cleaned_data['side']
+                # trade.leverage = form.cleaned_data['leverage']
+                trade.comment = form.cleaned_data['comment']
+                trade.save()
+                dynamicPath_newtrade = reverse('newtrade')
+                return HttpResponseRedirect(dynamicPath_newtrade)
+
+        elif 'reviewForm' in request.POST :
+            review_form = ReviewForm(request.POST)
+            review = review_form.save(commit=False)
+            review.trade = trade
+            review.owner = profile
+            review.save()
+
     return render(request, 'dashboard/newTrade/detailTrade.html', {'sidebar': sidebar, 
-                                                                   'form': form, 
                                                                    'trade': trade,
                                                                    'profile': profile,
+                                                                   'tradeForm': trade_form,
+                                                                   'reviewForm': review_form, 
                                                                    'reviews': reviews})
 
 
