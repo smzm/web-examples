@@ -5,8 +5,10 @@ from .forms import NewTradeForm, ReviewForm
 from .models import TradePosition, Review
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from users.models import Profile
 from .utils import searchTrade, paginateTrades
+
 
 sidebar = {
     'dashboard': '<svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M4 11h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm10 0h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zM4 21h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm10 0h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1z"></path></svg>',
@@ -55,6 +57,7 @@ def newTrade(request):
             obj.save()
 
 
+
     return render(request, 'dashboard/newTrade/newTrade.html', {'sidebar': sidebar, 'tradeForm': trade_form, 'trades': trades, 'profile': profile})
 
 
@@ -71,7 +74,7 @@ def update_trade(request, pk):
     profile = request.user.profile
     trade = profile.tradeposition_set.get(id=pk)
     reviews = trade.review_set.all().order_by('-created')
-    
+
     trade_form = NewTradeForm({
         'symbol': trade.symbol,
         'price': trade.price,
@@ -97,6 +100,7 @@ def update_trade(request, pk):
                 trade.comment = trade_form.cleaned_data['comment']
                 trade.save()
                 dynamicPath_newtrade = reverse('newtrade')
+                messages.success(request, 'Your trade position was updated.')
                 return HttpResponseRedirect(dynamicPath_newtrade)
 
         elif 'reviewForm' in request.POST :
@@ -105,7 +109,8 @@ def update_trade(request, pk):
             review.trade = trade
             review.owner = profile
             review.save()
-
+            
+    trade.calcualteEmotionRatio
     return render(request, 'dashboard/newTrade/detailTrade.html', {'sidebar': sidebar, 
                                                                    'trade': trade,
                                                                    'profile': profile,

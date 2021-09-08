@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.forms.widgets import SplitDateTimeWidget
 from users.models import Profile
 
 # Create your models here.
@@ -24,7 +25,25 @@ class TradePosition(models.Model):
 
     def __str__(self):
         return self.symbol
-
+    
+    @property
+    def calcualteEmotionRatio(self):
+        reviews = self.review_set.all()
+        total_reviews = reviews.count()
+        self.total_reviews = total_reviews
+        number_of_happy = reviews.filter(emotion='happy').count()
+        self.happy_ratio = round((number_of_happy / (total_reviews)) * 100, 1)
+        number_of_sad = reviews.filter(emotion='sad').count()
+        self.sad_ratio = round((number_of_sad / (total_reviews)) * 100, 1)
+        number_of_hope = reviews.filter(emotion='hope').count()
+        self.hope_ratio = round((number_of_hope / (total_reviews)) * 100, 1)
+        number_of_stress = reviews.filter(emotion='stress').count()
+        self.stress_ratio = round((number_of_stress / (total_reviews)) * 100, 1)
+        number_of_calm = reviews.filter(emotion='calm').count()
+        self.calm_ratio = round((number_of_calm / (total_reviews)) * 100, 1)
+        number_of_fear = reviews.filter(emotion='fear').count()
+        self.fear_ratio = round((number_of_fear / (total_reviews)) * 100, 1)
+        self.save()
 
 class Review(models.Model):
     emotion_type = (('fear','Fear'),
@@ -36,11 +55,12 @@ class Review(models.Model):
     emotion = models.CharField(max_length=200, choices=emotion_type)
     trade = models.ForeignKey(TradePosition,null=True, blank=True, on_delete=models.CASCADE)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
-    body = models.TextField(max_length=2000, null=True, blank=True)
+    body = models.TextField(max_length=1000, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
     def __str__(self):
         return self.body
+
 
 class Analysis(models.Model):
     id = models.UUIDField(default=uuid.uuid4, unique=True,
