@@ -1,6 +1,6 @@
 from django import forms
 from datetime import datetime
-from django.forms.widgets import DateTimeInput, Widget
+from django.forms.widgets import DateTimeInput, Select, TextInput, Widget
 import pytz
 from .models import Review
 
@@ -44,7 +44,17 @@ class ReviewForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ReviewForm, self).__init__(*args, **kwargs)
-        for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'm-2 border h-10'
+        self.fields['body'].widget = TextInput(attrs={
+            'class' : 'my-4 border-2'
+        })
+        emotion_type = (('fear','Fear'),
+               ('hope', 'Hope'),
+               ('stress', 'Stress'),
+               ('calm', 'Calm'),
+               ('happy', 'Happy'),
+               ('sad','Sad'))
+        self.fields['emotion'].widget = Select(choices=emotion_type,attrs={
+            'class' : 'my-4 bg-red-200 border-2'
+        })
 
         

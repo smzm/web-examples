@@ -104,14 +104,17 @@
             </div>
         </div>
 
-        <div id="CHART"></div>
-        <div id="REVIEW_FORM">
+        <div id="CHART" class="h-32 my-6 border-2">
+          chart
+        </div>
+
+        <div id="REVIEW_FORM" class="border-2">
           {% include "include/reviewForm.html" %}
         </div>
     </div>
 
 
-<div id="rightSidebar" class="border p-4 w-72">
+<div id="rightSidebar" class="border p-4 w-72 overflow-y-scroll">
   {% if reviews %}
     {% for review in reviews %}
     <div id="REVIEWS" class="flex flex-col my-6 pb-6 border-b">

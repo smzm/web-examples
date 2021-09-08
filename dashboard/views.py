@@ -39,24 +39,23 @@ def trades(request):
 def newTrade(request):
     profile = request.user.profile
     trades = profile.tradeposition_set.all().order_by('-date', '-time')
-
+    trade_form = NewTradeForm()
     if request.method == 'POST':
-        form = NewTradeForm(request.POST)
-        if form.is_valid():
+        trade_form = NewTradeForm(request.POST)
+        if trade_form.is_valid():
             obj = TradePosition(owner=request.user.profile)
-            obj.symbol = form.cleaned_data['symbol']
-            obj.date = form.cleaned_data['date']
-            obj.time = form.cleaned_data['time']
-            obj.price = form.cleaned_data['price']
-            obj.size = form.cleaned_data['size']
-            obj.side = form.cleaned_data['side']
-            # obj.leverage = form.cleaned_data['leverage']
-            obj.comment = form.cleaned_data['comment']
+            obj.symbol = trade_form.cleaned_data['symbol']
+            obj.date = trade_form.cleaned_data['date']
+            obj.time = trade_form.cleaned_data['time']
+            obj.price = trade_form.cleaned_data['price']
+            obj.size = trade_form.cleaned_data['size']
+            obj.side = trade_form.cleaned_data['side']
+            # obj.leverage = trade_form.cleaned_data['leverage']
+            obj.comment = trade_form.cleaned_data['comment']
             obj.save()
-    else:
-        form = NewTradeForm()
 
-    return render(request, 'dashboard/newTrade/newTrade.html', {'sidebar': sidebar, 'form': form, 'trades': trades, 'profile': profile})
+
+    return render(request, 'dashboard/newTrade/newTrade.html', {'sidebar': sidebar, 'tradeForm': trade_form, 'trades': trades, 'profile': profile})
 
 
 @login_required(login_url="/login/")
@@ -71,7 +70,7 @@ def delete_trade(request, pk):
 def update_trade(request, pk):
     profile = request.user.profile
     trade = profile.tradeposition_set.get(id=pk)
-    reviews = trade.review_set.all()
+    reviews = trade.review_set.all().order_by('-created')
     
     trade_form = NewTradeForm({
         'symbol': trade.symbol,
@@ -86,16 +85,16 @@ def update_trade(request, pk):
 
     if request.method == 'POST':
         if 'tradeForm' in request.POST:
-            form = NewTradeForm(request.POST)
-            if form.is_valid():
-                trade.symbol = form.cleaned_data['symbol']
-                trade.date = form.cleaned_data['date']
-                trade.time = form.cleaned_data['time']
-                trade.price = form.cleaned_data['price']
-                trade.size = form.cleaned_data['size']
-                trade.side = form.cleaned_data['side']
-                # trade.leverage = form.cleaned_data['leverage']
-                trade.comment = form.cleaned_data['comment']
+            trade_form = NewTradeForm(request.POST)
+            if trade_form.is_valid():
+                trade.symbol = trade_form.cleaned_data['symbol']
+                trade.date = trade_form.cleaned_data['date']
+                trade.time = trade_form.cleaned_data['time']
+                trade.price = trade_form.cleaned_data['price']
+                trade.size = trade_form.cleaned_data['size']
+                trade.side = trade_form.cleaned_data['side']
+                # trade.leverage = trade_form.cleaned_data['leverage']
+                trade.comment = trade_form.cleaned_data['comment']
                 trade.save()
                 dynamicPath_newtrade = reverse('newtrade')
                 return HttpResponseRedirect(dynamicPath_newtrade)
