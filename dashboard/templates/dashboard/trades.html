@@ -88,6 +88,9 @@
     </div>
   </div>
 
+{% include 'include/pagination.html' with query_set=trades customRange=customRange%}
+
+
 </div>
 {% endblock content %}
 

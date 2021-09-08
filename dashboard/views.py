@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.forms import ModelForm
 from django.contrib.auth.decorators import login_required
 from users.models import Profile
+from .utils import searchTrade, paginateTrades
 
 sidebar = {
     'dashboard': '<svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M4 11h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm10 0h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zM4 21h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1zm10 0h6a1 1 0 0 0 1-1v-6a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1z"></path></svg>',
@@ -25,20 +26,20 @@ def dashboard(request):
 
 @login_required(login_url="/login/")
 def trades(request):
-    search_query = ''
-    profile = request.user.profile
-    trades = profile.tradeposition_set.all()
+    profile = request.user.profile   
+    trades = profile.tradeposition_set.all().order_by('-date', '-time')
+    search_query = ''   
     if request.GET.get('search_query'):
-        search_query = request.GET.get('search_query')
-        trades = profile.tradeposition_set.filter(symbol__icontains=search_query)
-        
-    return render(request, 'dashboard/trades.html',  {'sidebar': sidebar, 'profile': profile, 'trades':trades, 'search_query':search_query})
+        trades, search_query = searchTrade(request)
+
+    trades, custumRange = paginateTrades(request, trades, 5)        
+    return render(request, 'dashboard/trades.html',  {'sidebar': sidebar, 'profile': profile, 'trades':trades, 'search_query':search_query, 'customRange':custumRange})
 
 
 @login_required(login_url="/login/")
 def newTrade(request):
     profile = request.user.profile
-    trades = profile.tradeposition_set.all()
+    trades = profile.tradeposition_set.all().order_by('-date', '-time')
 
     if request.method == 'POST':
         form = NewTradeForm(request.POST)
