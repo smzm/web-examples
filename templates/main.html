@@ -205,52 +205,5 @@ div::-webkit-scrollbar-corner{
  </div>
 
     
-<script>
-      let user = document.body.querySelector('#--POPUP')
-      let hum_icon = document.body.querySelector('#HUMBERICON')
-      let sidebar = document.body.querySelector('#SIDEBAR')
-
-      function menuSwitch(){
-        sidebar.classList.toggle('hidden')
-      }
-
-
-      let userMenu = document.body.querySelector('#--POPUP')
-      let userPic =  document.getElementById("--PICTURE")
-      let userName =  document.getElementById("--NAME")
-      window.addEventListener('mouseup', function(event){
-        if((event.target == userPic) | (event.target == userName)){
-          if(userMenu.classList.contains('hidden')){
-            userMenu.classList.remove('hidden') ;
-            setTimeout(function () {
-              userMenu.classList.remove('opacity-0');
-            }, 20);
-          }
-          else {
-            userMenu.classList.add('opacity-0');
-            userMenu.addEventListener('transitionend', function(e) {
-              userMenu.classList.add('hidden') ;
-            }, {
-                capture: false,
-                once: true,
-                passive: false
-               })
-          }
-        }
-        else if ((event.target != userMenu) & (!userMenu.classList.contains('hidden'))) {
-           userMenu.classList.add('opacity-0');
-           userMenu.addEventListener('transitionend', function(e) {
-           userMenu.classList.add('hidden');
-            }, {
-            capture: false,
-            once: true,
-            passive: false
-            });
-          }
-      },false);
-
-
-
-  </script>
 </body>
 </html>

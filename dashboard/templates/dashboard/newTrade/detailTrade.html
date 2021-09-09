@@ -18,8 +18,6 @@
     </div>
 
 
-    {% comment %} <div id="All_TRADE" class="flex-1 text-gray-200 bg-color-dark shadow ml-2 mr-4 mb-4 border-2 border-gray-700 border-opacity-20 rounded-lg py-14"> {% endcomment %}
-
     <div id="TABLE" class="flex flex-col flex-1">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -125,11 +123,19 @@
         <div id="-TIME" class="text-gray-500 text-xs">{{review.created}}</div>
         <div class="flex justify-end">
           <a class="mx-2 text-indigo-400" href="{% url 'edit_delete_review' review.id %}"> edit </a>
-          <a class="mx-2 text-red-400" href=""> delete </a>
+          <div class="mx-2 text-red-400 cursor-pointer"> 
+            <div onclick="showPopup()"> delete </div>
+            <div id="REVIEW_DELETE_TEXT" class="hidden text-base text-gray-500"> Are you Sure? 
+                <form method="POST" action="{% url 'edit_delete_review' review.id %}" class="text-blue-500 mx-1">
+                  {% csrf_token %}
+                  <input type="submit" name="deleteReview" value="yes">
+                </form>
+                <div onclick="removePopup()" class="text-red-500 mx-1" >No</div>
+             </div>
+          </div>
         </div>
-        
     </div>
-    {% endfor %}
+   {% endfor %}
    {% else %} 
     <div>
       There is no Review
@@ -150,7 +156,17 @@
 {% endif %}
 </div>
 
-
+  <script type="text/javascript">
+      function showPopup() {
+        delete_review = document.querySelector('#REVIEW_DELETE_TEXT')
+        delete_review.classList.remove('hidden')
+      }
+      function removePopup() {
+        delete_review = document.querySelector('#REVIEW_DELETE_TEXT')
+        delete_review.classList.add('hidden')
+        console.log(delete_review)
+      }
+  </script>
 
 
 

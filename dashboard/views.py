@@ -150,8 +150,12 @@ def edit_delete_review(request,  pk):
             if review.is_valid():
                 review.save()
                 return redirect('update_trade', trade_id)
-        elif '' in request.POST:        
-            pass
+        elif 'deleteReview' in request.POST: 
+            print('debug-=========')       
+            review = Review.objects.get(id=pk)
+            review.delete()
+            redirect('update_trade', trade_id)
+
 
     context = {'sidebar': sidebar,
                'profile': profile,
