@@ -184,6 +184,25 @@ div::-webkit-scrollbar-corner{
     background: #171A1F;
 }
 
+/* ======== delete-review ============ */
+.REVIEW_DELETE_LABEL{
+  display: inline-block;
+}
+.REVIEW_DELETE_CHECKBOX{
+  display:none ;
+}
+.REVIEW_DELETE_CHECKBOX:checked + .REVIEW_DELETE_FORM{
+  top: 0px;
+  left: 0px;
+}
+.REVIEW_DELETE_FORM{
+  position: absolute;
+  top:50px;
+  left: 0px;
+  transition: all 0.5s ease-in-out;
+}
+
+
 
 </style>
   </head>

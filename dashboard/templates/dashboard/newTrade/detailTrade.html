@@ -113,26 +113,27 @@
 
 
 <div id="rightSidebar" class="border p-4 w-72 flex flex-col">
-<div id="REVIEW_TIMELINE" class="overflow-y-scroll ">
+<div id="REVIEW_TIMELINE" class="overflow-y-scroll">
   {% if reviews %}
     {% for review in reviews %}
     <div id="REVIEWS" class="flex flex-col my-6 pb-6 border-b">
-        {% comment %} <div id="-OWNER" class="text-blue-300 pb-4 self-center text-base"> @{{review.owner}} </div> {% endcomment %}
         <div id="-BODY">{{review.body|linebreaksbr}}</div>
         <div id="-EMOTION" class="text-red-300">{{review.emotion}}</div>
         <div id="-TIME" class="text-gray-500 text-xs">{{review.created}}</div>
-        <div class="flex justify-end">
+        <div class="flex mt-2 relative overflow-hidden h-10">
           <a class="mx-2 text-indigo-400" href="{% url 'edit_delete_review' review.id %}"> edit </a>
-          <div class="mx-2 text-red-400 cursor-pointer"> 
-            <div onclick="showPopup()"> delete </div>
-            <div id="REVIEW_DELETE_TEXT" class="hidden text-base text-gray-500"> Are you Sure? 
-                <form method="POST" action="{% url 'edit_delete_review' review.id %}" class="text-blue-500 mx-1">
-                  {% csrf_token %}
-                  <input type="submit" name="deleteReview" value="yes">
-                </form>
-                <div onclick="removePopup()" class="text-red-500 mx-1" >No</div>
-             </div>
-          </div>
+          <label class="REVIEW_DELETE_LABEL text-red-400 cursor-pointer"> 
+              <span class="text-red-400">delete</span>
+              <input type="checkbox" onclick="uncheck(this)" class="REVIEW_DELETE_CHECKBOX inline-block">
+              <div class="REVIEW_DELETE_FORM text-base p-1 bg-white text-gray-500 border rounded-md flex justify-end"> 
+                  <span class="mx-2"> Delete? </span> 
+                  <form method="POST" action="{% url 'edit_delete_review' review.id %}" class="text-blue-500 mx-1">
+                    {% csrf_token %}
+                    <input type="submit" name="deleteReview" value="Yes" class="cursor-pointer">
+                    <span class="text-red-400">No</span>
+                  </form>
+              </div>
+          </label>
         </div>
     </div>
    {% endfor %}
@@ -143,7 +144,7 @@
   {% endif %} 
 </div>
 {% if trade.total_reviews > 0 %}
-  <div id="CHART_REVIEW" class="border">
+  <div id="CHART_REVIEW" class="mt-auto py-4">
       <div id="RATIO" class=""> 
         <div>Happy ratio : {{trade.happy_ratio}}%</div>
         <div>Sad ratio : {{trade.sad_ratio}}%</div>
@@ -155,18 +156,6 @@
   </div>
 {% endif %}
 </div>
-
-  <script type="text/javascript">
-      function showPopup() {
-        delete_review = document.querySelector('#REVIEW_DELETE_TEXT')
-        delete_review.classList.remove('hidden')
-      }
-      function removePopup() {
-        delete_review = document.querySelector('#REVIEW_DELETE_TEXT')
-        delete_review.classList.add('hidden')
-        console.log(delete_review)
-      }
-  </script>
 
 
 
@@ -316,6 +305,10 @@
 
 
 </div>
+
+  
+
+
 <script type="text/javascript">
     let Trend_Analysis_List = document.body.querySelector('#-TREND_ANALYSIS_LIST')
     let Trend_Analysis_Button = document.body.querySelector('#-TREND_ANALYSIS_BUTTON')
@@ -376,6 +369,17 @@
         }
     }
 
-</script>
+// Uncheck other checkbox of delete review
+function uncheck(e) {
+    if (e.checked == true) {
+      let checkboxes = document.getElementsByClassName('REVIEW_DELETE_CHECKBOX')
+      for (let index = 0; index < checkboxes.length; index++) {
+        checkboxes[index].checked = false;
+      }
+      e.checked = true
+    }
+  }
 
+
+</script>
 {% endblock %}

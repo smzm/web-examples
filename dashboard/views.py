@@ -154,7 +154,7 @@ def edit_delete_review(request,  pk):
             print('debug-=========')       
             review = Review.objects.get(id=pk)
             review.delete()
-            redirect('update_trade', trade_id)
+            return redirect('update_trade', trade_id)
 
 
     context = {'sidebar': sidebar,
