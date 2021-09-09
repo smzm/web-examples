@@ -31,19 +31,28 @@ class TradePosition(models.Model):
         reviews = self.review_set.all()
         total_reviews = reviews.count()
         self.total_reviews = total_reviews
-        number_of_happy = reviews.filter(emotion='happy').count()
-        self.happy_ratio = round((number_of_happy / (total_reviews)) * 100, 1)
-        number_of_sad = reviews.filter(emotion='sad').count()
-        self.sad_ratio = round((number_of_sad / (total_reviews)) * 100, 1)
-        number_of_hope = reviews.filter(emotion='hope').count()
-        self.hope_ratio = round((number_of_hope / (total_reviews)) * 100, 1)
-        number_of_stress = reviews.filter(emotion='stress').count()
-        self.stress_ratio = round((number_of_stress / (total_reviews)) * 100, 1)
-        number_of_calm = reviews.filter(emotion='calm').count()
-        self.calm_ratio = round((number_of_calm / (total_reviews)) * 100, 1)
-        number_of_fear = reviews.filter(emotion='fear').count()
-        self.fear_ratio = round((number_of_fear / (total_reviews)) * 100, 1)
-        self.save()
+        try :
+            number_of_happy = reviews.filter(emotion='happy').count()
+            self.happy_ratio = round((number_of_happy / (total_reviews)) * 100, 1)
+            number_of_sad = reviews.filter(emotion='sad').count()
+            self.sad_ratio = round((number_of_sad / (total_reviews)) * 100, 1)
+            number_of_hope = reviews.filter(emotion='hope').count()
+            self.hope_ratio = round((number_of_hope / (total_reviews)) * 100, 1)
+            number_of_stress = reviews.filter(emotion='stress').count()
+            self.stress_ratio = round((number_of_stress / (total_reviews)) * 100, 1)
+            number_of_calm = reviews.filter(emotion='calm').count()
+            self.calm_ratio = round((number_of_calm / (total_reviews)) * 100, 1)
+            number_of_fear = reviews.filter(emotion='fear').count()
+            self.fear_ratio = round((number_of_fear / (total_reviews)) * 100, 1)
+            self.save()
+        except ZeroDivisionError:
+            self.happy_ratio = 0
+            self.sad_ratio = 0
+            self.hope_ratio = 0
+            self.stress_ratio = 0
+            self.calm_ratio = 0
+            self.fear_ratio = 0
+            self.save()
 
 class Review(models.Model):
     emotion_type = (('fear','Fear'),

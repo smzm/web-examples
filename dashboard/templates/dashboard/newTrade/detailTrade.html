@@ -104,7 +104,7 @@
             </div>
         </div>
 
-        <div id="CHART" class="h-32 my-6 border-2">
+        <div id="CHART" class="h-32 my-6 border-2 flex-1">
           chart
         </div>
 
@@ -119,10 +119,15 @@
   {% if reviews %}
     {% for review in reviews %}
     <div id="REVIEWS" class="flex flex-col my-6 pb-6 border-b">
-        <div id="-OWNER" class="text-blue-300 pb-4 self-center text-base"> @{{review.owner}} </div>
+        {% comment %} <div id="-OWNER" class="text-blue-300 pb-4 self-center text-base"> @{{review.owner}} </div> {% endcomment %}
         <div id="-BODY">{{review.body|linebreaksbr}}</div>
         <div id="-EMOTION" class="text-red-300">{{review.emotion}}</div>
         <div id="-TIME" class="text-gray-500 text-xs">{{review.created}}</div>
+        <div class="flex justify-end">
+          <a class="mx-2 text-indigo-400" href="{% url 'edit_delete_review' review.id %}"> edit </a>
+          <a class="mx-2 text-red-400" href=""> delete </a>
+        </div>
+        
     </div>
     {% endfor %}
    {% else %} 
@@ -131,16 +136,18 @@
     </div>
   {% endif %} 
 </div>
-<div id="CHART_REVIEW" class="border">
-    <div id="RATIO" class=""> 
-      <div>Happy ratio : {{trade.happy_ratio}}%</div>
-      <div>Sad ratio : {{trade.sad_ratio}}%</div>
-      <div>Hope ratio : {{trade.hope_ratio}}%</div>
-      <div>Fear ratio : {{trade.fear_ratio}}%</div>
-      <div>Calm ratio : {{trade.calm_ratio}}%</div>
-      <div>Stress ratio : {{trade.stress_ratio}}%</div>
-    </div>
-</div>
+{% if trade.total_reviews > 0 %}
+  <div id="CHART_REVIEW" class="border">
+      <div id="RATIO" class=""> 
+        <div>Happy ratio : {{trade.happy_ratio}}%</div>
+        <div>Sad ratio : {{trade.sad_ratio}}%</div>
+        <div>Hope ratio : {{trade.hope_ratio}}%</div>
+        <div>Fear ratio : {{trade.fear_ratio}}%</div>
+        <div>Calm ratio : {{trade.calm_ratio}}%</div>
+        <div>Stress ratio : {{trade.stress_ratio}}%</div>
+      </div>
+  </div>
+{% endif %}
 </div>
 
 

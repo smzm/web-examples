@@ -109,7 +109,7 @@ def update_trade(request, pk):
             review.trade = trade
             review.owner = profile
             review.save()
-            
+
     trade.calcualteEmotionRatio
     return render(request, 'dashboard/newTrade/detailTrade.html', {'sidebar': sidebar, 
                                                                    'trade': trade,
@@ -123,3 +123,40 @@ def update_trade(request, pk):
 def history(request):
     profile = request.user.profile
     return render(request, 'dashboard/history.html',  {'sidebar': sidebar, 'profile': profile})
+
+
+@login_required(login_url="/login/")
+def edit_delete_review(request,  pk):
+    profile = request.user.profile
+    review = profile.review_set.filter(id=pk)  # It should be an iterator so need to use filter
+    trade_id = review.first().trade_id
+    trade = profile.tradeposition_set.get(id=trade_id)
+    trade.calcualteEmotionRatio
+    trade_form = NewTradeForm({
+        'symbol': trade.symbol,
+        'price': trade.price,
+        'date': trade.date,
+        'time': trade.time,
+        'size': trade.size,
+        'side': trade.side,
+        # 'leverage': trade.leverage,
+        'comment': trade.comment})
+    reviews = trade.review_set.all().order_by('-created')
+    review_form = ReviewForm(instance=review.first())
+
+    if request.method == "POST":
+        if 'reviewForm' in request.POST:
+            review = ReviewForm(request.POST, instance=review.first())
+            if review.is_valid():
+                review.save()
+                return redirect('update_trade', trade_id)
+        elif '' in request.POST:        
+            pass
+
+    context = {'sidebar': sidebar,
+               'profile': profile,
+               'trade':trade,
+               'tradeForm':trade_form,
+               'reviews': reviews,
+               'reviewForm': review_form}
+    return render(request, 'dashboard/newTrade/detailTrade.html', context)

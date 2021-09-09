@@ -40,7 +40,7 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model= Review
         fields = ['emotion', 'body']
-        labels = {'emotion':'Place your emotion about this trade', 'body':'Add your review'}
+        labels = {'emotion':'Place your emotion about this trade', 'body':'Explain your feeling .'}
 
     def __init__(self, *args, **kwargs):
         super(ReviewForm, self).__init__(*args, **kwargs)
