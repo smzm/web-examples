@@ -1,3 +1,4 @@
+from dashboard.forms import ReviewForm, NewTradeForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -75,3 +76,5 @@ def loginUser(request):
 def logoutUser(request):
     logout(request)
     return redirect('login')
+
+

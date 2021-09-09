@@ -1,7 +1,6 @@
 import uuid
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.forms.widgets import SplitDateTimeWidget
 from users.models import Profile
 
 # Create your models here.
@@ -69,6 +68,23 @@ class Review(models.Model):
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
     def __str__(self):
         return self.body
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    recipient = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='messeges')
+    trade = models.ForeignKey(TradePosition, on_delete=models.CASCADE, related_name="msg")
+    # trade = models.ForeignKey(TradePosition, on_delete=models.CASCADE)
+    body = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(default=uuid.uuid4, unique=True,
+                          primary_key=True, editable=False)
+
+    def __str__(self):
+        return self.sender.name
+    class Meta:
+        ordering = ['is_read','-created']
 
 
 class Analysis(models.Model):

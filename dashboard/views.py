@@ -164,3 +164,25 @@ def edit_delete_review(request,  pk):
                'reviews': reviews,
                'reviewForm': review_form}
     return render(request, 'dashboard/newTrade/detailTrade.html', context)
+
+
+
+
+@login_required(login_url="/login/")
+def inbox(request, pk):
+    profile = request.user.profile
+    trade = profile.tradeposition_set.get(id=pk)
+    reviews = trade.review_set.all().order_by('-created')
+    review_form = ReviewForm()
+    trade_form = NewTradeForm({
+    'symbol': trade.symbol,
+    'price': trade.price,
+    'date': trade.date,
+    'time': trade.time,
+    'size': trade.size,
+    'side': trade.side,
+    # 'leverage': trade.leverage,
+    'comment': trade.comment})
+
+    context = {'sidebar':sidebar, 'profile':profile, 'trade':trade, 'reviews':reviews, 'reviewForm':review_form, 'tradeForm': trade_form }
+    return render(request, 'dashboard/newTrade/detailTrade.html', context)
