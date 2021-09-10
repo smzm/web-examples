@@ -121,7 +121,11 @@ input[type=range]::-ms-track {
 }
 
     </style> {% endcomment %}
+  {% block style %}
+  {% endblock style %}
+
 <style>
+  
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;700&display=swap');
    .comfortaa-font{
     font-family: 'Comfortaa', cursive; 
@@ -137,25 +141,6 @@ input[type=range]::-ms-track {
       background-color: #FCFEFF;
     }
 
-/* ======================  Spin Word*/
-    .spin_words{
-      animation: spin_words 5s infinite alternate ;
-      animation-timing-function: ease-in-out;
-    }
-    @keyframes spin_words{
-      0%{
-        transform: translateY(0%);
-      }
-      50%{
-        transform: translateY(0%);
-      }
-      55%{
-        transform: translateY(-100%);
-      }
-      100%{
-        transform: translateY(-100%);
-      }
-    }
 
 /*======= Scrollbar =======*/
     /* width */
@@ -183,26 +168,6 @@ div::-webkit-scrollbar-thumb:hover {
 div::-webkit-scrollbar-corner{
     background: #171A1F;
 }
-
-/* ======== delete-review ============ */
-.REVIEW_DELETE_LABEL{
-  display: inline-block;
-}
-.REVIEW_DELETE_CHECKBOX{
-  display:none ;
-}
-.REVIEW_DELETE_CHECKBOX:checked + .REVIEW_DELETE_FORM{
-  top: 0px;
-  left: 0px;
-}
-.REVIEW_DELETE_FORM{
-  position: absolute;
-  top:50px;
-  left: 0px;
-  transition: all 0.5s ease-in-out;
-}
-
-
 
 </style>
   </head>

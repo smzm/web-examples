@@ -2,7 +2,7 @@ from django.http import request
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from .forms import NewTradeForm, ReviewForm
-from .models import TradePosition, Review
+from .models import Message, TradePosition, Review
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -101,7 +101,7 @@ def update_trade(request, pk):
                 trade.save()
                 dynamicPath_newtrade = reverse('newtrade')
                 messages.success(request, 'Your trade position was updated.')
-                return HttpResponseRedirect(dynamicPath_newtrade)
+                return redirect('update_trade', pk)
 
         elif 'reviewForm' in request.POST :
             review_form = ReviewForm(request.POST)
@@ -109,15 +109,30 @@ def update_trade(request, pk):
             review.trade = trade
             review.owner = profile
             review.save()
-
     trade.calcualteEmotionRatio
-    return render(request, 'dashboard/newTrade/detailTrade.html', {'sidebar': sidebar, 
-                                                                   'trade': trade,
-                                                                   'profile': profile,
-                                                                   'tradeForm': trade_form,
-                                                                   'reviewForm': review_form, 
-                                                                   'reviews': reviews})
 
+    all_msg = trade.msg.all()
+    msg_count = all_msg.count()
+    unread_msg = all_msg.filter(is_read=False)
+    unread_count = unread_msg.count() 
+    read_msg = all_msg.filter(is_read=True)
+    read_count = read_msg.count()
+    msg_details = {'all_msg': all_msg,
+                   'unread_msg':unread_msg,
+                   'unread_count': unread_count,
+                   'msg_count': msg_count,
+                   'read_msg':read_msg,
+                   'read_count': read_count}
+
+
+    context = {'sidebar':sidebar,
+               'profile':profile,
+               'trade':trade,
+               'tradeForm': trade_form,
+               'reviews':reviews,
+               'reviewForm':review_form,
+               'msg_details': msg_details }
+    return render(request, 'dashboard/newTrade/detailTrade.html',context)
 
 @login_required(login_url="/login/")
 def history(request):
@@ -165,24 +180,3 @@ def edit_delete_review(request,  pk):
                'reviewForm': review_form}
     return render(request, 'dashboard/newTrade/detailTrade.html', context)
 
-
-
-
-@login_required(login_url="/login/")
-def inbox(request, pk):
-    profile = request.user.profile
-    trade = profile.tradeposition_set.get(id=pk)
-    reviews = trade.review_set.all().order_by('-created')
-    review_form = ReviewForm()
-    trade_form = NewTradeForm({
-    'symbol': trade.symbol,
-    'price': trade.price,
-    'date': trade.date,
-    'time': trade.time,
-    'size': trade.size,
-    'side': trade.side,
-    # 'leverage': trade.leverage,
-    'comment': trade.comment})
-
-    context = {'sidebar':sidebar, 'profile':profile, 'trade':trade, 'reviews':reviews, 'reviewForm':review_form, 'tradeForm': trade_form }
-    return render(request, 'dashboard/newTrade/detailTrade.html', context)

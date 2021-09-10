@@ -1,5 +1,38 @@
 {% extends 'main.html' %}
 
+{% block style %}
+<style>
+    /* ======== delete-review popup ============ */
+    .REVIEW_DELETE_LABEL{
+      display: inline-block;
+    }
+    .REVIEW_DELETE_CHECKBOX{
+      display:none ;
+    }
+    .REVIEW_DELETE_CHECKBOX:checked + .REVIEW_DELETE_FORM{
+      top: 0px;
+      left: 0px;
+    }
+    .REVIEW_DELETE_FORM{
+      position: absolute;
+      top:50px;
+      left: 0px;
+      transition: all 0.5s ease-in-out;
+    }
+
+    /* ======== slide messages : all , unread , read  ============ */
+  .inside{
+    top: 0px;
+    transition: all 0.5s ease-in-out;
+  }
+  .outside{
+    top: 60px;
+    transition: all 0.5s ease-in-out;
+  }
+
+</style>
+{% endblock style %}
+
 {% block sidebar %}
 {% include 'include/sidebar.html' with active='trades' %}
 {% endblock sidebar %}
@@ -101,6 +134,49 @@
                 </div>
             </div>
         </div>
+
+
+      <div id="MESSAGES" class="my-2">
+        <div class="flex justify-around">
+            <h1 id="ALL_MSG_LABEL" class="my-2 text-gray-900" onclick="shift(this)"> Messages ( <span class="text-red-400"> {{msg_details.msg_count}} </span> ) </h1>
+            <h1 id="UNREAD_MSG_LABEL" class="my-2 text-gray-400" onclick="shift(this)"> Unread ( {{msg_details.unread_count}} ) </h1>
+            <h1 id="READ_MSG_LABEL" class="my-2 text-gray-400" onclick="shift(this)"> read ( {{msg_details.read_count}} ) </h1>
+        </div>
+
+        <div id="MESSAGES_CONTENT" class="flex h-12 overflow-hidden relative">
+
+            {% for all_message in msg_details.all_msg  %}
+              <li id="ALL_MSG" class="flex justify-around items-center border min-w-full absolute inside ">
+                <div class="flex flex-col items-center">
+                  <a id="MSG_FROM" href="{% url 'profile' all_message.sender %}">{{all_message.sender}}</a>
+                  <span id="MSG_DATE" class="text-xs text-gray-400"> {{all_message.created}} </span>
+                </div>
+                <span id="MSG_BODY"> {{all_message.body}} </span>
+              </li>
+              {% endfor %}
+
+            {% for unread_message in msg_details.unread_msg %}
+              <li id="UNREAD_MSG" class="flex justify-around items-center border min-w-full absolute outside">
+                <div class="flex flex-col items-center">
+                  <a id="MSG_FROM" href="{% url 'profile' unread_message.sender %}">{{unread_message.sender}}</a>
+                  <span id="MSG_DATE" class="text-xs text-gray-400"> {{unread_message.created}} </span>
+                </div>
+                <span id="MSG_BODY"> {{unread_message.body}} </span>
+              </li>
+            {% endfor %}
+
+            {% for read_message in msg_details.read_msg %}
+              <li id="READ_MSG" class="flex justify-around items-center border min-w-full absolute outside">
+                <div class="flex flex-col items-center">
+                  <a id="MSG_FROM" href="{% url 'profile' read_message.sender %}">{{read_message.sender}}</a>
+                  <span id="MSG_DATE" class="text-xs text-gray-400"> {{read_message.created}} </span>
+                </div>
+                <span id="MSG_BODY"> test{{read_message.body}} </span>
+              </li>
+            {% endfor %}
+        </div>
+
+      </div>
 
         <div id="CHART" class="h-32 my-6 border-2 flex-1">
           chart
@@ -380,6 +456,42 @@ function uncheck(e) {
     }
   }
 
+function shift(e){
+  let all_msg = document.querySelector("#ALL_MSG")
+  let unread_msg = document.querySelector("#UNREAD_MSG")
+  let read_msg = document.querySelector("#READ_MSG")
+  
+  if(e.id == "ALL_MSG_LABEL"){
+    all_msg.classList.add('inside')
+    all_msg.classList.remove('outside')
 
+    unread_msg.classList.remove('inside')
+    unread_msg.classList.add('outside')
+    
+    read_msg.classList.remove('inside')
+    read_msg.classList.add('outside')
+  }
+  if (e.id == "UNREAD_MSG_LABEL") {
+    all_msg.classList.remove('inside')
+    all_msg.classList.add('outside')
+    
+    unread_msg.classList.remove('outside')
+    unread_msg.classList.add('inside')
+    
+    read_msg.classList.remove('inside')
+    read_msg.classList.add('outside')
+  }
+  if (e.id == "READ_MSG_LABEL") {
+    all_msg.classList.remove('inside')
+    all_msg.classList.add('outside')
+
+    unread_msg.classList.remove('inside')
+    unread_msg.classList.add('outside')
+
+    read_msg.classList.add('inside')
+    read_msg.classList.remove('outside')
+
+  }
+}
 </script>
 {% endblock %}

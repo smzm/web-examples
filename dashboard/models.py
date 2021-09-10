@@ -75,7 +75,7 @@ class Message(models.Model):
     recipient = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='messeges')
     trade = models.ForeignKey(TradePosition, on_delete=models.CASCADE, related_name="msg")
     # trade = models.ForeignKey(TradePosition, on_delete=models.CASCADE)
-    body = models.TextField()
+    body = models.TextField(max_length=1000)
     is_read = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True,
