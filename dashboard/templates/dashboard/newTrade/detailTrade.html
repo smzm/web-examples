@@ -21,14 +21,15 @@
     }
 
     /* ======== slide messages : all , unread , read  ============ */
-  .inside{
+  .msg_inside{
     top: 0px;
-    transition: all 0.5s ease-in-out;
+    transition: all 0.9s ease-in-out;
   }
-  .outside{
+  .msg_outside{
     top: 60px;
-    transition: all 0.5s ease-in-out;
+    transition: all 0.4s ease-in-out;
   }
+
 
 </style>
 {% endblock style %}
@@ -135,48 +136,36 @@
             </div>
         </div>
 
-
-      <div id="MESSAGES" class="my-2">
-        <div class="flex justify-around">
-            <h1 id="ALL_MSG_LABEL" class="my-2 text-gray-900" onclick="shift(this)"> Messages ( <span class="text-red-400"> {{msg_details.msg_count}} </span> ) </h1>
-            <h1 id="UNREAD_MSG_LABEL" class="my-2 text-gray-400" onclick="shift(this)"> Unread ( {{msg_details.unread_count}} ) </h1>
-            <h1 id="READ_MSG_LABEL" class="my-2 text-gray-400" onclick="shift(this)"> read ( {{msg_details.read_count}} ) </h1>
+    {% if msg_details.msg_count %}
+      <div id="MESSAGES" class="">
+        <div id="MESSAGES_LABELS" class="flex justify-around py-1">
+            <h1 id="INBOX_MSG_LABEL" class="my-2 text-gray-400 p-2 rounded-md hover:text-gray-700 cursor-pointer " onclick="shift(this)"> Inbox </h1>
+            <h1 id="LATEST_MSG_LABEL" class="my-2 text-gray-900 bg-gray-100 p-2 rounded-md hover:text-gray-700 cursor-pointer" onclick="shift(this)"> Latest Message </h1>
         </div>
 
+        <hr class="w-4/5 mx-auto">
+        
         <div id="MESSAGES_CONTENT" class="flex h-12 overflow-hidden relative">
+            
+            <div id="INBOX_MSG_CONTAINER" class="flex flex-col absolute msg_outside min-w-full">
+              <li class="my-4 text-center"> you have <span class="text-red-400"> {{msg_details.msg_count}} </span> message{{msg_details.msg_count|pluralize}} about this trade. <a href="{% url 'trade_inbox' trade.id %}" class="text-red-500"> Go to inbox </a></li>
+            </div>
 
-            {% for all_message in msg_details.all_msg  %}
-              <li id="ALL_MSG" class="flex justify-around items-center border min-w-full absolute inside ">
+            <div id="LATEST_MSG_CONTAINER" class="flex flex-col absolute msg_inside min-w-full">
+              <li id="LATEST_MSG" class="flex flex-grow justify-around items-center my-2">
                 <div class="flex flex-col items-center">
-                  <a id="MSG_FROM" href="{% url 'profile' all_message.sender %}">{{all_message.sender}}</a>
-                  <span id="MSG_DATE" class="text-xs text-gray-400"> {{all_message.created}} </span>
+                  <a id="MSG_FROM" href="{% url 'profile' msg_details.latest_msg.sender %}" class="text-blue-600">{{msg_details.latest_msg.sender}}</a>
+                  <span id="MSG_DATE" class="text-xs text-gray-400"> {{msg_details.latest_msg.created}} </span>
                 </div>
-                <span id="MSG_BODY"> {{all_message.body}} </span>
+                <span id="MSG_BODY" class="text-red-500"> {{msg_details.latest_msg.body|truncatewords:5}} </span>
               </li>
-              {% endfor %}
+            </div>
 
-            {% for unread_message in msg_details.unread_msg %}
-              <li id="UNREAD_MSG" class="flex justify-around items-center border min-w-full absolute outside">
-                <div class="flex flex-col items-center">
-                  <a id="MSG_FROM" href="{% url 'profile' unread_message.sender %}">{{unread_message.sender}}</a>
-                  <span id="MSG_DATE" class="text-xs text-gray-400"> {{unread_message.created}} </span>
-                </div>
-                <span id="MSG_BODY"> {{unread_message.body}} </span>
-              </li>
-            {% endfor %}
-
-            {% for read_message in msg_details.read_msg %}
-              <li id="READ_MSG" class="flex justify-around items-center border min-w-full absolute outside">
-                <div class="flex flex-col items-center">
-                  <a id="MSG_FROM" href="{% url 'profile' read_message.sender %}">{{read_message.sender}}</a>
-                  <span id="MSG_DATE" class="text-xs text-gray-400"> {{read_message.created}} </span>
-                </div>
-                <span id="MSG_BODY"> test{{read_message.body}} </span>
-              </li>
-            {% endfor %}
         </div>
-
       </div>
+    {% else %}
+            <div class="mx-auto">There is no message for this trade.</div>  
+    {% endif %}
 
         <div id="CHART" class="h-32 my-6 border-2 flex-1">
           chart
@@ -457,40 +446,33 @@ function uncheck(e) {
   }
 
 function shift(e){
-  let all_msg = document.querySelector("#ALL_MSG")
-  let unread_msg = document.querySelector("#UNREAD_MSG")
-  let read_msg = document.querySelector("#READ_MSG")
+  let inbox_msg = document.querySelector("#INBOX_MSG_CONTAINER")
+  let inbox_msg_label = document.querySelector("#INBOX_MSG_LABEL")
+  let latest_msg = document.querySelector("#LATEST_MSG_CONTAINER")
+  let latest_msg_label = document.querySelector("#LATEST_MSG_LABEL")
+
   
-  if(e.id == "ALL_MSG_LABEL"){
-    all_msg.classList.add('inside')
-    all_msg.classList.remove('outside')
+  if(e.id == "INBOX_MSG_LABEL"){
+    inbox_msg.classList.add('msg_inside', 'text-gray-900',)
+    inbox_msg.classList.remove('msg_outside', 'text-gray-400')
+    inbox_msg_label.classList.add('text-gray-900', 'bg-gray-100')
+    inbox_msg_label.classList.remove('text-gray-400')
 
-    unread_msg.classList.remove('inside')
-    unread_msg.classList.add('outside')
-    
-    read_msg.classList.remove('inside')
-    read_msg.classList.add('outside')
+    latest_msg.classList.add('msg_outside', 'text-gray-400')
+    latest_msg.classList.remove('msg_inside', 'text-gray-400')
+    latest_msg_label.classList.add('text-gray-400')
+    latest_msg_label.classList.remove('text-gray-900', 'bg-gray-100')
   }
-  if (e.id == "UNREAD_MSG_LABEL") {
-    all_msg.classList.remove('inside')
-    all_msg.classList.add('outside')
-    
-    unread_msg.classList.remove('outside')
-    unread_msg.classList.add('inside')
-    
-    read_msg.classList.remove('inside')
-    read_msg.classList.add('outside')
-  }
-  if (e.id == "READ_MSG_LABEL") {
-    all_msg.classList.remove('inside')
-    all_msg.classList.add('outside')
+  if (e.id == "LATEST_MSG_LABEL") {
+    inbox_msg.classList.add('msg_outside')
+    inbox_msg.classList.remove('msg_inside')
+    inbox_msg_label.classList.add('text-gray-400')
+    inbox_msg_label.classList.remove('text-gray-900', 'bg-gray-100')
 
-    unread_msg.classList.remove('inside')
-    unread_msg.classList.add('outside')
-
-    read_msg.classList.add('inside')
-    read_msg.classList.remove('outside')
-
+    latest_msg.classList.remove('msg_outside')
+    latest_msg.classList.add('msg_inside')
+    latest_msg_label.classList.remove('text-gray-400')
+    latest_msg_label.classList.add('text-gray-900', 'bg-gray-100')
   }
 }
 </script>

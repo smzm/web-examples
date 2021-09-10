@@ -113,16 +113,11 @@ def update_trade(request, pk):
 
     all_msg = trade.msg.all()
     msg_count = all_msg.count()
-    unread_msg = all_msg.filter(is_read=False)
-    unread_count = unread_msg.count() 
-    read_msg = all_msg.filter(is_read=True)
-    read_count = read_msg.count()
+    latest_msg = all_msg.last()
     msg_details = {'all_msg': all_msg,
-                   'unread_msg':unread_msg,
-                   'unread_count': unread_count,
                    'msg_count': msg_count,
-                   'read_msg':read_msg,
-                   'read_count': read_count}
+                   'latest_msg': latest_msg
+                    }
 
 
     context = {'sidebar':sidebar,
@@ -180,3 +175,20 @@ def edit_delete_review(request,  pk):
                'reviewForm': review_form}
     return render(request, 'dashboard/newTrade/detailTrade.html', context)
 
+@login_required(login_url="/login/")
+def trade_inbox(request, pk):
+    profile = request.user.profile
+    trade = profile.tradeposition_set.get(id=pk)
+
+    all_msg = trade.msg.all()
+    msg_count = all_msg.count()
+    unread_msg = all_msg.filter(is_read=False)
+    unread_count = unread_msg.count() 
+    read_msg = all_msg.filter(is_read=True)
+    read_count = read_msg.count()
+    msg_details = {'all_msg': all_msg,
+                   'msg_count': msg_count,
+                    }
+
+    context = {'sidebar':sidebar, 'profile':profile, 'trade':trade, 'msg_details':msg_details}
+    return render(request, 'dashboard/inbox.html', context)
