@@ -72,9 +72,8 @@ class Review(models.Model):
 
 class Message(models.Model):
     sender = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    recipient = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='messeges')
+    recipient = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='messages')
     trade = models.ForeignKey(TradePosition, on_delete=models.CASCADE, related_name="msg")
-    # trade = models.ForeignKey(TradePosition, on_delete=models.CASCADE)
     body = models.TextField(max_length=1000)
     is_read = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
@@ -84,7 +83,7 @@ class Message(models.Model):
     def __str__(self):
         return self.sender.name
     class Meta:
-        ordering = ['is_read','-created']
+        ordering = ['-created']
 
 
 class Analysis(models.Model):

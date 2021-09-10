@@ -135,7 +135,7 @@
                 </div>
             </div>
         </div>
-
+        
     {% if msg_details.msg_count %}
       <div id="MESSAGES" class="">
         <div id="MESSAGES_LABELS" class="flex justify-around py-1">
@@ -148,7 +148,7 @@
         <div id="MESSAGES_CONTENT" class="flex h-12 overflow-hidden relative">
             
             <div id="INBOX_MSG_CONTAINER" class="flex flex-col absolute msg_outside min-w-full">
-              <li class="my-4 text-center"> you have <span class="text-red-400"> {{msg_details.msg_count}} </span> message{{msg_details.msg_count|pluralize}} about this trade. <a href="{% url 'trade_inbox' trade.id %}" class="text-red-500"> Go to inbox </a></li>
+              <li class="my-4 text-center"> you have <span class="text-red-400"> {{msg_details.msg_count}} </span> message{{msg_details.msg_count|pluralize}} about this trade. <a href="{% url 'trade_inbox' msg_details.latest_msg.id %}" class="text-red-500"> Go to inbox </a></li>
             </div>
 
             <div id="LATEST_MSG_CONTAINER" class="flex flex-col absolute msg_inside min-w-full">
@@ -165,7 +165,7 @@
       </div>
     {% else %}
             <div class="mx-auto">There is no message for this trade.</div>  
-    {% endif %}
+    {% endif %} 
 
         <div id="CHART" class="h-32 my-6 border-2 flex-1">
           chart
