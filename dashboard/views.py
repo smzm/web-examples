@@ -1,7 +1,7 @@
 from django.http import request
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
-from .forms import NewTradeForm, ReviewForm
+from .forms import NewTradeForm, ReviewForm, MessageForm
 from .models import Message, TradePosition, Review
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -136,9 +136,9 @@ def history(request):
 
 
 @login_required(login_url="/login/")
-def edit_delete_review(request,  pk):
+def edit_delete_review(request,  rev_pk):
     profile = request.user.profile
-    review = profile.review_set.filter(id=pk)  # It should be an iterator so need to use filter
+    review = profile.review_set.filter(id=rev_pk)  # It should be an iterator so need to use filter
     trade_id = review.first().trade_id
     trade = profile.tradeposition_set.get(id=trade_id)
     trade.calcualteEmotionRatio
@@ -162,7 +162,7 @@ def edit_delete_review(request,  pk):
                 return redirect('update_trade', trade_id)
         elif 'deleteReview' in request.POST: 
             print('debug-=========')       
-            review = Review.objects.get(id=pk)
+            review = Review.objects.get(id=rev_pk)
             review.delete()
             return redirect('update_trade', trade_id)
 
@@ -176,11 +176,12 @@ def edit_delete_review(request,  pk):
     return render(request, 'dashboard/newTrade/detailTrade.html', context)
 
 @login_required(login_url="/login/")
-def trade_inbox(request, pk):
+def trade_inbox(request, msg_pk):
     profile = request.user.profile
-    message = Message.objects.get(id=pk)
-    message.is_read = True
-    message.save()
+    message = profile.messages.get(id=msg_pk)
+    if message.is_read == False:
+        message.is_read = True
+        message.save()
     trade = message.trade
 
     all_msg = trade.msg.all()
@@ -211,3 +212,22 @@ def all_trades_inbox(request):
 
     context = { 'sidebar':sidebar, 'profile':profile, 'trades':trades, 'msg_details':msg_details}
     return render(request, 'dashboard/inbox.html', context)
+
+
+
+def message_trade(request, username, trade_pk):
+    profile = Profile.objects.get(username=username) 
+    trade = profile.tradeposition_set.get(id=trade_pk)
+    form = MessageForm()
+    if request.method == "POST":
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            msg = form.save(commit=False)
+            msg.sender = request.user.profile
+            msg.recipient = profile
+            msg.trade = trade
+            msg.save()
+            return redirect('profile', username=username)
+
+    context = {'profile':profile, 'trade':trade, "form":form}
+    return render(request, 'include/messageForm.html', context)

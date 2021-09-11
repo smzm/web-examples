@@ -2,7 +2,7 @@ from django import forms
 from datetime import datetime
 from django.forms.widgets import DateTimeInput, Select, TextInput, Widget
 import pytz
-from .models import Review
+from .models import Review, Message
 
 
 def get_now():
@@ -58,3 +58,14 @@ class ReviewForm(forms.ModelForm):
         })
 
         
+        
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['body']
+        
+    def __init__(self, *args, **kwargs):
+        super(MessageForm, self).__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            field.widget.attrs.update({'class': 'border border-gray-300'})

@@ -11,8 +11,9 @@ urlpatterns = [
     path('analysis/', views.dashboard, name="analysis"),
     path('trades/delete/<str:pk>/', views.delete_trade, name="delete_trade"),
     path('trade/<str:pk>/', views.update_trade, name="update_trade"),
-    path('trade/review/<str:pk>/', views.edit_delete_review, name="edit_delete_review"),
-    path('trade/inbox/<str:pk>/', views.trade_inbox, name="trade_inbox"),
-    path('trades/inbox/', views.all_trades_inbox, name="all_trades_inbox")
-    
+    path('trade/review/<str:rev_pk>/', views.edit_delete_review, name="edit_delete_review"),
+    path('trade/inbox/<str:msg_pk>/', views.trade_inbox, name="trade_inbox"),
+    path('trades/inbox/', views.all_trades_inbox, name="all_trades_inbox"),
+    path('@<str:username>/message/<str:trade_pk>/', views.message_trade, name="message_trade")
+
     ]
