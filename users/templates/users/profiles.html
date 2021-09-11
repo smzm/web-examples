@@ -3,23 +3,49 @@
 
 
 {% block content %}
-<div class="flex flex-col">
-    <div class="text-lg">
-        @{{profile.username}}
+
+<div id="USER" class="flex w-full min-h-full">
+
+    <a href="{% url 'dashboard' %}" class="text-indigo-500">Dashboard</a>
+
+    <div id="-PROFILE" class='p-10 w-72 bg-color-light2 ml-10'>
+        <div class="flex flex-col items-center justify-center">
+            <a href="{% url 'profile' profile.username %}" class="flex justify-center items-center bg-color-light1 rounded-full w-44 h-44 p-4">
+                <img src="/{{profile.profile_image}}" class="w-32 h-32 object-cover rounded-full border-2 border-gray-50 hover:border-gray-300 transition-all duration-300 transform hover:scale-105 cursor-pointer shadow-lg " alt="Profile Picture">
+            </a>
+                <div id="USERNAME" class="my-3 text-lg font-bold text-gray-700 cursor-default antialiased">@{{profile.username}}</div>
+                <div id="NAME" class="my-1  text-gray-700 cursor-default antialiased">{{profile.name}}</div>
+                <div id="NAME" class="my-1  text-gray-700 cursor-default antialiased">{{profile.email}}</div>
+                {% if profile.id == request.user.profile.id %}
+                <a href="{% url 'editProfile' %}" class="text-red-500">
+                    edit
+                </a>
+                {% endif %}
+                <hr class="my-1 w-full border-gray-400 border-opacity-10">
+        </div>
     </div>
-    <div class="">
-        {{profile.name}}
+
+    <div id="-LATESTTRADE" class="overflow-y-scroll flex-1">
+        <div class="p-10 bg-gray-100 w-full border">LATEST TRADES</div>
+        {% for trade in public_trades %}
+            <li class="border-b list-none p-4 flex items-center justify-evenly ">
+                <span class="m-2"> {{trade.symbol}} </span>
+                <div class="m-2 flex flex-col"> 
+                    <span> {{trade.date}} </span>
+                    <span> {{trade.time}} </span>
+                </div>
+                <span class="m-2"> {{trade.price}} </span>
+                <span class="m-2"> {{trade.side}} </span>
+                <span class="m-2"> {{trade.size}} </span>
+                {% if request.user.profile.id != profile.id %}
+                    <a href="{% url 'message_trade' profile.username trade.id %}" class="text-red-500"> Send Message </a>
+                {% else %}
+                    <a href="{% url 'update_trade' trade.id %}" class="text-red-500"> Details </a>
+                {% endif %}
+            </li>
+        {% endfor %}
     </div>
-    <div class="">
-        {{profile.email}}
-    </div>
-        <div class="">
-        {{profile.github_account}}
-    </div>
-    <a href="{% url 'editProfile' %}" class="text-red-500">
-        edit
-    </a>
-</div>
+
+</div> 
    
-    <img src="/{{profile.profile_image}}" class="w-24 h-24" alt="Profile Picture">
 {% endblock content %}
