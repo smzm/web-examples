@@ -21,3 +21,5 @@ class ProfileForm(ModelForm):
         model = Profile
         fields = "__all__"
         exclude = ["user"]
+
+

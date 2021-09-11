@@ -1,4 +1,3 @@
-from dashboard.forms import ReviewForm, NewTradeForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -13,7 +12,8 @@ from django.contrib.auth.decorators import login_required
 login_required(login_url="/login/")
 def profile(request, username):
     profile = Profile.objects.get(username=username)   
-    context = {'profile': profile}
+    public_trades = profile.tradeposition_set.all().order_by('-date', '-time')
+    context = {'profile': profile, 'public_trades': public_trades}
     return render(request, 'users/profiles.html', context)
 
 def editProfile(request):
