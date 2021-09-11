@@ -157,7 +157,7 @@
                   <a id="MSG_FROM" href="{% url 'profile' msg_details.latest_msg.sender %}" class="text-blue-600">{{msg_details.latest_msg.sender}}</a>
                   <span id="MSG_DATE" class="text-xs text-gray-400"> {{msg_details.latest_msg.created}} </span>
                 </div>
-                <span id="MSG_BODY" class="text-red-500"> {{msg_details.latest_msg.body|truncatewords:5}} </span>
+                <a id="MSG_BODY" href="{% url 'trade_inbox' msg_details.latest_msg.id %}" class="text-red-500"> {{msg_details.latest_msg.body|truncatewords:5}} </a>
               </li>
             </div>
 
