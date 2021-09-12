@@ -65,7 +65,7 @@ def newTrade(request):
 def delete_trade(request, pk):
     trade = TradePosition.objects.get(id=pk)
     trade.delete()
-    dynamicPath_newtrade = reverse('newtrade')
+    dynamicPath_newtrade = reverse('trades')
     return HttpResponseRedirect(dynamicPath_newtrade)
 
 
