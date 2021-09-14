@@ -66,7 +66,7 @@ def refresh_token_view(request):
             'Authentication credentials were not provided.')
     try:
         payload = jwt.decode(
-            refresh_token, settings.REFRESH_TOKEN_SECRET, algorithms=['HS256'])
+            refresh_token, settings.SECRET_KEY, algorithms=['HS256'])
     except jwt.ExpiredSignatureError:
         raise exceptions.AuthenticationFailed(
             'expired refresh token, please login again.')
