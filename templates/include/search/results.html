@@ -1,0 +1,17 @@
+{% if querysets %}
+    {% for qs in querysets  %}
+        <li class="list-none">
+            <a href="{% url 'update_trade' qs.id %}"> 
+                <span class="mx-2">{{qs.symbol}}</span>
+                <span class="mx-2">{{qs.date}}</span>
+                <span class="mx-2">{{qs.time}}</span>
+            </a>   
+        <li>
+    {% endfor %}
+    {% if continuous %}
+        <form action="{% url 'trades' %}" method="GET">
+            <input hidden type="text" value="{{request.GET.search_query}}" name="search_query">
+            <button type="submit" class="text-gray-400"> See All...</button>
+        </form>
+    {% endif %}
+{% endif %}
