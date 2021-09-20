@@ -32,14 +32,7 @@
 {% block content%}
 <div id="MAIN" class="flex flex-col flex-1 bg-color-light1 py-5 px-20">
 
-    <form id="SEARCH" action="{% url 'trades' %}" method="GET" class="mt-5 w-56 self-end">
-            <div class="focus-within:text-blue-400 text-gray-400 relative flex flex-col items-center">
-                <button class="absolute z-10 top-2 left-8" type="submit">
-                    <svg class="fill-current " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path></svg>
-                </button>
-                <input spellcheck="false" type="text" name="search_query" class="bg-color-light3 pl-12 p-2 w-10/12 rounded-lg outline-none border border-gray-300 border-opacity-20 focus:border-blue-300 text-gray-400 transition-all duration-200">
-            </div>
-    </form>
+    {% include 'include/search/search.html' %}
 
     <div id="LATEST_TRADES" class="bg-color-light1 min-h-full my-14">
         <h2 class="text-gray-600 text-2xl font-bold tracking-wider px-10 pb-10 antialiased"> LATEST TRADES </h2>
@@ -111,6 +104,9 @@
         </div>
     </div>
 </div>
+
+
+
 {%endblock%}
 
 
