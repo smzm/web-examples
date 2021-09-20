@@ -1,4 +1,5 @@
 from django.http import request
+from django.http import response
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from .forms import NewTradeForm, ReviewForm, MessageForm
@@ -19,10 +20,12 @@ sidebar = {
 }
 
 
+
 @login_required(login_url="/login/")
 def dashboard(request):
     profile = request.user.profile
     return render(request, 'dashboard/dashboard.html', {'sidebar': sidebar, 'profile': profile})
+
 
 
 @login_required(login_url="/login/")
@@ -34,7 +37,9 @@ def trades(request):
         trades, search_query = searchTrade(request)
 
     trades, custumRange = paginateTrades(request, trades, 5)        
+
     return render(request, 'dashboard/trades.html',  {'sidebar': sidebar, 'profile': profile, 'trades':trades, 'search_query':search_query, 'customRange':custumRange})
+
 
 
 @login_required(login_url="/login/")
@@ -55,10 +60,12 @@ def newTrade(request):
             # obj.leverage = trade_form.cleaned_data['leverage']
             obj.comment = trade_form.cleaned_data['comment']
             obj.save()
+            return redirect(f'/trade/{obj.id}')
 
 
 
     return render(request, 'dashboard/newTrade/newTrade.html', {'sidebar': sidebar, 'tradeForm': trade_form, 'trades': trades, 'profile': profile})
+
 
 
 @login_required(login_url="/login/")
@@ -67,6 +74,7 @@ def delete_trade(request, pk):
     trade.delete()
     dynamicPath_newtrade = reverse('trades')
     return HttpResponseRedirect(dynamicPath_newtrade)
+
 
 
 @login_required(login_url="/login/")
@@ -117,8 +125,6 @@ def update_trade(request, pk):
     msg_details = {'all_msg': all_msg,
                    'msg_count': msg_count,
                    'latest_msg': latest_msg}
-    print(latest_msg)
-
 
     context = {'sidebar':sidebar,
                'profile':profile,
@@ -129,10 +135,13 @@ def update_trade(request, pk):
                'msg_details': msg_details }
     return render(request, 'dashboard/newTrade/detailTrade.html',context)
 
+
+
 @login_required(login_url="/login/")
 def history(request):
     profile = request.user.profile
     return render(request, 'dashboard/history.html',  {'sidebar': sidebar, 'profile': profile})
+
 
 
 @login_required(login_url="/login/")
@@ -174,6 +183,8 @@ def edit_delete_review(request,  rev_pk):
                'reviews': reviews,
                'reviewForm': review_form}
     return render(request, 'dashboard/newTrade/detailTrade.html', context)
+
+
 
 @login_required(login_url="/login/")
 def trade_inbox(request, msg_pk):
@@ -231,3 +242,23 @@ def message_trade(request, username, trade_pk):
 
     context = {'profile':profile, 'trade':trade, "form":form}
     return render(request, 'include/messageForm.html', context)
+
+
+@login_required(login_url="/login/")
+def search(request):
+    profile = request.user.profile
+    if request.htmx : 
+        search_query = request.GET.get('search_query')
+        continuous = False
+        if search_query : 
+            querysets = profile.tradeposition_set.all().filter(symbol__icontains=search_query).order_by('-date', '-time')
+            if querysets.count() > 3 : 
+                querysets = querysets[:3]
+                continuous = True
+        else : 
+            querysets = None
+
+        context = { 'querysets' : querysets, 'continuous':continuous  }
+        template = 'include/search/results.html'
+
+    return render(request, template, context)
