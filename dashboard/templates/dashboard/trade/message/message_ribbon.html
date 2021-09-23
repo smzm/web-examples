@@ -1,0 +1,30 @@
+    {% if msg_details.msg_count %}
+      <div id="MESSAGES" class="">
+        <div id="MESSAGES_LABELS" class="flex justify-around py-1">
+            <h1 id="INBOX_MSG_LABEL" class="my-2 text-gray-400 p-2 rounded-md hover:text-gray-700 cursor-pointer " onclick="shift(this)"> Inbox </h1>
+            <h1 id="LATEST_MSG_LABEL" class="my-2 text-gray-900 bg-gray-100 p-2 rounded-md hover:text-gray-700 cursor-pointer" onclick="shift(this)"> Latest Message </h1>
+        </div>
+
+        <hr class="w-4/5 mx-auto">
+        
+        <div id="MESSAGES_CONTENT" class="flex h-12 overflow-hidden relative">
+            
+            <div id="INBOX_MSG_CONTAINER" class="flex flex-col absolute msg_outside min-w-full">
+              <li class="my-4 text-center"> you have <span class="text-red-400"> {{msg_details.msg_count}} </span> message{{msg_details.msg_count|pluralize}} about this trade. <a href="{% url 'trade_inbox' msg_details.latest_msg.id %}" class="text-red-500"> Go to inbox </a></li>
+            </div>
+
+            <div id="LATEST_MSG_CONTAINER" class="flex flex-col absolute msg_inside min-w-full">
+              <li id="LATEST_MSG" class="flex flex-grow justify-around items-center my-2">
+                <div class="flex flex-col items-center">
+                  <a id="MSG_FROM" href="{% url 'profile' msg_details.latest_msg.sender %}" class="text-blue-600">{{msg_details.latest_msg.sender}}</a>
+                  <span id="MSG_DATE" class="text-xs text-gray-400"> {{msg_details.latest_msg.created}} </span>
+                </div>
+                <a id="MSG_BODY" href="{% url 'trade_inbox' msg_details.latest_msg.id %}" class="text-red-500"> {{msg_details.latest_msg.body|truncatewords:5}} </a>
+              </li>
+            </div>
+
+        </div>
+      </div>
+    {% else %}
+            {% comment %} <div class="mx-auto">There is no message for this trade.</div>   {% endcomment %}
+    {% endif %} 

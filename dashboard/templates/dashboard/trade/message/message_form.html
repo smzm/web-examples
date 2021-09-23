@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+{% block content %}
+<form id="messageForm" autocomplete="off" method="POST" class="m-10" >
+    {% csrf_token %}
+    <div class="my-4">From : {{request.user.profile.name}} </div>
+    <div class="my-4">To : {{profile.name}} </div>
+    <div class="flex bg-gray-100 p-4 text-indigo-500">
+        <span class="mx-2" > Trade : </span>
+        <span class="mx-2" > {{trade.symbol}} </span>
+        <span class="mx-2" > {{trade.date}}-{{trade.time}} </span>
+        <span class="mx-2" > {{trade.price}} </span>
+        <span class="mx-2" > {{trade.side}} </span>  
+        <span class="mx-2" > {{trade.size}} </span>
+    </div>
+    {{form}}
+    <input form="messageForm" type="submit" name="messageForm" value="Send" class="p-4 bg-indigo-100 rounded-md">
+        
+</form>
+{% endblock content %}
