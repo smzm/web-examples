@@ -1,8 +1,8 @@
 {% extends "main.html" %}
 
-{% block sidebar %}
-{% include 'include/sidebar.html' with active='history' %}
-{% endblock sidebar %}
+{% block menu %}
+{% include 'include/menu.html' with active='history' %}
+{% endblock menu %}
 
 {% block content %}
 <div id="MAIN" class="flex flex-col flex-1 bg-color-light1 py-5 px-20">
@@ -22,6 +22,6 @@
 {% endblock content %}
 
 
-{% block userSidebar %}
-{% include 'include/userSidebar.html' %}
-{% endblock userSidebar %}
+{% block user_sidebar %}
+{% include 'include/user_sidebar.html' %}
+{% endblock user_sidebar %}

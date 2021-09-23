@@ -1,15 +1,14 @@
 {% extends "main.html" %}
 
-{% block sidebar %}
-{% include 'include/sidebar.html' with active='trades' %}
-{% endblock sidebar %}
+{% block menu %}
+{% include 'include/menu.html' with active='trades' %}
+{% endblock menu %}
 
 
 {% block content %}
 <div id="MAIN" class="flex flex-col flex-1 bg-color-light1 py-5 px-20">
 
 {{search_query}}
-
   <div id="All_TRADE" class="overflow-y-auto flex flex-1 bg-color-light1 text-gray-200 p-10">
    <div class="flex flex-col">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -75,8 +74,8 @@
                 <div class="text-sm text-gray-500"> {{trade.leverage}} </div>
               </td> {% endcomment %}
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <a  class="text-red-600 hover:text-red-900" href="{% url 'delete_trade' trade.id %}">Delete</a>
-                <a  class="text-indigo-600 hover:text-indigo-900" href="{% url 'update_trade' trade.id %}">Details</a>
+                <a  class="text-red-600 hover:text-red-900" href="{% url 'trade_delete' trade.id %}">Delete</a>
+                <a  class="text-indigo-600 hover:text-indigo-900" href="{% url 'trade_detail' trade.id %}">Details</a>
               </td>
             </tr>
             {% endfor %}
@@ -94,6 +93,6 @@
 </div>
 {% endblock content %}
 
-{% block userSidebar %}
-{% include 'include/userSidebar.html' %}
-{% endblock userSidebar %}
+{% block user_sidebar %}
+{% include 'include/user_sidebar.html' %}
+{% endblock user_sidebar %}
