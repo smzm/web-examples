@@ -1,3 +1,26 @@
+{% block style %}
+<style>
+    /* ======== delete-review popup ============ */
+    .REVIEW_DELETE_LABEL{
+      display: inline-block;
+    }
+    .REVIEW_DELETE_CHECKBOX{
+      display:none ;
+    }
+    .REVIEW_DELETE_CHECKBOX:checked + .REVIEW_DELETE_FORM{
+      top: 0px;
+      left: 0px;
+    }
+    .REVIEW_DELETE_FORM{
+      position: absolute;
+      top:50px;
+      left: 0px;
+      transition: all 0.5s ease-in-out;
+    }
+</style>
+{% endblock style%}
+
+
 <div id="rightSidebar" class="border p-4 w-72 flex flex-col">
 <div id="REVIEW_TIMELINE" class="overflow-y-scroll">
   {% if reviews %}
@@ -8,7 +31,7 @@
         <div id="-TIME" class="text-gray-500 text-xs">{{review.created}}</div>
         <div class="flex mt-2 relative overflow-hidden h-10">
         
-        <form method="POST" hx-post="{% url 'review_edit_hx' review.id %}" hx-swap="outerHTML" hx-target="#reviewForm">
+        <form method="POST" hx-post="{% url 'review_update_form_hx' review.id %}" hx-swap="outerHTML" hx-target="#reviewForm">
           {% csrf_token %}
           <button class="mx-2 text-indigo-400" type="submit" > edit </button>
         </form>

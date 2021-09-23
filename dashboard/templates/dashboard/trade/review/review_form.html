@@ -1,23 +1,64 @@
+{% block style %}
+ <style>
+#EMOTION label{
+    opacity:0.5 ; 
+    padding: 5px;
+
+}
+#EMOTION input:checked + label{
+    opacity:1 ;
+}
+</style>
+{% endblock style %}
+
 
 
 <form class="inline" id="reviewForm" autocomplete="off"  method="POST" 
     {% if review_edit_state %}
-        hx-post="{% url 'review_edit_hx' review.id %}"  hx-target="#rightSidebar" hx-swap="outerHTML"
+        hx-post="{% url 'review_update_sidebar_hx' review.id %}"  hx-target="#rightSidebar" hx-swap="outerHTML"
     {% else %}
         hx-post="{% url 'review_add_hx' trade.id %}"  hx-target="#rightSidebar" hx-swap="outerHTML" 
     {% endif %}
  >
  
     {% csrf_token %}
-    {% for review_field in reviewForm  %}
-    <div class="flex flex-col">
-        {{review_field.label}}
-        {% comment %} <label for="{{review_field.id_for_label}}"> {{review_field.field.choices}} </label> {% endcomment %}
-        {{review_field}}        
+    {{reviewForm.emotion.label}}
+    <div id="EMOTION" class="flex justify-around mt-2">
+        <div class="mx-4">
+            <input type="radio" id="Fear" name="emotion" value="fear" class="review_input hidden" 
+                    {% if reviewForm.data.emotion == 'fear' %}checked{% endif %} >
+            <label for="Fear" class="hover:text-gray-700 cursor-pointer">Fear</label>
+        </div>
+        <div class="mx-4">
+            <input type="radio" id="Hope" name="emotion" value="hope" class="review_input hidden"
+                    {% if reviewForm.data.emotion == 'hope' %}checked{% endif %}>
+            <label for="Hope" class="hover:text-gray-700 cursor-pointer">Hope</label>
+        </div>
+        <div class="mx-4">
+            <input type="radio" id="Stress" name="emotion" value="stress" class="review_input hidden"
+                    {% if reviewForm.data.emotion == 'stress' %}checked{% endif %}>
+            <label for="Stress" class="hover:text-gray-700 cursor-pointer">Stress</label>
+        </div>
+        <div class="mx-4">
+            <input type="radio" id="Calm" name="emotion" value="calm" class="review_input hidden"
+                    {% if reviewForm.data.emotion == 'calm' %}checked{% endif %}>
+            <label for="Calm" class="hover:text-gray-700 cursor-pointer">Calm</label>
+        </div>
+        <div class="mx-4">
+            <input type="radio" id="Happy" name="emotion" value="happy" class="review_input hidden"
+                    {% if reviewForm.data.emotion == 'happy' %}checked{% endif %}>
+            <label for="Happy" class="hover:text-gray-700 cursor-pointer">Happy</label>
+        </div>
+        <div class="mx-4">
+            <input type="radio" id="Sad" name="emotion" value="Sad" class="review_input hidden"
+                    {% if reviewForm.data.emotion == 'sad' %}checked{% endif %}>
+            <label for="Sad" class="hover:text-gray-700 cursor-pointer">Sad</label>
+        </div>
     </div>
-    {% endfor %}
-
-    
+    <div>
+        {{reviewForm.body.label}}
+        {{reviewForm.body}}
+    </div>    
 
     {% if review_edit_state %}
         <button form="reviewForm" type="submit" id="update_review" name="update_review" value="Update" class="p-4">
@@ -38,17 +79,19 @@
 </form>
 
 
+
 <script type="text/javascript">
-    // Empty input when send review
+    // Empty input when send review and uncheck all emotions
     const send_review = document.querySelector('#send_review')
     send_review.addEventListener('click', () => {
-        const review_input = document.getElementById('review_input')
+        const review_body = document.getElementById('REVIEW_BODY')
+        const review_input = document.getElementsByClassName('review_input')
          setTimeout(function () { 
-             review_input.value = ""
+             review_body.value = "";
+             for (let index = 0; index < review_input.length; index++) {
+                 review_input[index].checked = false;                 
+             }
           }, 100);
     })
-
-
-    // Emoji in Reviews 
 
 </script>
