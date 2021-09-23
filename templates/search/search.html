@@ -1,15 +1,30 @@
-<form id="SEARCH" action="{% url 'trades' %}" method="GET" class="mt-5 w-56 self-end" >
+<form id="SEARCH" action="{% url 'search_trade' %}" method="GET" class="self-end mt-5 w-56" autocomplete="off">
     {% csrf_token %}
     <div class="focus-within:text-blue-400 text-gray-400 relative flex flex-col items-center">
         <button class="absolute z-10 top-2 left-8" type="submit">
             <svg class="fill-current " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path></svg>
         </button>
-        <input value="{{request.GET.search_query}}" spellcheck="false" type="text" name="search_query" class="bg-color-light3 pl-12 p-2 w-10/12 rounded-lg outline-none border border-gray-300 border-opacity-20 focus:border-blue-300 text-gray-400 transition-all duration-200" 
-        hx-get="{% url 'search' %}" hx-trigger="keyup changed delay:200ms" hx-target="#search-results" >
+        <input id="SEARCH_INPUT" value="{{request.GET.search_query}}" spellcheck="false" type="text" name="search_query" class="bg-color-light3 pl-12 p-2 w-10/12 rounded-lg outline-none border border-gray-300 border-opacity-20 focus:border-blue-300 text-gray-400 transition-all duration-200" 
+        hx-get="{% url 'search_trade_hx' %}" hx-trigger="keyup changed delay:200ms" hx-target="#search-results" >
     </div>
 </form>
 
 
-<ul id="search-results" class="absolute w-96">
+<ul id="search-results" class="absolute top-24 self-end">
 </ul>
 
+<script type="text/javascript">
+    const search_results = document.getElementById('search-results');
+    const search_input = document.getElementById("SEARCH_INPUT")
+
+    document.addEventListener('click', function (event) {
+        const isClickInsideSearchResults = search_results.contains(event.target);
+        const isClickInsideSearchInput = search_input.contains(event.target);
+        if (!isClickInsideSearchResults && !isClickInsideSearchInput) {
+            document.getElementById("search-results").style.display = "none"
+        }
+    });
+    search_input.addEventListener('click', () => {
+        document.getElementById("search-results").style.display = "block"
+    })
+</script>

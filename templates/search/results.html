@@ -1,17 +1,17 @@
 {% if querysets %}
     {% for qs in querysets  %}
-        <li class="list-none">
-            <a href="{% url 'update_trade' qs.id %}"> 
-                <span class="mx-2">{{qs.symbol}}</span>
-                <span class="mx-2">{{qs.date}}</span>
-                <span class="mx-2">{{qs.time}}</span>
+        <li class="list-none flex flex-col">
+            <a class="text-xs p-2 mb-1 rounded-lg bg-gray-200 hover:bg-indigo-100" href="{% url 'trade_detail' qs.id %}"> 
+                <span class="mx-2 text-gray-700">{{qs.symbol}}</span>
+                <span class="mx-2 text-gray-400">{{qs.date}}</span>
+                <span class="mx-2 text-gray-400">{{qs.time}}</span>
             </a>   
         <li>
     {% endfor %}
     {% if continuous %}
-        <form action="{% url 'trades' %}" method="GET">
+        <form action="{% url 'search_trade' %}" method="GET">
             <input hidden type="text" value="{{request.GET.search_query}}" name="search_query">
-            <button type="submit" class="text-gray-400"> See All...</button>
+            <button type="submit" class="text-gray-400 w-full text-xs p-2 mb-1 rounded-lg bg-gray-200 hover:bg-indigo-100"> See All...</button>
         </form>
     {% endif %}
 {% endif %}
