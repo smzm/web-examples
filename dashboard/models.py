@@ -63,7 +63,7 @@ class Review(models.Model):
     emotion = models.CharField(max_length=200, choices=emotion_type)
     trade = models.ForeignKey(TradePosition,null=True, blank=True, on_delete=models.CASCADE)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
-    body = models.TextField(max_length=1000, null=True, blank=True)
+    body = models.TextField(max_length=1000, null=True)
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
     def __str__(self):

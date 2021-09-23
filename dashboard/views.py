@@ -21,6 +21,7 @@ sidebar = {
 
 
 
+
 @login_required(login_url="/login/")
 def dashboard(request):
     profile = request.user.profile
@@ -28,24 +29,72 @@ def dashboard(request):
 
 
 
+
+@login_required(login_url="/login/")
+def history(request):
+    profile = request.user.profile
+    return render(request, 'dashboard/history.html',  {'sidebar': sidebar, 'profile': profile})
+
+
+
+
+# ================================================ Trade 
 @login_required(login_url="/login/")
 def trades(request):
     profile = request.user.profile   
     trades = profile.tradeposition_set.all().order_by('-date', '-time')
-    search_query = ''   
-    if request.GET.get('search_query'):
-        trades, search_query = searchTrade(request)
+    trades, custumRange = paginateTrades(request, trades, 5)   
 
-    trades, custumRange = paginateTrades(request, trades, 5)        
+    context = {'sidebar': sidebar,
+               'profile': profile,
+               'trades': trades, 
+               'customRange': custumRange}
+    return render(request, 'dashboard/trades.html',  context)
 
-    return render(request, 'dashboard/trades.html',  {'sidebar': sidebar, 'profile': profile, 'trades':trades, 'search_query':search_query, 'customRange':custumRange})
 
 
 
 @login_required(login_url="/login/")
-def newTrade(request):
+def trade_detail(request, trade_pk):
     profile = request.user.profile
-    trades = profile.tradeposition_set.all().order_by('-date', '-time')
+    trade = profile.tradeposition_set.get(id=trade_pk)
+    trade_form = trade_form = NewTradeForm({
+            'symbol': trade.symbol,
+            'price': trade.price,
+            'date': trade.date,
+            'time': trade.time,
+            'size': trade.size,
+            'side': trade.side,
+            # 'leverage': trade.leverage,
+            'comment': trade.comment}
+    )
+    review_form = ReviewForm()
+    reviews = trade.review_set.all().order_by('-created')
+    trade.calcualteEmotionRatio
+    all_msg = trade.msg.all()
+    msg_count = all_msg.count()
+    latest_msg = all_msg.last()
+    msg_details = {'all_msg': all_msg,
+                   'msg_count': msg_count,
+                   'latest_msg': latest_msg}
+        
+    context = {'sidebar': sidebar,
+               'profile': profile,
+               'trade': trade,
+               'tradeForm' : trade_form,
+               'reviews' : reviews,
+               'reviewForm' : review_form,
+               'msg_details': msg_details
+               }
+    return render(request, 'dashboard/trade/detail_trade.html', context)
+
+
+
+
+@login_required(login_url="/login/")
+def trade_add(request):
+    trade_edit_state = 0
+    profile = request.user.profile
     trade_form = NewTradeForm()
     if request.method == 'POST':
         trade_form = NewTradeForm(request.POST)
@@ -60,42 +109,28 @@ def newTrade(request):
             # obj.leverage = trade_form.cleaned_data['leverage']
             obj.comment = trade_form.cleaned_data['comment']
             obj.save()
-            return redirect(f'/trade/{obj.id}')
+            messages.success(request, 'Your trade position was updated.')
+
+    context = {'sidebar':sidebar,
+                'profile':profile,
+                'tradeForm': trade_form,
+                'trade_edit_state': trade_edit_state
+        }
 
 
+    return render(request, 'dashboard/trade/add_trade.html',context)
 
-    return render(request, 'dashboard/newTrade/newTrade.html', {'sidebar': sidebar, 'tradeForm': trade_form, 'trades': trades, 'profile': profile})
-
-
-
-@login_required(login_url="/login/")
-def delete_trade(request, pk):
-    trade = TradePosition.objects.get(id=pk)
-    trade.delete()
-    dynamicPath_newtrade = reverse('trades')
-    return HttpResponseRedirect(dynamicPath_newtrade)
 
 
 
 @login_required(login_url="/login/")
-def update_trade(request, pk):
+def trade_edit(request, trade_pk):
+    trade_edit_state = 1
     profile = request.user.profile
-    trade = profile.tradeposition_set.get(id=pk)
-    reviews = trade.review_set.all().order_by('-created')
+    trade = profile.tradeposition_set.get(id=trade_pk)
 
-    trade_form = NewTradeForm({
-        'symbol': trade.symbol,
-        'price': trade.price,
-        'date': trade.date,
-        'time': trade.time,
-        'size': trade.size,
-        'side': trade.side,
-        # 'leverage': trade.leverage,
-        'comment': trade.comment})
-    review_form = ReviewForm()
 
     if request.method == 'POST':
-        if 'tradeForm' in request.POST:
             trade_form = NewTradeForm(request.POST)
             if trade_form.is_valid():
                 trade.symbol = trade_form.cleaned_data['symbol']
@@ -107,85 +142,85 @@ def update_trade(request, pk):
                 # trade.leverage = trade_form.cleaned_data['leverage']
                 trade.comment = trade_form.cleaned_data['comment']
                 trade.save()
-                dynamicPath_newtrade = reverse('newtrade')
                 messages.success(request, 'Your trade position was updated.')
-                return redirect('update_trade', pk)
+                return render(request, 'dashboard/trade/include/trade_info.html',{'trade' : trade} )
+    return render(request, 'dashboard/trade/include/trade_form.html', {'tradeForm': trade_form, 'trade_edit_state': trade_edit_state})
 
-        elif 'reviewForm' in request.POST :
+
+
+
+@login_required(login_url="/login/")
+def trade_delete(request, trade_pk):
+    trade = TradePosition.objects.get(id=trade_pk)
+    trade.delete()
+    dynamicPath_newtrade = reverse('trades')
+    return HttpResponseRedirect(dynamicPath_newtrade)
+
+
+
+# ================================================ Trade -> Review
+@login_required(login_url="/login/")
+def review_add_hx(request, trade_pk):
+    if request.htmx :
+        review_edit_state = 0
+        profile = request.user.profile
+        trade = profile.tradeposition_set.get(id=trade_pk)
+        reviews = trade.review_set.all().order_by('-created')
+        review_form = ReviewForm()   
+        if request.method == "POST": 
             review_form = ReviewForm(request.POST)
-            review = review_form.save(commit=False)
-            review.trade = trade
-            review.owner = profile
-            review.save()
-    trade.calcualteEmotionRatio
+            if review_form.is_valid():
+                review = review_form.save(commit=False)
+                review.trade = trade
+                review.owner = profile
+                review.save()        
+                trade.calcualteEmotionRatio
+                return render(request, 'dashboard/trade/review/review_sidebar.html', {"reviews": reviews, "trade": trade})
 
-    all_msg = trade.msg.all()
-    msg_count = all_msg.count()
-    latest_msg = all_msg.last()
-    msg_details = {'all_msg': all_msg,
-                   'msg_count': msg_count,
-                   'latest_msg': latest_msg}
+    return render(request, 'dashboard/trade/review/review_form.html', {'reviewForm': review_form, 'trade': trade, 'review_edit_state': review_edit_state})
 
-    context = {'sidebar':sidebar,
-               'profile':profile,
-               'trade':trade,
-               'tradeForm': trade_form,
-               'reviews':reviews,
-               'reviewForm':review_form,
-               'msg_details': msg_details }
-    return render(request, 'dashboard/newTrade/detailTrade.html',context)
+ 
 
+@login_required(login_url="/login/")
+def review_edit_hx(request, review_pk):
+    if request.htmx : 
+        print('test')
+        review_edit_state = 1
+        profile = request.user.profile
+        review = profile.review_set.get(id=review_pk) 
+        review_form = ReviewForm(instance=review)
+        trade_id = review.trade_id
+        trade = profile.tradeposition_set.get(id=trade_id)
+        reviews = trade.review_set.all().order_by('-created')
+
+        if request.method == "POST" :
+            review_hx = ReviewForm(request.POST, instance=review)
+            if review_hx.is_valid():
+                review_hx.save()
+                reviews = trade.review_set.all().order_by('-created')
+                trade.calcualteEmotionRatio
+                return render(request, 'dashboard/trade/review/review_sidebar.html', {"reviews": reviews, "trade": trade})
+        # else : 
+        #     print('trigger')
+            # redirect('add_review_hx', trade.id)
+
+        return render(request, 'dashboard/trade/review/review_form.html', {'reviewForm': review_form, 'review': review, 'review_edit_state': review_edit_state, 'trade': trade})
 
 
 @login_required(login_url="/login/")
-def history(request):
-    profile = request.user.profile
-    return render(request, 'dashboard/history.html',  {'sidebar': sidebar, 'profile': profile})
+def review_delete_hx(request, review_pk):
+    if request.htmx:
+        profile = request.user.profile
+        review = profile.review_set.get(id=review_pk)
+        trade_id = review.trade_id
+        trade = profile.tradeposition_set.get(id=trade_id)
+        reviews = trade.review_set.all().order_by('-created')
+        review.delete()
+        trade.calcualteEmotionRatio
+        return render(request, 'dashboard/trade/review/review_sidebar.html', {"reviews": reviews, "trade": trade})
 
 
-
-@login_required(login_url="/login/")
-def edit_delete_review(request,  rev_pk):
-    profile = request.user.profile
-    review = profile.review_set.filter(id=rev_pk)  # It should be an iterator so need to use filter
-    trade_id = review.first().trade_id
-    trade = profile.tradeposition_set.get(id=trade_id)
-    trade.calcualteEmotionRatio
-    trade_form = NewTradeForm({
-        'symbol': trade.symbol,
-        'price': trade.price,
-        'date': trade.date,
-        'time': trade.time,
-        'size': trade.size,
-        'side': trade.side,
-        # 'leverage': trade.leverage,
-        'comment': trade.comment})
-    reviews = trade.review_set.all().order_by('-created')
-    review_form = ReviewForm(instance=review.first())
-
-    if request.method == "POST":
-        if 'reviewForm' in request.POST:
-            review = ReviewForm(request.POST, instance=review.first())
-            if review.is_valid():
-                review.save()
-                return redirect('update_trade', trade_id)
-        elif 'deleteReview' in request.POST: 
-            print('debug-=========')       
-            review = Review.objects.get(id=rev_pk)
-            review.delete()
-            return redirect('update_trade', trade_id)
-
-
-    context = {'sidebar': sidebar,
-               'profile': profile,
-               'trade':trade,
-               'tradeForm':trade_form,
-               'reviews': reviews,
-               'reviewForm': review_form}
-    return render(request, 'dashboard/newTrade/detailTrade.html', context)
-
-
-
+# # ================================================ Trade -> Message
 @login_required(login_url="/login/")
 def trade_inbox(request, msg_pk):
     profile = request.user.profile
@@ -208,7 +243,7 @@ def trade_inbox(request, msg_pk):
 
 
 @login_required(login_url="/login/")
-def all_trades_inbox(request):
+def trades_inbox(request):
     profile = request.user.profile
     trades = profile.tradeposition_set.all()
     all_msg = profile.messages.all()
@@ -226,7 +261,7 @@ def all_trades_inbox(request):
 
 
 
-def message_trade(request, username, trade_pk):
+def trade_message(request, username, trade_pk):
     profile = Profile.objects.get(username=username) 
     trade = profile.tradeposition_set.get(id=trade_pk)
     form = MessageForm()
@@ -241,24 +276,40 @@ def message_trade(request, username, trade_pk):
             return redirect('profile', username=username)
 
     context = {'profile':profile, 'trade':trade, "form":form}
-    return render(request, 'include/messageForm.html', context)
+    return render(request, 'dashboard/trade/message/message_form.html', context)
 
 
+
+# ================================================ Trade -> Search
 @login_required(login_url="/login/")
-def search(request):
+def search_trade_hx(request):
     profile = request.user.profile
     if request.htmx : 
         search_query = request.GET.get('search_query')
         continuous = False
         if search_query : 
             querysets = profile.tradeposition_set.all().filter(symbol__icontains=search_query).order_by('-date', '-time')
-            if querysets.count() > 3 : 
-                querysets = querysets[:3]
+            if querysets.count() > 2 : 
+                querysets = querysets[:2]
                 continuous = True
         else : 
             querysets = None
+            
 
         context = { 'querysets' : querysets, 'continuous':continuous  }
-        template = 'include/search/results.html'
+        template = 'search/results.html'
 
     return render(request, template, context)
+
+
+@login_required(login_url="/login/")
+def search_trade(request):
+    profile = request.user.profile
+    trades = profile.tradeposition_set.all().order_by('-date', '-time')
+    search_query = ''
+    if request.GET.get('search_query'):
+        trades, search_query = searchTrade(request)
+
+    trades, custumRange = paginateTrades(request, trades, 5)
+
+    return render(request, 'dashboard/trades.html',  {'sidebar': sidebar, 'profile': profile, 'trades': trades, 'search_query': search_query, 'customRange': custumRange})

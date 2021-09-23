@@ -1,6 +1,6 @@
 from django import forms
 from datetime import datetime
-from django.forms.widgets import DateTimeInput, Select, TextInput, Widget
+from django.forms.widgets import DateTimeInput, Input, RadioSelect, Select, TextInput, Widget
 import pytz
 from .models import Review, Message
 
@@ -36,6 +36,8 @@ class NewTradeForm(forms.Form):
         'class': 'text-center w-36 bg-color-darker m-2 p-2 text-gray-400 border-2 focus:border-blue-800 border-gray-700 border-opacity-60 rounded-3xl outline-none transition-all duration-200'}))
 
 
+
+
 class ReviewForm(forms.ModelForm):
     class Meta:
         model= Review
@@ -45,18 +47,23 @@ class ReviewForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ReviewForm, self).__init__(*args, **kwargs)
         self.fields['body'].widget = TextInput(attrs={
-            'class' : 'my-4 border-2'
+            'class': 'my-4 border-2 p-4',
+            'id' : 'review_input'
         })
-        emotion_type = (('fear','Fear'),
-               ('hope', 'Hope'),
-               ('stress', 'Stress'),
-               ('calm', 'Calm'),
-               ('happy', 'Happy'),
-               ('sad','Sad'))
-        self.fields['emotion'].widget = Select(choices=emotion_type,attrs={
-            'class' : 'my-4 bg-red-200 border-2'
+        
+        emotion_type = (('fear', 'Fear'),
+                        ('hope', 'Hope'),
+                        ('stress', 'Stress'),
+                        ('calm', 'Calm'),
+                        ('happy', 'Happy'),
+                        ('sad','Sad'))
+        self.fields['emotion'].widget = RadioSelect(choices=emotion_type,
+        attrs={
+            'class': 'my-4 text-red-500 bg-gray-300 rounded-lg',
+            'id' : "EMOTION"
         })
 
+            
         
         
 class MessageForm(forms.ModelForm):
