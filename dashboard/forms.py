@@ -38,30 +38,26 @@ class NewTradeForm(forms.Form):
 
 
 
-class ReviewForm(forms.ModelForm):
-    class Meta:
-        model= Review
-        fields = ['emotion', 'body']
-        labels = {'emotion':'Place your emotion about this trade', 'body':'Explain your feeling .'}
+class ReviewForm(forms.Form):
+    emotion_type = (('fear', 'Fear'),
+                    ('hope', 'Hope'),
+                    ('stress', 'Stress'),
+                    ('calm', 'Calm'),
+                    ('happy', 'Happy'),
+                    ('sad','Sad')
+                    )
+    emotion = forms.ChoiceField(
+        label="Place your emotion about this trade", choices=emotion_type, widget=forms.widgets.RadioSelect(
+            attrs={
+                'id': 'EMOTION',
+                'class':'border hover:text-red-500 inline'
+                }))
 
-    def __init__(self, *args, **kwargs):
-        super(ReviewForm, self).__init__(*args, **kwargs)
-        self.fields['body'].widget = TextInput(attrs={
-            'class': 'my-4 border-2 p-4',
-            'id' : 'review_input'
-        })
-        
-        emotion_type = (('fear', 'Fear'),
-                        ('hope', 'Hope'),
-                        ('stress', 'Stress'),
-                        ('calm', 'Calm'),
-                        ('happy', 'Happy'),
-                        ('sad','Sad'))
-        self.fields['emotion'].widget = RadioSelect(choices=emotion_type,
-        attrs={
-            'class': 'my-4 text-red-500 bg-gray-300 rounded-lg',
-            'id' : "EMOTION"
-        })
+    body = forms.CharField(required=False, label="Explain your Feelings : ",
+                           widget=forms.widgets.TextInput(attrs={
+                               'id': 'REVIEW_BODY',
+                               'class': 'my-4 border-2 p-4'
+                           }))
 
             
         

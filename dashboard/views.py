@@ -58,7 +58,7 @@ def trades(request):
 def trade_detail(request, trade_pk):
     profile = request.user.profile
     trade = profile.tradeposition_set.get(id=trade_pk)
-    trade_form = trade_form = NewTradeForm({
+    trade_form = NewTradeForm({
             'symbol': trade.symbol,
             'price': trade.price,
             'date': trade.date,
@@ -170,41 +170,57 @@ def review_add_hx(request, trade_pk):
         if request.method == "POST": 
             review_form = ReviewForm(request.POST)
             if review_form.is_valid():
-                review = review_form.save(commit=False)
-                review.trade = trade
-                review.owner = profile
-                review.save()        
+                review = Review(owner=profile,
+                                trade=trade,
+                                emotion=request.POST.get('emotion'),
+                                body=review_form.cleaned_data['body']
+                                )
+                review.save()
                 trade.calcualteEmotionRatio
                 return render(request, 'dashboard/trade/review/review_sidebar.html', {"reviews": reviews, "trade": trade})
 
     return render(request, 'dashboard/trade/review/review_form.html', {'reviewForm': review_form, 'trade': trade, 'review_edit_state': review_edit_state})
 
- 
+
 
 @login_required(login_url="/login/")
-def review_edit_hx(request, review_pk):
+def review_update_form_hx(request, review_pk):
     if request.htmx : 
-        print('test')
         review_edit_state = 1
         profile = request.user.profile
         review = profile.review_set.get(id=review_pk) 
-        review_form = ReviewForm(instance=review)
+        review_form = ReviewForm({
+            'emotion' : review.emotion ,
+            'body' :    review.body
+        })
+        print(review_form.data['emotion'])
         trade_id = review.trade_id
         trade = profile.tradeposition_set.get(id=trade_id)
         reviews = trade.review_set.all().order_by('-created')
+    return render(request, 'dashboard/trade/review/review_form.html', {'reviewForm': review_form, 'review': review, 'review_edit_state': review_edit_state, 'trade': trade})
 
+
+
+
+@login_required(login_url="/login/")
+def review_update_sidebar_hx(request, review_pk):
+    profile = request.user.profile
+    review = profile.review_set.get(id=review_pk) 
+    trade_id = review.trade_id
+    trade = profile.tradeposition_set.get(id=trade_id)
+    reviews = trade.review_set.all().order_by('-created')
+    if request.htmx : 
         if request.method == "POST" :
-            review_hx = ReviewForm(request.POST, instance=review)
+            review_hx = ReviewForm(request.POST)
             if review_hx.is_valid():
-                review_hx.save()
+                review.emotion = request.POST.get('emotion')
+                review.body = review_hx.cleaned_data['body']
+                review.save()
                 reviews = trade.review_set.all().order_by('-created')
                 trade.calcualteEmotionRatio
-                return render(request, 'dashboard/trade/review/review_sidebar.html', {"reviews": reviews, "trade": trade})
-        # else : 
-        #     print('trigger')
-            # redirect('add_review_hx', trade.id)
+    return render(request, 'dashboard/trade/review/review_sidebar.html', {"reviews": reviews, "trade": trade})
 
-        return render(request, 'dashboard/trade/review/review_form.html', {'reviewForm': review_form, 'review': review, 'review_edit_state': review_edit_state, 'trade': trade})
+
 
 
 @login_required(login_url="/login/")
