@@ -8,7 +8,7 @@ urlpatterns = [
     path('trade/<str:pk>/', views.getTrade),
     path('add/trade/', views.addTrade),
     path('user/', views.user, name='user'),
-    path('login/', views.login_view, name='login'),
+    path('login/', views.login_view, name='apilogin'),
     path('refresh/token/', views.refresh_token_view, name="refreshToken")
     # path('users/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('users/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
