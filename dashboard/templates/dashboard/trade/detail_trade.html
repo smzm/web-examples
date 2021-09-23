@@ -1,61 +1,10 @@
 {% extends 'main.html' %}
-
-{% block style %}
-<style>
-    /* ======== delete-review popup ============ */
-    .REVIEW_DELETE_LABEL{
-      display: inline-block;
-    }
-    .REVIEW_DELETE_CHECKBOX{
-      display:none ;
-    }
-    .REVIEW_DELETE_CHECKBOX:checked + .REVIEW_DELETE_FORM{
-      top: 0px;
-      left: 0px;
-    }
-    .REVIEW_DELETE_FORM{
-      position: absolute;
-      top:50px;
-      left: 0px;
-      transition: all 0.5s ease-in-out;
-    }
-
-    /* ======== slide messages : all , unread , read  ============ */
-  .msg_inside{
-    top: 0px;
-    transition: all 0.9s ease-in-out;
-  }
-  .msg_outside{
-    top: 60px;
-    transition: all 0.4s ease-in-out;
-  }
- ul#EMOTION li{
-  display: inline-block;
-  margin-left: 30px;
-}
-
-/* #EMOTION input{
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-} */
-
-
-</style>
-{% endblock style %}
-
-
-
-
 {% block menu %}
 {% include 'include/menu.html' with active='trades' %}
 {% endblock menu %}
 
 
-
-
 {% block content %}
-
 <div id="DETAIL_TRADE" class="overflow-y-auto flex flex-grow">
 
 
