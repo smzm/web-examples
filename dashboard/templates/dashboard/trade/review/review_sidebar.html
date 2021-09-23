@@ -1,0 +1,96 @@
+<div id="rightSidebar" class="border p-4 w-72 flex flex-col">
+<div id="REVIEW_TIMELINE" class="overflow-y-scroll">
+  {% if reviews %}
+    {% for review in reviews %}
+    <div id="REVIEWS" class="flex flex-col my-6 pb-6 border-b">
+        <div id="-BODY">{{review.body|linebreaksbr}}</div>
+        <div id="-EMOTION" class="text-red-300">{{review.emotion}}</div>
+        <div id="-TIME" class="text-gray-500 text-xs">{{review.created}}</div>
+        <div class="flex mt-2 relative overflow-hidden h-10">
+        
+        <form method="POST" hx-post="{% url 'review_edit_hx' review.id %}" hx-swap="outerHTML" hx-target="#reviewForm">
+          {% csrf_token %}
+          <button class="mx-2 text-indigo-400" type="submit" > edit </button>
+        </form>
+
+
+          <label class="REVIEW_DELETE_LABEL text-red-400 cursor-pointer"> 
+              <span class="text-red-400">delete</span>
+              <input type="checkbox" onclick="uncheck(this)" class="REVIEW_DELETE_CHECKBOX inline-block">
+              <div class="REVIEW_DELETE_FORM text-base p-1 bg-white text-gray-500 border rounded-md flex justify-end"> 
+                  <span class="mx-2"> Delete? </span> 
+                  
+                  <form method="POST" action="" class="text-blue-500 mx-1" hx-post="{% url 'review_delete_hx' review.id %}" hx-target="#rightSidebar" hx-swap="outerHTML">
+                    {% csrf_token %}
+                    <input type="submit" name="deleteReview" value="Yes" class="cursor-pointer">
+                    <span class="text-red-400">No</span>
+                  </form>
+              </div>
+          </label>
+        </div>
+    </div>
+   {% endfor %}
+   {% else %} 
+    <div>
+      There is no Review
+    </div>
+  {% endif %} 
+</div>
+{% if trade.total_reviews > 0 %}
+  <div id="CHART_REVIEW" class="mt-auto py-4">
+      <div id="RATIO" class=""> 
+        <div>Happy ratio : {{trade.happy_ratio}}%</div>
+        <div>Sad ratio : {{trade.sad_ratio}}%</div>
+        <div>Hope ratio : {{trade.hope_ratio}}%</div>
+        <div>Fear ratio : {{trade.fear_ratio}}%</div>
+        <div>Calm ratio : {{trade.calm_ratio}}%</div>
+        <div>Stress ratio : {{trade.stress_ratio}}%</div>
+      </div>
+  </div>
+{% endif %}
+</div>
+
+
+<script>
+// Uncheck other checkbox of delete review
+function uncheck(e) {
+    if (e.checked == true) {
+      let checkboxes = document.getElementsByClassName('REVIEW_DELETE_CHECKBOX')
+      for (let index = 0; index < checkboxes.length; index++) {
+        checkboxes[index].checked = false;
+      }
+      e.checked = true
+    }
+  }
+
+function shift(e){
+  let inbox_msg = document.querySelector("#INBOX_MSG_CONTAINER")
+  let inbox_msg_label = document.querySelector("#INBOX_MSG_LABEL")
+  let latest_msg = document.querySelector("#LATEST_MSG_CONTAINER")
+  let latest_msg_label = document.querySelector("#LATEST_MSG_LABEL")
+
+  
+  if(e.id == "INBOX_MSG_LABEL"){
+    inbox_msg.classList.add('msg_inside', 'text-gray-900',)
+    inbox_msg.classList.remove('msg_outside', 'text-gray-400')
+    inbox_msg_label.classList.add('text-gray-900', 'bg-gray-100')
+    inbox_msg_label.classList.remove('text-gray-400')
+
+    latest_msg.classList.add('msg_outside', 'text-gray-400')
+    latest_msg.classList.remove('msg_inside', 'text-gray-400')
+    latest_msg_label.classList.add('text-gray-400')
+    latest_msg_label.classList.remove('text-gray-900', 'bg-gray-100')
+  }
+  if (e.id == "LATEST_MSG_LABEL") {
+    inbox_msg.classList.add('msg_outside')
+    inbox_msg.classList.remove('msg_inside')
+    inbox_msg_label.classList.add('text-gray-400')
+    inbox_msg_label.classList.remove('text-gray-900', 'bg-gray-100')
+
+    latest_msg.classList.remove('msg_outside')
+    latest_msg.classList.add('msg_inside')
+    latest_msg_label.classList.remove('text-gray-400')
+    latest_msg_label.classList.add('text-gray-900', 'bg-gray-100')
+  }
+}
+</script>

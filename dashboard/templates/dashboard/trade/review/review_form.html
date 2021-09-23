@@ -1,0 +1,54 @@
+
+
+<form class="inline" id="reviewForm" autocomplete="off"  method="POST" 
+    {% if review_edit_state %}
+        hx-post="{% url 'review_edit_hx' review.id %}"  hx-target="#rightSidebar" hx-swap="outerHTML"
+    {% else %}
+        hx-post="{% url 'review_add_hx' trade.id %}"  hx-target="#rightSidebar" hx-swap="outerHTML" 
+    {% endif %}
+ >
+ 
+    {% csrf_token %}
+    {% for review_field in reviewForm  %}
+    <div class="flex flex-col">
+        {{review_field.label}}
+        {% comment %} <label for="{{review_field.id_for_label}}"> {{review_field.field.choices}} </label> {% endcomment %}
+        {{review_field}}        
+    </div>
+    {% endfor %}
+
+    
+
+    {% if review_edit_state %}
+        <button form="reviewForm" type="submit" id="update_review" name="update_review" value="Update" class="p-4">
+            Update
+        </button>
+    {% else %}
+        <button form="reviewForm" type="submit" id="send_review" name="edit_review" value="Send" class="p-4">
+            Send
+        </button>
+    {% endif %}
+
+{% if review_edit_state %} 
+    <div id="CANCEL_FORM" class="inline" hx-trigger="click" hx-get="{% url 'review_add_hx' trade.id %}" hx-target="#reviewForm" hx-swap="outerHTML">
+        {% csrf_token %}
+        <button form="CANCEL_FORM" type="submit"> Cancel editing </button>
+    </div>   
+{% endif %}
+</form>
+
+
+<script type="text/javascript">
+    // Empty input when send review
+    const send_review = document.querySelector('#send_review')
+    send_review.addEventListener('click', () => {
+        const review_input = document.getElementById('review_input')
+         setTimeout(function () { 
+             review_input.value = ""
+          }, 100);
+    })
+
+
+    // Emoji in Reviews 
+
+</script>
