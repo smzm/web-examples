@@ -16,7 +16,7 @@ def profile(request, username):
     context = {'profile': profile, 'public_trades': public_trades}
     return render(request, 'users/profiles.html', context)
 
-def editProfile(request):
+def profile_edit(request):
     profile = request.user.profile
     form = ProfileForm(instance=profile)
     
@@ -27,10 +27,10 @@ def editProfile(request):
             return redirect(f'/@{profile.username}')
 
     context = {'form':form}
-    return render(request, 'users/editProfile.html', context)
+    return render(request, 'users/edit_profile.html', context)
 
 
-def registerUser(request):
+def profile_register(request):
     form = CustomUserCreationForm()
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -50,7 +50,7 @@ def registerUser(request):
     return render(request, 'users/login_register.html', {'page': 'register', 'form': form})
 
 
-def loginUser(request):
+def profile_login(request):
     if request.user.is_authenticated:
         return redirect('/dashboard')
 
@@ -73,7 +73,7 @@ def loginUser(request):
     return render(request, 'users/login_register.html', {'page': 'login'})
 
 
-def logoutUser(request):
+def profile_logout(request):
     logout(request)
     return redirect('login')
 
