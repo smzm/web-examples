@@ -17,7 +17,7 @@
                 <div id="NAME" class="my-1  text-gray-700 cursor-default antialiased">{{profile.name}}</div>
                 <div id="NAME" class="my-1  text-gray-700 cursor-default antialiased">{{profile.email}}</div>
                 {% if profile.id == request.user.profile.id %}
-                <a href="{% url 'editProfile' %}" class="text-red-500">
+                <a href="{% url 'profile_edit' %}" class="text-red-500">
                     edit
                 </a>
                 {% endif %}
@@ -38,9 +38,9 @@
                 <span class="m-2"> {{trade.side}} </span>
                 <span class="m-2"> {{trade.size}} </span>
                 {% if request.user.profile.id != profile.id %}
-                    <a href="{% url 'message_trade' profile.username trade.id %}" class="text-red-500"> Send Message </a>
+                    <a href="{% url 'trade_message' profile.username trade.id %}" class="text-red-500"> Send Message </a>
                 {% else %}
-                    <a href="{% url 'update_trade' trade.id %}" class="text-red-500"> Details </a>
+                    <a href="{% url 'trade_detail' trade.id %}" class="text-red-500"> Details </a>
                 {% endif %}
             </li>
         {% endfor %}
