@@ -1,0 +1,196 @@
+{% block style %}
+<style>
+#ANALYSIS input{
+    display: none;
+}
+#ANALYSIS input + label {
+    background-color: gray;
+}
+#ANALYSIS input:checked + label {
+    background-color: #4b008c;
+}
+</style>
+{% endblock style %}
+
+
+<div id="ANALYSIS" class="my-4 p-8">
+  <div id="TREND_ANALYSIS_CATEGORY" class="flex flex-col justify-between border mt-8">
+  <div>TREND ANALYSIS CATEGORY</div>
+    <div class="flex">
+        <input id="Support_And_Resistance" name="trend_analysis" type="checkbox" value="Support_And_Resistance">
+        <label for="Support_And_Resistance" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Support And Resistance</label>
+    </div>
+    <div class="flex">
+        <input id="Supply_and_Demand" name="trend_analysis" type="checkbox" value="Supply_and_Demand">
+        <label for="Supply_and_Demand" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Supply and Demand</label>
+    </div>
+    <div class="flex">
+        <input id="Pivot_Points" name="trend_analysis" type="checkbox" value="Pivot_Points">
+        <label for="Pivot_Points" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Pivot Points</label>
+    </div>
+    <div class="flex">
+        <input id="Fibonacci" name="trend_analysis" type="checkbox" value="Fibonacci">
+        <label for="Fibonacci" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Fibonacci</label>
+    </div>
+    <div class="flex">
+        <input id="Trend_Lines" name="trend_analysis" type="checkbox" value="Trend_Lines">
+        <label for="Trend_Lines" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Trend Lines</label>
+    </div>
+    <div class="flex">
+        <input id="Candlestick_Analysis" name="trend_analysis" type="checkbox" value="Candlestick_Analysis">
+        <label for="Candlestick_Analysis" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Candlestick Analysis</label>
+    </div>
+    <div class="flex">
+        <input id="Multiple_Time_Frame_Analysis" name="trend_analysis" type="checkbox" value="Multiple_Time_Frame_Analysis">
+        <label for="Multiple_Time_Frame_Analysis" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Multiple Time Frame Analysis</label>
+    </div>
+    <div class="flex">
+        <input id="Fractals" name="trend_analysis" type="checkbox" value="Fractals">
+        <label for="Fractals" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Fractals</label>
+    </div>
+    <div class="flex">
+        <input id="Cycles" name="trend_analysis" type="checkbox" value="Cycles">
+        <label for="Cycles" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Cycles</label>
+    </div>
+  </div>
+
+  <div id="HARMONIC_PATTERNS_CATERGORY" class="flex flex-col justify-between border mt-8">
+    <div>HARMONIC PATTERNS CATERGORY</div>
+    <div class="flex">
+        <input id="ABCD" name="harmonic_patterns" type="checkbox" value="ABCD">
+        <label for="ABCD" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">AB=CD</label>
+    </div>
+    <div class="flex">
+        <input id="Three_Drives" name="harmonic_patterns" type="checkbox" value="Three_Drives">
+        <label for="Three_Drives" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Three Drives</label>
+    </div>
+    <div class="flex">
+        <input id="Gartley" name="harmonic_patterns" type="checkbox" value="Gartley">
+        <label for="Gartley" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Gartley</label>
+    </div>
+    <div class="flex">
+        <input id="Bat" name="harmonic_patterns" type="checkbox" value="Bat">
+        <label for="Bat" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Bat</label>
+    </div>
+    <div class="flex">
+        <input id="Butterfly" name="harmonic_patterns" type="checkbox" value="Butterfly">
+        <label for="Butterfly" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Butterfly</label>
+    </div>
+    <div class="flex">
+        <input id="Crab" name="harmonic_patterns" type="checkbox" value="Crab">
+        <label for="Crab" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Crab</label>
+    </div>
+    <div class="flex">
+        <input id="Cypher" name="harmonic_patterns" type="checkbox" value="Cypher">
+        <label for="Cypher" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Cypher</label>
+    </div>
+    <div class="flex">
+        <input id="5_0" name="harmonic_patterns" type="checkbox" value="5_0">
+        <label for="5_0" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">5-0</label>
+    </div>
+    <div class="flex">
+        <input id="Shark" name="harmonic_patterns" type="checkbox" value="Shark">
+        <label for="Shark" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Shark</label>
+    </div>
+  </div>
+
+{% comment %}
+  <div id="CHART_PATTERNS_CATEGORY">
+    <div>
+        <label for="Chart_Patterns" class="text-gray-300">Chart Patterns</label>
+        <input id="Chart_Patterns" name="Chart_Patterns" type="checkbox">
+    </div>
+    <div>
+        <label for="Double_Top_or_Bottom" class="text-gray-300">Double Top or Bottom</label>
+        <input id="Double_Top_or_Bottom" name="Double_Top_or_Bottom" type="checkbox">
+    </div>
+    <div>
+        <label for="Head_and_Shoulders" class="text-gray-300">Head and Shoulders</label>
+        <input id="Head_and_Shoulders" name="Head_and_Shoulders" type="checkbox">
+    </div>
+    <div>
+        <label for="Cup_and_Handle" class="text-gray-300">Cup and Handle</label>
+        <input id="Cup_and_Handle" name="Cup_and_Handle" type="checkbox">
+    </div>
+    <div>
+        <label for="Flag" class="text-gray-300">Flag</label>
+        <input id="Flag" name="Flag" type="checkbox">
+    </div>
+    <div>
+        <label for="Rectangle" class="text-gray-300">Rectangle</label>
+        <input id="Rectangle" name="Rectangle" type="checkbox">
+    </div>
+    <div>
+        <label for="Parallel_Channel" class="text-gray-300">Parallel Channel</label>
+        <input id="Parallel_Channel" name="Parallel_Channel" type="checkbox">
+    </div>
+    <div>
+        <label for="Pitchforks" class="text-gray-300">Pitchforks</label>
+        <input id="Pitchforks" name="Pitchforks" type="checkbox">
+    </div>
+    <div>
+        <label for="Triangle" class="text-gray-300">Triangle</label>
+        <input id="Triangle" name="Triangle" type="checkbox">
+    </div>
+    <div>
+        <label for="Gan" class="text-gray-300">Gan</label>
+        <input id="Gan" name="Gan" type="checkbox">
+    </div>
+  </div>
+
+  <div id="TECHNICAL_INDICATOR_CATEGORY">
+    <div>
+        <label for="Technical_Indicators" class="text-gray-300">Technical Indicators</label>
+        <input id="Technical_Indicators" name="Technical_Indicators" type="checkbox">
+    </div>
+     <div>
+        <label for="Oscilators" class="text-gray-300">Oscilators</label>
+        <input id="Oscilators" name="Oscilators" type="checkbox">
+    </div>
+    <div>
+        <label for="Volatility" class="text-gray-300">Volatility</label>
+        <input id="Volatility" name="Volatility" type="checkbox">
+    </div>
+    <div>
+        <label for="Volume" class="text-gray-300">Volume</label>
+        <input id="Volume" name="Volume" type="checkbox">
+    </div>
+    <div>
+        <label for="Moving_Average" class="text-gray-300">Moving Average</label>
+        <input id="Moving_Average" name="Moving_Average" type="checkbox">
+    </div>
+    <div>
+        <label for="Bill_Wiliams" class="text-gray-300">Bill Wiliams</label>
+        <input id="Bill_Wiliams" name="Bill_Wiliams" type="checkbox">
+    </div>
+  </div>
+
+  <div id="WAVE_ANALYSIS_CATEGORY">
+    <div>
+        <label for="Wave_Analysis" class="text-gray-300">Wave Analysis</label>
+        <input id="Wave_Analysis" name="Wave_Analysis" type="checkbox">
+    </div>
+    <div>
+        <label for="Neo_Wave" class="text-gray-300">Neo Wave</label>
+        <input id="Neo_Wave" name="Neo_Wave" type="checkbox">
+    </div>
+    <div>
+        <label for="Sine_Wave" class="text-gray-300">Sine Wave</label>
+        <input id="Sine_Wave" name="Sine_Wave" type="checkbox">
+    </div>
+    <div>
+        <label for="Wolfe_Wave" class="text-gray-300">Wolfe Wave</label>
+        <input id="Wolfe_Wave" name="Wolfe_Wave" type="checkbox">
+    </div>
+  </div>
+
+
+  <div id="FUNDAMENTAL_ANALYSIS_CATEGORY">
+    <div>
+        <label for="Fundamental_Analysis" class="text-gray-300">Fundamental Analysis</label>
+        <input id="Fundamental_Analysis" name="Fundamental_Analysis" type="checkbox">
+    </div>
+ </div>
+
+ {% endcomment %}
+</div> 
