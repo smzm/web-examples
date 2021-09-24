@@ -3,7 +3,7 @@ from django.http import response
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from .forms import NewTradeForm, ReviewForm, MessageForm
-from .models import Message, TradePosition, Review
+from .models import Analysis, Message, TradePosition, Review, TrendAnalysis, HarmonicPatterns
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -97,6 +97,8 @@ def trade_add(request):
     profile = request.user.profile
     trade_form = NewTradeForm()
     if request.method == 'POST':
+        selected_trend_analysis = request.POST.getlist('trend_analysis')
+        selected_harmonic_patterns = request.POST.getlist('harmonic_patterns')
         trade_form = NewTradeForm(request.POST)
         if trade_form.is_valid():
             obj = TradePosition(owner=request.user.profile)
@@ -109,16 +111,30 @@ def trade_add(request):
             # obj.leverage = trade_form.cleaned_data['leverage']
             obj.comment = trade_form.cleaned_data['comment']
             obj.save()
+            
+            trend_analysis = TrendAnalysis(owner=profile,value=selected_trend_analysis)
+            trend_analysis.save()
+
+            harmonic_patterns = HarmonicPatterns(owner=profile, value=selected_harmonic_patterns)
+            harmonic_patterns.save()
+
+            analysis = Analysis(owner=profile,
+                                trade=obj,
+                                Trend_Analysis=trend_analysis,
+                                Harmonic_Patterns=harmonic_patterns)
+            analysis.save()
+            obj.analysis = analysis
+
             messages.success(request, 'Your trade position was updated.')
 
     context = {'sidebar':sidebar,
                 'profile':profile,
                 'tradeForm': trade_form,
-                'trade_edit_state': trade_edit_state
+                'trade_edit_state': trade_edit_state,
         }
 
-
     return render(request, 'dashboard/trade/add_trade.html',context)
+
 
 
 
