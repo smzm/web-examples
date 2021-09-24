@@ -38,7 +38,17 @@
 {% block content%}
 <div id="MAIN" class="flex flex-col flex-1 bg-color-light1 py-5 px-20">
 
-    {% include 'search/search.html' %}
+  <div id="HEADER" class="self-end flex items-center">
+      <a href="{% url 'trades_inbox' %}" class="no-underline relative p-4">
+          <span class="p-3 bg-white text-gray-400 rounded-lg">Inbox</span>
+          {% if unread_count %}
+            <span class="px-2 absolute -top-2 -right-0 rounded-full bg-red-500 text-white"> {{unread_count}} </span>
+          {% endif %}
+      </a>
+
+     {% include 'search/search.html' %}
+  </div>
+
 
     {% include 'dashboard/trade/include/latest_trade.html' %}
 

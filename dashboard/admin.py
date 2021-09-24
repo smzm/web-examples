@@ -17,9 +17,6 @@ class ClassInline(admin.TabularInline):
 class TradePositionAdmin(admin.ModelAdmin):
     inlines = [ClassInline,]
 
-# @admin.register(HarmonicPatterns)
-# class HarmonicPatternAdmin(admin.ModelAdmin):
-#     form = HarmonicPatternsForm
 
 admin.site.register(Review)
 admin.site.register(Message)

@@ -1,4 +1,5 @@
 {% extends 'main.html' %}
+
 {% block menu %}
 {% include 'include/menu.html' with active='trades' %}
 {% endblock menu %}
@@ -8,12 +9,12 @@
 <div id="DETAIL_TRADE" class="overflow-y-auto flex flex-grow">
 
 
-    <div id="UPDATE_FORM" class="overflow-y-auto flex bg-color-dark shadow ml-4 mb-4 mr-2 p-4 border-2 border-gray-700 border-opacity-20 rounded-lg">
+    <div id="UPDATE_FORM" class="overflow-y-auto flex p-4 bg-gray-200 border-2 min-h-full ">
       {% include "dashboard/trade/include/trade_form.html" with  btn='Update'  trade_edit_state=1 %}
     </div>
 
 
-    <div id="MAIN_CONTENT" class="flex flex-col flex-1">
+    <div id="MAIN_CONTENT" class="flex flex-col flex-1 p-2">
         <div class="">
           {% include 'dashboard/trade/include/trade_info.html' %}
         </div>
@@ -32,159 +33,8 @@
           </div>
     </div>
 
-
-{% include 'dashboard/trade/review/review_sidebar.html' %}
-
-
-
-<!-- <div id="-HARMONIC_PATTERN_CATERGORY">
-          <div>
-            <label for="Harmonic_Patterns" class="w-72 flex items-center justify-between my-2 text-gray-300 bg-gray-800 p-4 rounded-lg cursor-pointer">Harmonic Patterns</label>
-            <input id="Harmonic_Patterns" name="Harmonic_Patterns" type="checkbox">
-          </div>
-          <div>
-            <label for="ABCD" class="text-gray-300">AB=CD</label>
-            <input id="ABCD" name="ABCD" type="checkbox">
-          </div>
-          <div>
-            <label for="Three_Drives" class="text-gray-300">Three Drives</label>
-            <input id="Three_Drives" name="Three_Drives" type="checkbox">
-          </div>
-          <div>
-            <label for="Gartley" class="text-gray-300">Gartley</label>
-            <input id="Gartley" name="Gartley" type="checkbox">
-          </div>
-          <div>
-            <label for="Bat" class="text-gray-300">Bat</label>
-            <input id="Bat" name="Bat" type="checkbox">
-          </div>
-          <div>
-            <label for="Butterfly" class="text-gray-300">Butterfly</label>
-            <input id="Butterfly" name="Butterfly" type="checkbox">
-          </div>
-          <div>
-            <label for="Crab" class="text-gray-300">Crab</label>
-            <input id="Crab" name="Crab" type="checkbox">
-          </div>
-          <div>
-            <label for="Cypher" class="text-gray-300">Cypher</label>
-            <input id="Cypher" name="Cypher" type="checkbox">
-          </div>
-          <div>
-            <label for="5_0" class="text-gray-300">5-0</label>
-            <input id="5_0" name="5_0" type="checkbox">
-          </div>
-          <div>
-            <label for="Shark" class="text-gray-300">Shark</label>
-            <input id="Shark" name="Shark" type="checkbox">
-          </div>
-        </div>
-
-          <div id="-CHART_PATTERNS_CATEGORY">
-          <div>
-            <label for="Chart_Patterns" class="text-gray-300">Chart Patterns</label>
-            <input id="Chart_Patterns" name="Chart_Patterns" type="checkbox">
-          </div>
-          <div>
-            <label for="Double_Top_or_Bottom" class="text-gray-300">Double Top or Bottom</label>
-            <input id="Double_Top_or_Bottom" name="Double_Top_or_Bottom" type="checkbox">
-          </div>
-          <div>
-            <label for="Head_and_Shoulders" class="text-gray-300">Head and Shoulders</label>
-            <input id="Head_and_Shoulders" name="Head_and_Shoulders" type="checkbox">
-          </div>
-          <div>
-            <label for="Cup_and_Handle" class="text-gray-300">Cup and Handle</label>
-            <input id="Cup_and_Handle" name="Cup_and_Handle" type="checkbox">
-          </div>
-          <div>
-            <label for="Flag" class="text-gray-300">Flag</label>
-            <input id="Flag" name="Flag" type="checkbox">
-          </div>
-          <div>
-            <label for="Rectangle" class="text-gray-300">Rectangle</label>
-            <input id="Rectangle" name="Rectangle" type="checkbox">
-          </div>
-          <div>
-            <label for="Parallel_Channel" class="text-gray-300">Parallel Channel</label>
-            <input id="Parallel_Channel" name="Parallel_Channel" type="checkbox">
-          </div>
-          <div>
-            <label for="Pitchforks" class="text-gray-300">Pitchforks</label>
-            <input id="Pitchforks" name="Pitchforks" type="checkbox">
-          </div>
-          <div>
-            <label for="Triangle" class="text-gray-300">Triangle</label>
-            <input id="Triangle" name="Triangle" type="checkbox">
-          </div>
-          <div>
-            <label for="Gan" class="text-gray-300">Gan</label>
-            <input id="Gan" name="Gan" type="checkbox">
-          </div>
-      </div>
-
-      <div id="-TECHNICAL_INDICATOR_CATEGORY">
-        <div>
-          <label for="Technical_Indicators" class="text-gray-300">Technical Indicators</label>
-          <input id="Technical_Indicators" name="Technical_Indicators" type="checkbox">
-        </div>
-
-        <div>
-          <label for="Oscilators" class="text-gray-300">Oscilators</label>
-          <input id="Oscilators" name="Oscilators" type="checkbox">
-        </div>
-        <div>
-          <label for="Volatility" class="text-gray-300">Volatility</label>
-          <input id="Volatility" name="Volatility" type="checkbox">
-        </div>
-        <div>
-          <label for="Volume" class="text-gray-300">Volume</label>
-          <input id="Volume" name="Volume" type="checkbox">
-        </div>
-        <div>
-          <label for="Moving_Average" class="text-gray-300">Moving Average</label>
-          <input id="Moving_Average" name="Moving_Average" type="checkbox">
-        </div>
-        <div>
-          <label for="Bill_Wiliams" class="text-gray-300">Bill Wiliams</label>
-          <input id="Bill_Wiliams" name="Bill_Wiliams" type="checkbox">
-        </div>
-      </div>
-
-      <div id="-WAVE_ANALYSIS_CATEGORY">
-        <div>
-          <label for="Wave_Analysis" class="text-gray-300">Wave Analysis</label>
-          <input id="Wave_Analysis" name="Wave_Analysis" type="checkbox">
-        </div>
-        <div>
-          <label for="Neo_Wave" class="text-gray-300">Neo Wave</label>
-          <input id="Neo_Wave" name="Neo_Wave" type="checkbox">
-        </div>
-        <div>
-          <label for="Sine_Wave" class="text-gray-300">Sine Wave</label>
-          <input id="Sine_Wave" name="Sine_Wave" type="checkbox">
-        </div>
-        <div>
-          <label for="Wolfe_Wave" class="text-gray-300">Wolfe Wave</label>
-          <input id="Wolfe_Wave" name="Wolfe_Wave" type="checkbox">
-        </div>
-      </div>
-
-
-      <div id="-FUNDAMENTAL_ANALYSIS_CATEGORY">
-        <div>
-          <label for="Fundamental_Analysis" class="text-gray-300">Fundamental Analysis</label>
-          <input id="Fundamental_Analysis" name="Fundamental_Analysis" type="checkbox">
-        </div>
-      </div>
-
-      </div>
-    </div> -->
-
-
+    {% include 'dashboard/trade/review/review_sidebar.html' %}
 </div>
-
-  
 
 
 <script type="text/javascript">

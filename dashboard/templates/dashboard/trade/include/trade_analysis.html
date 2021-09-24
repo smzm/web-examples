@@ -13,83 +13,102 @@
 {% endblock style %}
 
 
-<div id="ANALYSIS" class="my-4 p-8">
-  <div id="TREND_ANALYSIS_CATEGORY" class="flex flex-col justify-between border mt-8">
-  <div>TREND ANALYSIS CATEGORY</div>
+<div id="ANALYSIS" class="my-4 p-8 w-72">
+
+ <button type="button" id="TREND_ANALYSIS_BTN" class="accordion border border-gray-300 outline-none w-full p-4 bg-gray-300 text-center block my-2 hover:bg-gray-200 transition-all duration-200"> Trend Analysis </button>
+  <div id="TREND_ANALYSIS_CATEGORY" class="hidden border mt-8">
     <div class="flex">
-        <input id="Support_And_Resistance" name="trend_analysis" type="checkbox" value="Support_And_Resistance">
+        <input id="Support_And_Resistance" name="trend_analysis" type="checkbox" value="Support_And_Resistance" 
+                {% if  'Support_And_Resistance' in analysis.trend_analysis.value %}checked{% endif %} >
         <label for="Support_And_Resistance" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Support And Resistance</label>
     </div>
     <div class="flex">
-        <input id="Supply_and_Demand" name="trend_analysis" type="checkbox" value="Supply_and_Demand">
+        <input id="Supply_and_Demand" name="trend_analysis" type="checkbox" value="Supply_and_Demand" 
+                {% if  'Supply_and_Demand' in analysis.trend_analysis.value %} checked {% endif %} >
         <label for="Supply_and_Demand" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Supply and Demand</label>
     </div>
     <div class="flex">
-        <input id="Pivot_Points" name="trend_analysis" type="checkbox" value="Pivot_Points">
+        <input id="Pivot_Points" name="trend_analysis" type="checkbox" value="Pivot_Points" 
+                {% if  'Pivot_Points' in analysis.trend_analysis.value %} checked {% endif %} >
         <label for="Pivot_Points" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Pivot Points</label>
     </div>
     <div class="flex">
-        <input id="Fibonacci" name="trend_analysis" type="checkbox" value="Fibonacci">
+        <input id="Fibonacci" name="trend_analysis" type="checkbox" value="Fibonacci"
+                {% if  'Fibonacci' in analysis.trend_analysis.value %} checked {% endif %} >
         <label for="Fibonacci" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Fibonacci</label>
     </div>
     <div class="flex">
-        <input id="Trend_Lines" name="trend_analysis" type="checkbox" value="Trend_Lines">
+        <input id="Trend_Lines" name="trend_analysis" type="checkbox" value="Trend_Lines"
+                {% if  'Trend_Lines' in analysis.trend_analysis.value %} checked {% endif %} >
         <label for="Trend_Lines" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Trend Lines</label>
     </div>
     <div class="flex">
-        <input id="Candlestick_Analysis" name="trend_analysis" type="checkbox" value="Candlestick_Analysis">
+        <input id="Candlestick_Analysis" name="trend_analysis" type="checkbox" value="Candlestick_Analysis"
+                {% if  'Candlestick_Analysis' in analysis.trend_analysis.value %} checked {% endif %} >
         <label for="Candlestick_Analysis" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Candlestick Analysis</label>
     </div>
     <div class="flex">
-        <input id="Multiple_Time_Frame_Analysis" name="trend_analysis" type="checkbox" value="Multiple_Time_Frame_Analysis">
+        <input id="Multiple_Time_Frame_Analysis" name="trend_analysis" type="checkbox" value="Multiple_Time_Frame_Analysis"
+              {% if  'Multiple_Time_Frame_Analysis' in analysis.trend_analysis.value %} checked {% endif %} >
         <label for="Multiple_Time_Frame_Analysis" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Multiple Time Frame Analysis</label>
     </div>
     <div class="flex">
-        <input id="Fractals" name="trend_analysis" type="checkbox" value="Fractals">
+        <input id="Fractals" name="trend_analysis" type="checkbox" value="Fractals"
+               {% if  'Fractals' in analysis.trend_analysis.value %} checked {% endif %} >
         <label for="Fractals" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Fractals</label>
     </div>
     <div class="flex">
-        <input id="Cycles" name="trend_analysis" type="checkbox" value="Cycles">
+        <input id="Cycles" name="trend_analysis" type="checkbox" value="Cycles"
+                {% if  'Cycles' in analysis.trend_analysis.value %} checked {% endif %} >
         <label for="Cycles" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Cycles</label>
     </div>
   </div>
 
-  <div id="HARMONIC_PATTERNS_CATERGORY" class="flex flex-col justify-between border mt-8">
-    <div>HARMONIC PATTERNS CATERGORY</div>
+  <button type="button" id="HARMONIC_PATTERNS_BTN" class="accordion border border-gray-300 outline-none w-full p-4 bg-gray-300 text-center block my-2 hover:bg-gray-200 transition-all duration-200"> Harmonic Patterns  </button>
+  <div id="HARMONIC_PATTERNS_CATERGORY" class="hidden border mt-8">
     <div class="flex">
-        <input id="ABCD" name="harmonic_patterns" type="checkbox" value="ABCD">
+        <input id="ABCD" name="harmonic_patterns" type="checkbox" value="ABCD"
+                {% if  'ABCD' in analysis.harmonic_patterns.value %} checked {% endif %} >
         <label for="ABCD" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">AB=CD</label>
     </div>
     <div class="flex">
-        <input id="Three_Drives" name="harmonic_patterns" type="checkbox" value="Three_Drives">
+        <input id="Three_Drives" name="harmonic_patterns" type="checkbox" value="Three_Drives"
+                {% if  'Three_Drives' in analysis.harmonic_patterns.value %} checked {% endif %} >
         <label for="Three_Drives" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Three Drives</label>
     </div>
     <div class="flex">
-        <input id="Gartley" name="harmonic_patterns" type="checkbox" value="Gartley">
+        <input id="Gartley" name="harmonic_patterns" type="checkbox" value="Gartley"
+                {% if  'Gartley' in analysis.harmonic_patterns.value %} checked {% endif %} >
         <label for="Gartley" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Gartley</label>
     </div>
     <div class="flex">
-        <input id="Bat" name="harmonic_patterns" type="checkbox" value="Bat">
+        <input id="Bat" name="harmonic_patterns" type="checkbox" value="Bat"
+        {% if  'Bat' in analysis.harmonic_patterns.value %} checked {% endif %} >
         <label for="Bat" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Bat</label>
     </div>
     <div class="flex">
-        <input id="Butterfly" name="harmonic_patterns" type="checkbox" value="Butterfly">
+        <input id="Butterfly" name="harmonic_patterns" type="checkbox" value="Butterfly"
+        {% if  'Butterfly' in analysis.harmonic_patterns.value %} checked {% endif %} >
         <label for="Butterfly" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Butterfly</label>
     </div>
     <div class="flex">
-        <input id="Crab" name="harmonic_patterns" type="checkbox" value="Crab">
+        <input id="Crab" name="harmonic_patterns" type="checkbox" value="Crab"
+        {% if  'Crab' in analysis.harmonic_patterns.value %} checked {% endif %} >
         <label for="Crab" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Crab</label>
     </div>
     <div class="flex">
-        <input id="Cypher" name="harmonic_patterns" type="checkbox" value="Cypher">
+        <input id="Cypher" name="harmonic_patterns" type="checkbox" value="Cypher"
+        {% if  'Cypher' in analysis.harmonic_patterns.value %} checked {% endif %} >
         <label for="Cypher" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Cypher</label>
     </div>
     <div class="flex">
-        <input id="5_0" name="harmonic_patterns" type="checkbox" value="5_0">
+        <input id="5_0" name="harmonic_patterns" type="checkbox" value="5_0"
+        {% if  '5_0' in analysis.harmonic_patterns.value %} checked {% endif %} >
         <label for="5_0" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">5-0</label>
     </div>
     <div class="flex">
-        <input id="Shark" name="harmonic_patterns" type="checkbox" value="Shark">
+        <input id="Shark" name="harmonic_patterns" type="checkbox" value="Shark"
+        {% if  'Shark' in analysis.harmonic_patterns.value %} checked {% endif %} >
         <label for="Shark" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Shark</label>
     </div>
   </div>
@@ -194,3 +213,16 @@
 
  {% endcomment %}
 </div> 
+
+
+<script type="text/javascript">
+    const acc = document.getElementsByClassName("accordion");
+
+    for (let i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+            this.classList.toggle('bg-blue-100')
+            this.nextElementSibling.classList.toggle('hidden')
+            this.nextElementSibling.classList.toggle('flex flex-col items-center')
+        });
+    }
+</script>

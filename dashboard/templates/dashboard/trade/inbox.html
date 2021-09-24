@@ -17,23 +17,23 @@
     </div>
     <div class="flex flex-col w-full">
 
-    <div id="TRADE_INFO" class="border p-10 flex justify-between">
-        <span>{{trade.symbol}} </span>
-        <span>{{trade.date}} - {{trade.time}} </span>
-        <span>{{trade.price}} </span>
-        <span>{{trade.side}} </span>
-        <span>{{trade.size}} </span>
-     </div>
 
         <div id="TRADE_MESSAGE" class="flex flex-col">
             {% for message in msg_details.all_msg  %}
-            
+                           
                 <li id="ALL_MSG" class="{%if not message.is_read%} bg-gray-100 {%endif%} flex justify-between items-center border-b p-4 ">
                     <div class="flex flex-col items-center mx-10">
                         <a id="MSG_FROM" href="{% url 'profile' message.sender %}" class="text-blue-600">{{message.sender}}</a>
                         <span id="MSG_DATE" class="text-xs text-gray-400"> {{message.created}} </span>
                     </div>
-                    <a href="{% url 'trade_inbox' message.id %}" id="MSG_BODY" class="text-gray-800 mx-10"> {{message.body}} </a>
+                    <div id="TRADE_INFO" class="p-10 flex justify-between">       
+                        <span class="mx-2 text-gray-400">{{message.trade.symbol}} </span>
+                        <span class="mx-2 text-gray-400">{{message.trade.date}} {{trade.time}} </span>
+                        <span class="mx-2 text-gray-400">{{message.trade.price}} </span>
+                        <span class="mx-2 text-gray-400">{{message.trade.side}} </span>
+                        <span class="mx-2 text-gray-400">{{message.trade.size}} </span>
+                    </div>
+                    <a href="{% url 'trade_inbox' message.id %}" id="MSG_BODY" class="text-gray-800 mx-10"> {{message.body|truncatewords:5}} </a>
                 </li>
             {% endfor %} 
         </div>

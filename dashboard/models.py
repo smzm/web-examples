@@ -70,7 +70,7 @@ class TrendAnalysis(models.Model):
     #                   ("Cycles", "Cycles")
     #                   )
 
-    value = models.CharField(max_length=5000)
+    value = models.CharField(max_length=5000, null=True, blank=True)
 
     def __str__(self):
         return self.value
@@ -94,7 +94,7 @@ class HarmonicPatterns(models.Model):
     #     ("Five_Zero", "Five_Zero"),
     #     ("Shark", "Shark"),
     # )
-    value = models.CharField(max_length=5000)
+    value = models.CharField(max_length=5000, null=True, blank=True)
 
     def __str__(self):
         return self.value
@@ -107,13 +107,12 @@ class Analysis(models.Model):
                           primary_key=True, editable=False)
     trade = models.OneToOneField(TradePosition, on_delete=models.CASCADE, related_name="analysis")
     Trend_Analysis = models.OneToOneField(TrendAnalysis, on_delete=models.SET_NULL, null=True, blank=True, related_name="trend_analysis")
-    Harmonic_Patterns = models.OneToOneField(HarmonicPatterns, on_delete=models.SET_NULL, null=True, blank=True)
-    # Chart_Patterns = models.ManyToManyField("ChartPatterns", blank=True)
-    # Technical_Indicators = models.ManyToManyField(
-    #     "TechnicalIndicators", blank=True)
-    # WaveAnalysis = models.ManyToManyField("WaveAnalysis", blank=True)
+    Harmonic_Patterns = models.OneToOneField(HarmonicPatterns, on_delete=models.SET_NULL, null=True, blank=True, related_name="harmonic_patterns")
+    # Chart_Patterns = models.OneToOneField("ChartPatterns", blank=True)
+    # Technical_Indicators = models.OneToOneField("TechnicalIndicators", blank=True)
+    # WaveAnalysis = models.OneToOneField("WaveAnalysis", blank=True)
 
-    # Fundamental_Analysis = models.ManyToManyField("FundamentalAnalysis",
+    # Fundamental_Analysis = models.OneToOneField("FundamentalAnalysis",
     #                                               blank=True,
     #                                               null=True)
     def __str__(self):
