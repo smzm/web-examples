@@ -1,0 +1,35 @@
+<div class="mx-auto text-2xl font-extrabold">
+    {{trades.0.date}}
+</div>
+
+{% for trade in trades  %}
+    <a href="{% url 'trade_detail' trade.id %}" class="flex justify-around p-4 my-4 bg-white rounded-lg">
+        <div>{{trade.symbol}}</div>
+        <div>{{trade.price}}</div>
+        <div>{{trade.side}}</div>
+        <div>{{trade.time}}</div>
+    </a>
+{% endfor %}
+
+{% if trades.has_other_pages %}
+
+  <div id="Pagination" class="flex list-none justify-center">
+      {% if trades.has_previous %}
+        <li class="px-2"><div hx-get="/history/date/{{day}}-{{month}}-{{year}}/?page={{trades.previous_page_number}}" hx-trriger="click" hx-target="#TRADES_IN_DAY" class="cursor-pointer bold text-gray-500 inline"> &#10094; </div><li>
+      {% endif %}
+
+      {% for page in customRange  %}
+        <li class="mx-1"> 
+          {% if page == trades.number %}
+            <a hx-get="/history/date/{{day}}-{{month}}-{{year}}/?page={{page}}" hx-trriger="click" hx-target="#TRADES_IN_DAY" class="cursor-pointer p-2 font-bold text-gray-800 border bg-color-light2 rounded-md"> {{page}} </a>
+          {% else %}
+            <a hx-get="/history/date/{{day}}-{{month}}-{{year}}/?page={{page}}" hx-trriger="click" hx-target="#TRADES_IN_DAY" class="cursor-pointer p-2 font-bold border bg-color-light2 rounded-md text-gray-500"> {{page}} </a>
+          {% endif %}
+        </li>
+      {% endfor %}
+      
+      {% if trades.has_next %}
+            <li class="px-2"><div hx-get="/history/date/{{day}}-{{month}}-{{year}}/?page={{trades.next_page_number}}" hx-trriger="click" hx-target="#TRADES_IN_DAY" class="cursor-pointer bold text-gray-500 inline"> &#10095; </div><li>
+      {% endif %}
+  </div>
+{% endif %}

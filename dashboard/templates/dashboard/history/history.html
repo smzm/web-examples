@@ -1,23 +1,34 @@
 {% extends "main.html" %}
 
+
 {% block menu %}
 {% include 'include/menu.html' with active='history' %}
-{% endblock menu %}
+{% endblock menu %} 
+
 
 {% block content %}
 <div id="MAIN" class="flex flex-col flex-1 bg-color-light1 py-5 px-20">
+    {% comment %} 
+        <h1 class="text-gray-600 ">Filter based on : </h1>
+        <p class="text-gray-600">Date</p>
+        <p class="text-gray-600">side</p>
+        <p class="text-gray-600">Analysis Category</p>
+        <p class="text-gray-600">Symbol</p>
+        <p class="text-gray-600">Mistakes</p>
+        <p class="text-gray-600">Tiem of days</p>
+        <p class="text-gray-600">Weekdays</p>
+        <p class="text-gray-600">emotions</p>
+        <p class="text-gray-600">wins</p>
+        <p class="text-gray-600">loss</p>
+     {% endcomment %}
 
-    <h1 class="text-gray-600 ">Filter based on : </h1>
-    <p class="text-gray-600">Date</p>
-    <p class="text-gray-600">side</p>
-    <p class="text-gray-600">Analysis Category</p>
-    <p class="text-gray-600">Symbol</p>
-    <p class="text-gray-600">Mistakes</p>
-    <p class="text-gray-600">Tiem of days</p>
-    <p class="text-gray-600">Weekdays</p>
-    <p class="text-gray-600">emotions</p>
-    <p class="text-gray-600">wins</p>
-    <p class="text-gray-600">loss</p>
+     <div class="h-3/4">
+         {% include "dashboard/history/calendar.html" %}    
+     </div>
+
+    <div id="TRADES_IN_DAY" class="my-8 h-1/4">
+        
+    </div>
 </div>
 {% endblock content %}
 

@@ -4,7 +4,12 @@ from . import views
 
 urlpatterns = [
     path('dashboard/', views.dashboard, name="dashboard"),
+
     path('history/', views.history, name="history"),
+    path('history/previous_month/', views.previous_month, name="previous_month"),
+    path('history/next_month/', views.next_month, name="next_month"),
+    path('history/date/<str:date>/', views.filter_trades_by_date, name="filter_trades_by_date"),   # Hard Link in calendar. don't change it unless update all urls
+
     path('trades/', views.trades, name="trades"),
     path('strategy/', views.dashboard, name="strategy"),
     path('analysis/', views.dashboard, name="analysis"),

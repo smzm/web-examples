@@ -16,6 +16,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from users.models import Profile
 from .utils import searchTrade, paginateTrades
+import calendar as cal
+import datetime
+
 
 
 sidebar = {
@@ -25,6 +28,8 @@ sidebar = {
     "trades": '<svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M19 21c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14zM9.553 9.658l4 2 1.553-3.105 1.789.895-2.447 4.895-4-2-1.553 3.105-1.789-.895 2.447-4.895z"></path></svg>',
     "analysis": '<svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M6 21H3a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1zm7 0h-3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v17a1 1 0 0 1-1 1zm7 0h-3a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1z"></path></svg>',
 }
+
+
 
 
 @login_required(login_url="/login/")
@@ -38,13 +43,154 @@ def dashboard(request):
     )
 
 
+
+# ================================================ History
 @login_required(login_url="/login/")
 def history(request):
     profile = request.user.profile
+    today = datetime.date.today()
+    year = today.year                   # Year of today
+    month_num = today.month             # Month of today
+    month_str = today.strftime('%B')    # Month of today in letters
+    day_num = today.day                 # Day of Today
+    day_of_week, month_range = cal.monthrange(year, month_num)      # day_of_week : after many day month begins     month_range: how many days month have
+       
+    date = {'year': year,
+            'month': month_str,
+            'month_num': month_num,
+            'day_num' : day_num, 
+            'month_range': range(1, month_range + 1 ) ,
+            'day_of_week' : range(1, day_of_week + 1 ),
+            'today': today
+            }
+    monthly_trades = profile.tradeposition_set.filter(date__year=year, 
+                                              date__month=month_num).order_by("-date",'-time').values_list('id','date','symbol')        # Get all trade of this month
+    trades_days = []
+    trades_id = []
+    trades_symbol = []
+    for index in range(0,len(monthly_trades)) : 
+        trade = monthly_trades[index]
+        trade_id = trade[0]
+        trade_day = trade[1].day
+        trade_symbol = trade[2]
+        trades_id.append(trade_id)          # All trade id for this month
+        trades_days.append(trade_day)       # All days user has trade 
+        trades_symbol.append(trade_symbol)  # All symbol trades in this month
+
+    trades_inforamtion = {'days': trades_days, 'id': trades_id, 'symbol':trades_symbol}   
     return render(
-        request, "dashboard/history.html", {
-            "sidebar": sidebar, "profile": profile}
+        request, "dashboard//history/history.html", {"sidebar": sidebar, "profile": profile, "date": date, "trades_info": trades_inforamtion}
     )
+
+
+
+@login_required(login_url="/login/")
+def next_month(request):
+    profile = request.user.profile
+    if request.htmx : 
+        data_year = int(request.POST.get('data-year'))
+        data_month = int(request.POST.get('data-month'))
+        data_day = int(request.POST.get('data-day'))
+
+        today = datetime.date.today()
+        _ , this_month_range = cal.monthrange(data_year, data_month)
+        time_delta = datetime.timedelta(days=+this_month_range)     # Go forward as long as this month
+        new_date = datetime.date(data_year, data_month, data_day) + time_delta
+        year = new_date.year
+        month_num = new_date.month
+        day_num = new_date.day
+
+        day_of_week, month_range = cal.monthrange(year, month_num)
+        month_str = new_date.strftime('%B')
+
+        date = {'year': year,
+                'month': month_str,
+                'month_num': month_num,
+                'day_num' : day_num, 
+                'month_range': range(1, month_range+1) ,
+                'day_of_week' : range(1, day_of_week+1),
+                'today': today
+        }
+        monthly_trades = profile.tradeposition_set.filter(date__year=year, 
+                                                      date__month=month_num).order_by("-date",'-time').values_list('id','date','symbol')
+        trades_days = []
+        trades_id = []
+        trades_symbol = []
+        for index in range(0,len(monthly_trades)) : 
+            trade = monthly_trades[index]
+            trade_id = trade[0]
+            trade_day = trade[1].day
+            trade_symbol = trade[2]
+            trades_id.append(trade_id)
+            trades_days.append(trade_day)
+            trades_symbol.append(trade_symbol)
+
+        trades_inforamtion = {'days': trades_days, 'id': trades_id, 'symbol':trades_symbol}   
+        return render(request, 'dashboard/history/calendar.html', {'date':date, "trades_info": trades_inforamtion} )
+
+
+
+@login_required(login_url="/login/")
+def previous_month(request):
+    profile = request.user.profile
+    if request.htmx : 
+        data_year = int(request.POST.get('data-year'))
+        data_month = int(request.POST.get('data-month'))
+        data_day = int(request.POST.get('data-day'))
+
+        today = datetime.date.today()
+        _ , this_month_range = cal.monthrange(data_year, data_month)
+        time_delta = datetime.timedelta(days=-this_month_range)     # Go backward as long as this month
+        new_date = datetime.date(data_year, data_month, data_day) + time_delta
+        year = new_date.year
+        month_num = new_date.month
+        month_str = new_date.strftime('%B')
+        day_num = new_date.day
+
+        day_of_week, month_range = cal.monthrange(year, month_num)
+
+        date = {'year': year,
+                'month': month_str,
+                'month_num': month_num,
+                'day_num' : day_num, 
+                'month_range': range(1, month_range+1) ,
+                'day_of_week' : range(1, day_of_week+1),
+                'today': today
+        }
+
+        monthly_trades = profile.tradeposition_set.filter(date__year=year, 
+                                                         date__month=month_num).order_by("-date",'-time').values_list('id','date','symbol')
+        trades_days = []
+        trades_id = []
+        trades_symbol = []
+        for index in range(0,len(monthly_trades)) : 
+            trade = monthly_trades[index]
+            trade_id = trade[0]
+            trade_day = trade[1].day
+            trade_symbol = trade[2]
+            trades_id.append(trade_id)
+            trades_days.append(trade_day)
+            trades_symbol.append(trade_symbol)
+
+        trades_inforamtion = {'days': trades_days, 'id': trades_id, 'symbol':trades_symbol}   
+        return render(request, 'dashboard/history/calendar.html', {'date':date, "trades_info": trades_inforamtion} )
+
+
+
+
+
+@login_required(login_url="/login/")
+def filter_trades_by_date(request, date):
+    profile = request.user.profile
+    day, month, year = date.split('-')
+    trades = profile.tradeposition_set.filter(date__year=year, 
+                                            date__month=month,
+                                            date__day=day).order_by("-date",'-time')
+    trades, customRange = paginateTrades(request, trades, 2)
+
+    return render(request, 'dashboard/history/trades_by_date.html', {'trades':trades, 'customRange': customRange, 'day':day, 'month':month, 'year':year})
+
+
 
 
 # ================================================ Trade
@@ -52,15 +198,17 @@ def history(request):
 def trades(request):
     profile = request.user.profile
     trades = profile.tradeposition_set.all().order_by("-date", "-time")
-    trades, custumRange = paginateTrades(request, trades, 5)
+    trades, customRange = paginateTrades(request, trades, 5)
 
     context = {
         "sidebar": sidebar,
         "profile": profile,
         "trades": trades,
-        "customRange": custumRange,
+        "customRange": customRange,
     }
     return render(request, "dashboard/trade/trades.html", context)
+
+
 
 
 @login_required(login_url="/login/")
@@ -216,12 +364,16 @@ def trade_edit(request, trade_pk):
     )
 
 
+
+
 @login_required(login_url="/login/")
 def trade_delete(request, trade_pk):
     trade = TradePosition.objects.get(id=trade_pk)
     trade.delete()
     dynamicPath_newtrade = reverse("trades")
     return HttpResponseRedirect(dynamicPath_newtrade)
+
+
 
 
 # ================================================ Trade -> Review
@@ -261,6 +413,8 @@ def review_add_hx(request, trade_pk):
     )
 
 
+
+
 @login_required(login_url="/login/")
 def review_update_form_hx(request, review_pk):
     if request.htmx:
@@ -283,6 +437,9 @@ def review_update_form_hx(request, review_pk):
             "trade": trade,
         },
     )
+
+
+
 
 
 @login_required(login_url="/login/")
@@ -308,6 +465,8 @@ def review_update_sidebar_hx(request, review_pk):
     )
 
 
+
+
 @login_required(login_url="/login/")
 def review_delete_hx(request, review_pk):
     if request.htmx:
@@ -323,6 +482,8 @@ def review_delete_hx(request, review_pk):
             "dashboard/trade/review/review_sidebar.html",
             {"reviews": reviews, "trade": trade},
         )
+
+
 
 
 # # ================================================ Trade -> Message
@@ -350,6 +511,8 @@ def trade_inbox(request, msg_pk):
     return render(request, "dashboard/trade/inbox.html", context)
 
 
+
+
 @login_required(login_url="/login/")
 def trades_inbox(request):
     profile = request.user.profile
@@ -374,6 +537,8 @@ def trades_inbox(request):
     return render(request, "dashboard/trade/inbox.html", context)
 
 
+
+
 def trade_message(request, username, trade_pk):
     profile = Profile.objects.get(username=username)
     trade = profile.tradeposition_set.get(id=trade_pk)
@@ -390,6 +555,8 @@ def trade_message(request, username, trade_pk):
 
     context = {"profile": profile, "trade": trade, "form": form}
     return render(request, "dashboard/trade/message/message_form.html", context)
+
+
 
 
 # ================================================ Trade -> Search
