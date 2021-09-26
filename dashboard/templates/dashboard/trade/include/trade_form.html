@@ -1,6 +1,7 @@
+<div id="FORM_CAONTAINER">
 <form id="NEW_TRADE_FORM" method="POST"
     {% if trade_edit_state %} 
-        hx-post="{% url 'trade_edit' trade.id %}" hx-trigger="change" hx-target="#TRADE_INFO" hx-swap="outerHTML" hx-indicator="#indicator"
+        hx-post="{% url 'trade_edit' trade.id %}" hx-trigger="change, submit" hx-target="#TRADE_INFO" hx-swap="outerHTML" hx-indicator="#indicator"
     {% else %} 
          action="{% url 'trade_add' %}"
     {% endif %} 
@@ -9,16 +10,37 @@
     >
     
     {% csrf_token %}
-    <div id="indicator" class="htmx-indicator mx-auto sticky top-0 p-2 rounded-md bg-green-300">Updating...</div> 
+    {% comment %} <div id="indicator" class="htmx-indicator mx-auto sticky top-0 p-2 rounded-md bg-green-300">Updating...</div>  {% endcomment %}
 
     <div id="FORM_DATA">
             {% for field in tradeForm %}
                 <label id="FORM_LABEL" class="place-self-end m-4 flex items-center text-gray-500 p-1 text-base focus:text-blue-600">
                     {{field.label | title}} :
                 </label>
-
-                <div id="FORM_INPUT" class="flex flex-col items-center ">
-                    {% if field.field.widget.attrs.id == 'CHECKBOX_SIDE' %}
+        
+                <div id="FORM_INPUT" class="flex flex-col items-center ">                               
+                    {% if field.field.widget.attrs.id == 'SYMBOL' %}
+                        <div class="relative mb-4"> 
+                            {{field}}
+                            <div class="text-xs text-red-500 absolute left-4 ">
+                                {{symbol_error}}
+                            </div>
+                        </div> 
+                    {% elif field.field.widget.attrs.id == 'DATE' %}
+                        <div class="relative">
+                            {{field}}
+                            <div class="text-xs text-red-500 absolute left-4 ">
+                                {{tradeForm.date.errors}} 
+                            </div>
+                        </div>
+                    {% elif field.field.widget.attrs.id == 'SIZE' %}
+                        <div class="relative mb-4">
+                            {{field}}
+                            <div class="text-xs text-yellow-500 absolute left-4 ">
+                                {{risk_error}}
+                            </div>
+                        </div>
+                    {% elif field.field.widget.attrs.id == 'CHECKBOX_SIDE' %}
                         <label id="CHECKBOX_SLIDE_BTN" class="text-gray-300" for="CHECKBOX_SIDE">
                             {{field}}
                         </label>
@@ -32,23 +54,28 @@
 
     </div>
 
-
- 
-
     {% include 'dashboard/trade/include/trade_analysis.html' %}
 
-
-    {% if not trade_edit_state %}
-    <button name="tradeForm" type="submit" form="NEW_TRADE_FORM" value="submit" class="w-64 self-center my-10 text-gray-200 bg-blue-700 rounded-lg p-4 hover:bg-blue-800">
-        {% if btn == 'Update' %}
-            Update
-        {% elif btn == 'Submit' %}
-            Submit
-        {% endif %}
-    </button>
+    {% if not tradeForm.errors and not trade_edit_state%}
+        <button name="tradeForm" type="submit" form="NEW_TRADE_FORM" value="submit" class="w-64 self-center my-10 text-gray-200 bg-blue-700 rounded-lg p-4 hover:bg-blue-800">
+                Submit
+        </button>
     {% endif %}
-    
 
-
+<input hidden name="trade_edit_state" value="{{trade_edit_state}}">
+ {% if trade_edit_state %}
+    <input hidden name="trade_id" value="{{trade.id}}"> 
+{% endif %}
 
 </form>
+
+</div>
+
+<script>
+    // When request send and response backed keep the cursor at the end of input
+    function cursor_at_end(e){
+        let val =  e.value
+        e.value = ''; 
+        e.value = val; 
+    }
+</script>

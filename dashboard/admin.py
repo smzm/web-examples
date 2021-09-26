@@ -8,7 +8,8 @@ from .models import (TradePosition,
                     ChartPatterns,
                     TechnicalIndicators,
                     WaveAnalysis,
-                    FundamentalAnalysis
+                    FundamentalAnalysis,
+                    Strategy
                     )
 
 
@@ -18,6 +19,10 @@ class ClassInline(admin.TabularInline):
 class TradePositionAdmin(admin.ModelAdmin):
     inlines = [ClassInline,]
 
+
+@admin.register(Strategy)
+class StrategyAdmin(admin.ModelAdmin):
+    list_display = ['name', 'balance', 'risk_on_balance']
 
 admin.site.register(Review)
 admin.site.register(Message)

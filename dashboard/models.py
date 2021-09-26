@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from users.models import Profile
+from datetime import date
 
 
 class TradePosition(models.Model):
@@ -12,12 +13,14 @@ class TradePosition(models.Model):
                           editable=False)
     symbol = models.CharField(max_length=200)
     price = models.FloatField(validators=[MinValueValidator(0)])
-    side = models.CharField(max_length=200)
     size = models.FloatField(validators=[MinValueValidator(0)])
+    side = models.CharField(max_length=200)
     # leverage = models.IntegerField(
     #     default=1, validators=[MinValueValidator(1), MaxValueValidator(500)])
     comment = models.TextField(max_length=1000, null=True, blank=True)
-    date = models.DateField()
+    strategy = models.ForeignKey('Strategy',null=True, on_delete=models.SET_NULL, related_name="trade")
+
+    date = models.DateField()    #validators=[MaxValueValidator(limit_value=date.today)]
     time = models.TimeField()
 
     def __str__(self):
@@ -209,8 +212,6 @@ class Analysis(models.Model):
 
 
 
-
-
 class Review(models.Model):
     emotion_type = (('fear', 'Fear'),
                     ('hope', 'Hope'),
@@ -231,12 +232,11 @@ class Review(models.Model):
         return self.body
 
 
+
 class Message(models.Model):
     sender = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    recipient = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name='messages')
-    trade = models.ForeignKey(
-        TradePosition, on_delete=models.CASCADE, related_name="msg")
+    recipient = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='messages')
+    trade = models.ForeignKey(TradePosition, on_delete=models.CASCADE, related_name="msg")
     body = models.TextField(max_length=1000)
     is_read = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
@@ -247,3 +247,24 @@ class Message(models.Model):
 
     def __str__(self):
         return self.sender.name
+
+
+
+class Strategy(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    created = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=200)
+    balance = models.FloatField(validators=[MinValueValidator(0)], null=True)
+    risk_on_balance = models.PositiveIntegerField(validators=[MaxValueValidator(100)], null=True)
+    value_risk = models.FloatField(null=True)
+
+    def value_risk_on_balance(self):
+        value_risk_on_balance = float((self.risk_on_balance / 100) * self.balance)
+        return value_risk_on_balance
+
+    def save(self, *args, **kwargs):
+        self.value_risk = self.value_risk_on_balance()
+        super(Strategy, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name

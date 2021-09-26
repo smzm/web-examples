@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from .models import TradePosition, Analysis, HarmonicPatterns, TrendAnalysis
+from .models import Strategy, TradePosition, Analysis, HarmonicPatterns, TrendAnalysis
 
 
 def auto_delete_trend_analysis(sender, instance, **kwargs):
@@ -40,4 +40,3 @@ post_delete.connect(auto_delete_chart_patterns, sender=Analysis)
 post_delete.connect(auto_delete_technical_indicators, sender=Analysis)
 post_delete.connect(auto_delete_wave_analysis, sender=Analysis)
 post_delete.connect(auto_delete_fundamental_analysis, sender=Analysis)
-

@@ -10,14 +10,19 @@ urlpatterns = [
     path('history/next_month/', views.next_month, name="next_month"),
     path('history/date/<str:date>/', views.filter_trades_by_date, name="filter_trades_by_date"),   # Hard Link in calendar. don't change it unless update all urls
 
-    path('trades/', views.trades, name="trades"),
-    path('strategy/', views.dashboard, name="strategy"),
+    path('strategy/', views.strategy, name="strategy"),
+
     path('analysis/', views.dashboard, name="analysis"),
 
+    path('trades/', views.trades, name="trades"),
     path('trade/detail/<str:trade_pk>/', views.trade_detail, name="trade_detail"),
     path('trade/add/', views.trade_add, name="trade_add"),
     path('trade/edit/<str:trade_pk>/', views.trade_edit, name="trade_edit"),
     path('trades/delete/<str:trade_pk>/', views.trade_delete, name="trade_delete"),
+
+    path('trade/trade_check_risk_hx/', views.trade_check_risk_hx, name="trade_check_risk_hx"),  # Hard Link in form for size and price field. don't change it unless update all urls
+    path('trade/trade_check_symbol_hx/', views.trade_check_symbol_hx, name="trade_check_symbol_hx"),  # Hard Link in form for size and price field. don't change it unless update all urls
+
     
     path('trade/review/add/<str:trade_pk>/', views.review_add_hx, name="review_add_hx"),
     path('trade/review/update/<str:review_pk>/', views.review_update_form_hx, name="review_update_form_hx"),

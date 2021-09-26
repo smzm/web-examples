@@ -2,7 +2,7 @@ from django.http import request
 from django.http import response
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
-from .forms import NewTradeForm, ReviewForm, MessageForm
+from .forms import NewTradeForm, ReviewForm, MessageForm, StrategyForm
 from .models import (
     Analysis,
     ChartPatterns,
@@ -14,6 +14,7 @@ from .models import (
     TrendAnalysis,
     HarmonicPatterns,
     WaveAnalysis,
+    Strategy
 )
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -45,6 +46,28 @@ def dashboard(request):
         request, "dashboard/dashboard.html", {
             "sidebar": sidebar, "profile": profile, 'unread_count': unread_count}
     )
+
+
+
+
+# ================================================ Strategy
+@login_required(login_url="/login/")
+def strategy(request):
+    profile = request.user.profile
+
+    strategy_form = StrategyForm()
+    context = {"sidebar": sidebar, "profile": profile, "strategyForm": strategy_form}       
+
+    if request.method == "POST" : 
+        strategy_form = StrategyForm(request.POST)
+        if strategy_form.is_valid():
+            strategy = strategy_form.save(commit=False)
+            strategy.save()
+            context['value_risk'] = strategy.value_risk
+            
+    return render(request, "dashboard/strategy/strategy.html", context)
+
+
 
 
 
@@ -218,6 +241,7 @@ def trades(request):
 @login_required(login_url="/login/")
 def trade_detail(request, trade_pk):
     profile = request.user.profile
+    trade_edit_state = 1
     trade = profile.tradeposition_set.get(id=trade_pk)
     trade_form = NewTradeForm(
         {
@@ -225,6 +249,7 @@ def trade_detail(request, trade_pk):
             "price": trade.price,
             "date": trade.date,
             "time": trade.time,
+            "strategy" : trade.strategy,
             "size": trade.size,
             "side": trade.side,
             # 'leverage': trade.leverage,
@@ -258,9 +283,64 @@ def trade_detail(request, trade_pk):
         "reviews": reviews,
         "reviewForm": review_form,
         "msg_details": msg_details,
-        'analysis': analysis
+        'analysis': analysis,
+        'trade_edit_state' : trade_edit_state 
     }
     return render(request, "dashboard/trade/detail_trade.html", context)
+
+
+
+
+@login_required(login_url="/login/")
+def trade_check_symbol_hx(request):
+    profile = request.user.profile
+    trade_form = NewTradeForm(request.POST)
+    trade_edit_state = int(request.POST['trade_edit_state'])
+    context = {
+        "sidebar": sidebar,
+        "profile": profile,
+        "tradeForm": trade_form,
+        "trade_edit_state" : trade_edit_state
+    }
+    if request.htmx : 
+        if trade_edit_state : 
+            trade_id = request.POST['trade_id']
+            trade = profile.tradeposition_set.get(id=trade_id)
+            context['trade'] = trade
+        if request.POST['symbol'] :
+           symbol = request.POST['symbol']
+        else : 
+            context['symbol_error'] = "Symbol is requierd."
+    return render(request, "dashboard/trade/include/trade_form.html", context)
+
+
+
+@login_required(login_url="/login/")
+def trade_check_risk_hx(request):
+    profile = request.user.profile
+    trade_form = NewTradeForm(request.POST)
+    trade_edit_state = int(request.POST['trade_edit_state'])
+    context = {
+        "sidebar": sidebar,
+        "profile": profile,
+        "tradeForm": trade_form,
+        "trade_edit_state" : trade_edit_state
+    }
+    if request.htmx : 
+        if trade_edit_state : 
+            trade_id = request.POST['trade_id']
+            trade = profile.tradeposition_set.get(id=trade_id)
+            context['trade'] = trade
+        if request.POST['price'] and request.POST['strategy'] and request.POST['size']: 
+            strategy_id = request.POST['strategy']
+            strategy = Strategy.objects.get(id=strategy_id)
+            value_risk = float(strategy.value_risk)          
+            price = float(request.POST['price'])
+            size = float(request.POST['size'])
+            if strategy and price and size : 
+                if (price * size) > value_risk:
+                    context['risk_error'] = "Risk strategy alert."
+    return render(request, "dashboard/trade/include/trade_form.html", context)
 
 
 
@@ -270,7 +350,12 @@ def trade_add(request):
     trade_edit_state = 0
     profile = request.user.profile
     trade_form = NewTradeForm()
-
+    context = {
+        "sidebar": sidebar,
+        "profile": profile,
+        "tradeForm": trade_form,
+        "trade_edit_state": trade_edit_state,
+    }
     if request.method == "POST":
         selected_trend_analysis = request.POST.getlist("trend_analysis")
         selected_harmonic_patterns = request.POST.getlist("harmonic_patterns")
@@ -285,6 +370,8 @@ def trade_add(request):
             obj.symbol = trade_form.cleaned_data["symbol"]
             obj.date = trade_form.cleaned_data["date"]
             obj.time = trade_form.cleaned_data["time"]
+            obj.strategy = trade_form.cleaned_data["strategy"]
+            strategy = Strategy.objects.get(name=obj.strategy)
             obj.price = trade_form.cleaned_data["price"]
             obj.size = trade_form.cleaned_data["size"]
             obj.side = trade_form.cleaned_data["side"]
@@ -332,13 +419,9 @@ def trade_add(request):
 
             messages.success(request, "Your trade position was updated.")            
             return redirect("trade_detail", obj.id)
+        else : 
+            return render(request, "dashboard/trade/add_trade.html", context)        
 
-    context = {
-    "sidebar": sidebar,
-    "profile": profile,
-    "tradeForm": trade_form,
-    "trade_edit_state": trade_edit_state,
-    }
     return render(request, "dashboard/trade/add_trade.html", context)
 
 
@@ -350,6 +433,7 @@ def trade_edit(request, trade_pk):
     profile = request.user.profile
     trade = profile.tradeposition_set.get(id=trade_pk)
 
+    print("=====================")
     if request.method == "POST":
         trade_form = NewTradeForm(request.POST)
         selected_trend_analysis = request.POST.getlist("trend_analysis")
@@ -363,6 +447,8 @@ def trade_edit(request, trade_pk):
             trade.symbol = trade_form.cleaned_data["symbol"]
             trade.date = trade_form.cleaned_data["date"]
             trade.time = trade_form.cleaned_data["time"]
+            trade.strategy = trade_form.cleaned_data["strategy"]
+            strategy = Strategy.objects.get(name=trade.strategy)
             trade.price = trade_form.cleaned_data["price"]
             trade.size = trade_form.cleaned_data["size"]
             trade.side = trade_form.cleaned_data["side"]
@@ -612,7 +698,6 @@ def trade_message(request, username, trade_pk):
 
     context = {"profile": profile, "trade": trade, "form": form}
     return render(request, "dashboard/trade/message/message_form.html", context)
-
 
 
 
