@@ -5,11 +5,15 @@ from django.shortcuts import redirect, render
 from .forms import NewTradeForm, ReviewForm, MessageForm
 from .models import (
     Analysis,
+    ChartPatterns,
+    FundamentalAnalysis,
     Message,
+    TechnicalIndicators,
     TradePosition,
     Review,
     TrendAnalysis,
     HarmonicPatterns,
+    WaveAnalysis,
 )
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -231,6 +235,10 @@ def trade_detail(request, trade_pk):
     analysis = {
         'trend_analysis' : trade.analysis.Trend_Analysis,
         'harmonic_patterns': trade.analysis.Harmonic_Patterns,
+        'chart_patterns' : trade.analysis.Chart_Patterns,
+        'technical_indicators' : trade.analysis.Technical_Indicators,
+        'wave_analysis' : trade.analysis.Wave_Analysis,
+        'fundamental_analysis' : trade.analysis.Fundamental_Analysis
     }
 
     review_form = ReviewForm()
@@ -266,6 +274,11 @@ def trade_add(request):
     if request.method == "POST":
         selected_trend_analysis = request.POST.getlist("trend_analysis")
         selected_harmonic_patterns = request.POST.getlist("harmonic_patterns")
+        selected_chart_patterns = request.POST.getlist("chart_patterns")
+        selected_technical_indicators = request.POST.getlist("technical_indicators")
+        selected_wave_analysis = request.POST.getlist("wave_analysis")
+        selected_fundamental_analysis = request.POST.getlist("fundamental_analysis")
+
         trade_form = NewTradeForm(request.POST)
         if trade_form.is_valid():
             obj = TradePosition(owner=request.user.profile)
@@ -285,14 +298,34 @@ def trade_add(request):
             )
 
             if selected_trend_analysis :
-                trend_analysis = TrendAnalysis(owner=profile, value=selected_trend_analysis)
+                trend_analysis = TrendAnalysis(value=selected_trend_analysis)
                 trend_analysis.save()
                 analysis.Trend_Analysis = trend_analysis
 
             if selected_harmonic_patterns :
-                harmonic_patterns = HarmonicPatterns(owner=profile, value=selected_harmonic_patterns)
+                harmonic_patterns = HarmonicPatterns(value=selected_harmonic_patterns)
                 harmonic_patterns.save()
                 analysis.Harmonic_Patterns = harmonic_patterns
+
+            if selected_chart_patterns :
+                chart_patterns = ChartPatterns(value=selected_chart_patterns)
+                chart_patterns.save()
+                analysis.Chart_Patterns = chart_patterns
+
+            if selected_technical_indicators :
+                technical_indicators = TechnicalIndicators(value=selected_technical_indicators)
+                technical_indicators.save()
+                analysis.Technical_Indicators = technical_indicators
+
+            if selected_wave_analysis :
+                wave_analysis = WaveAnalysis(value=selected_wave_analysis)
+                wave_analysis.save()
+                analysis.Wave_Analysis = wave_analysis
+
+            if selected_fundamental_analysis :
+                fundamental_analysis = FundamentalAnalysis(value=selected_fundamental_analysis)
+                fundamental_analysis.save()
+                analysis.Fundamental_Analysis = fundamental_analysis
             
             analysis.save()
             obj.analysis = analysis
@@ -321,6 +354,10 @@ def trade_edit(request, trade_pk):
         trade_form = NewTradeForm(request.POST)
         selected_trend_analysis = request.POST.getlist("trend_analysis")
         selected_harmonic_patterns = request.POST.getlist("harmonic_patterns")
+        selected_chart_patterns = request.POST.getlist("chart_patterns")
+        selected_technical_indicators = request.POST.getlist("technical_indicators")
+        selected_wave_analysis = request.POST.getlist("wave_analysis")
+        selected_fundamental_analysis = request.POST.getlist("fundamental_analysis")
 
         if trade_form.is_valid():
             trade.symbol = trade_form.cleaned_data["symbol"]
@@ -340,14 +377,34 @@ def trade_edit(request, trade_pk):
             )
 
             if selected_trend_analysis :
-                trend_analysis = TrendAnalysis(owner=profile, value=selected_trend_analysis)
+                trend_analysis = TrendAnalysis(value=selected_trend_analysis)
                 trend_analysis.save()
                 analysis.Trend_Analysis = trend_analysis
 
             if selected_harmonic_patterns :
-                harmonic_patterns = HarmonicPatterns(owner=profile, value=selected_harmonic_patterns)
+                harmonic_patterns = HarmonicPatterns(value=selected_harmonic_patterns)
                 harmonic_patterns.save()
                 analysis.Harmonic_Patterns = harmonic_patterns
+
+            if selected_chart_patterns :
+                chart_patterns = ChartPatterns(value=selected_chart_patterns)
+                chart_patterns.save()
+                analysis.Chart_Patterns = chart_patterns
+
+            if selected_technical_indicators :
+                technical_indicators = TechnicalIndicators(value=selected_technical_indicators)
+                technical_indicators.save()
+                analysis.Technical_Indicators = technical_indicators
+
+            if selected_wave_analysis :
+                wave_analysis = WaveAnalysis(value=selected_wave_analysis)
+                wave_analysis.save()
+                analysis.Wave_Analysis = wave_analysis
+
+            if selected_fundamental_analysis :
+                fundamental_analysis = FundamentalAnalysis(value=selected_fundamental_analysis)
+                fundamental_analysis.save()
+                analysis.Fundamental_Analysis = fundamental_analysis
             
             analysis.save()
             trade.analysis = analysis

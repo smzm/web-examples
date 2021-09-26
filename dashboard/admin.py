@@ -5,9 +5,10 @@ from .models import (TradePosition,
                     Analysis,
                     TrendAnalysis,
                     HarmonicPatterns,
-                    # ChartPatterns,
-                    # TechnicalIndicators,
-                    # WaveAnalysis
+                    ChartPatterns,
+                    TechnicalIndicators,
+                    WaveAnalysis,
+                    FundamentalAnalysis
                     )
 
 
@@ -23,6 +24,7 @@ admin.site.register(Message)
 admin.site.register(Analysis)
 admin.site.register(TrendAnalysis)
 admin.site.register(HarmonicPatterns)
-# admin.site.register(ChartPatterns)
-# admin.site.register(TechnicalIndicators)
-# admin.site.register(WaveAnalysis)
+admin.site.register(ChartPatterns)
+admin.site.register(TechnicalIndicators)
+admin.site.register(WaveAnalysis)
+admin.site.register(FundamentalAnalysis)

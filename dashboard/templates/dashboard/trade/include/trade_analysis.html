@@ -64,6 +64,8 @@
     </div>
   </div>
 
+
+
   <button type="button" id="HARMONIC_PATTERNS_BTN" class="accordion border border-gray-300 outline-none w-full p-4 bg-gray-300 text-center block my-2 hover:bg-gray-200 transition-all duration-200"> Harmonic Patterns  </button>
   <div id="HARMONIC_PATTERNS_CATERGORY" class="hidden border mt-8">
     <div class="flex">
@@ -113,105 +115,118 @@
     </div>
   </div>
 
-{% comment %}
-  <div id="CHART_PATTERNS_CATEGORY">
-    <div>
-        <label for="Chart_Patterns" class="text-gray-300">Chart Patterns</label>
-        <input id="Chart_Patterns" name="Chart_Patterns" type="checkbox">
+  <button type="button" id="CHART_PATTERNS_BTN" class="accordion border border-gray-300 outline-none w-full p-4 bg-gray-300 text-center block my-2 hover:bg-gray-200 transition-all duration-200">Chart Patterns </button>
+  <div id="CHART_PATTERNS_CATEGORY" class="hidden border mt-8">
+    <div class="flex">
+        <input id="Double_Top_or_Bottom" name="chart_patterns" type="checkbox" value="Double_Top_or_Bottom"
+        {% if  'Double_Top_or_Bottom' in analysis.chart_patterns.value %} checked {% endif %} >
+        <label for="Double_Top_or_Bottom" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Double Top or Bottom</label>
     </div>
-    <div>
-        <label for="Double_Top_or_Bottom" class="text-gray-300">Double Top or Bottom</label>
-        <input id="Double_Top_or_Bottom" name="Double_Top_or_Bottom" type="checkbox">
+    <div class="flex">
+        <input id="Head_and_Shoulders" name="chart_patterns" type="checkbox" value="Head_and_Shoulders"
+        {% if  'Head_and_Shoulders' in analysis.chart_patterns.value %} checked {% endif %} >
+        <label for="Head_and_Shoulders" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Head and Shoulders</label>
     </div>
-    <div>
-        <label for="Head_and_Shoulders" class="text-gray-300">Head and Shoulders</label>
-        <input id="Head_and_Shoulders" name="Head_and_Shoulders" type="checkbox">
+    <div class="flex">
+        <input id="Cup_and_Handle" name="chart_patterns" type="checkbox" value="Cup_and_Handle"
+        {% if  'Cup_and_Handle' in analysis.chart_patterns.value %} checked {% endif %} >
+        <label for="Cup_and_Handle" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Cup and Handle</label>
     </div>
-    <div>
-        <label for="Cup_and_Handle" class="text-gray-300">Cup and Handle</label>
-        <input id="Cup_and_Handle" name="Cup_and_Handle" type="checkbox">
+    <div class="flex">
+        <input id="Flag" name="chart_patterns" type="checkbox" value="Flag"
+        {% if  'Flag' in analysis.chart_patterns.value %} checked {% endif %} >
+        <label for="Flag" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Flag</label>
     </div>
-    <div>
-        <label for="Flag" class="text-gray-300">Flag</label>
-        <input id="Flag" name="Flag" type="checkbox">
+    <div class="flex">
+        <input id="Rectangle" name="chart_patterns" type="checkbox" value="Rectangle"
+        {% if  'Rectangle' in analysis.chart_patterns.value %} checked {% endif %} >
+        <label for="Rectangle" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Rectangle</label>
     </div>
-    <div>
-        <label for="Rectangle" class="text-gray-300">Rectangle</label>
-        <input id="Rectangle" name="Rectangle" type="checkbox">
+    <div class="flex">
+        <input id="Parallel_Channel" name="chart_patterns" type="checkbox" value="Parallel_Channel"
+        {% if  'Parallel_Channel' in analysis.chart_patterns.value %} checked {% endif %} >
+        <label for="Parallel_Channel" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Parallel Channel</label>
     </div>
-    <div>
-        <label for="Parallel_Channel" class="text-gray-300">Parallel Channel</label>
-        <input id="Parallel_Channel" name="Parallel_Channel" type="checkbox">
+    <div class="flex">
+        <input id="Pitchforks" name="chart_patterns" type="checkbox" value="Pitchforks"
+        {% if  'Pitchforks' in analysis.chart_patterns.value %} checked {% endif %} >
+        <label for="Pitchforks" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Pitchforks</label>
     </div>
-    <div>
-        <label for="Pitchforks" class="text-gray-300">Pitchforks</label>
-        <input id="Pitchforks" name="Pitchforks" type="checkbox">
+    <div class="flex">
+        <input id="Triangle" name="chart_patterns" type="checkbox" value="Triangle"
+        {% if  'Triangle' in analysis.chart_patterns.value %} checked {% endif %} >
+        <label for="Triangle" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Triangle</label>
     </div>
-    <div>
-        <label for="Triangle" class="text-gray-300">Triangle</label>
-        <input id="Triangle" name="Triangle" type="checkbox">
-    </div>
-    <div>
-        <label for="Gan" class="text-gray-300">Gan</label>
-        <input id="Gan" name="Gan" type="checkbox">
-    </div>
-  </div>
-
-  <div id="TECHNICAL_INDICATOR_CATEGORY">
-    <div>
-        <label for="Technical_Indicators" class="text-gray-300">Technical Indicators</label>
-        <input id="Technical_Indicators" name="Technical_Indicators" type="checkbox">
-    </div>
-     <div>
-        <label for="Oscilators" class="text-gray-300">Oscilators</label>
-        <input id="Oscilators" name="Oscilators" type="checkbox">
-    </div>
-    <div>
-        <label for="Volatility" class="text-gray-300">Volatility</label>
-        <input id="Volatility" name="Volatility" type="checkbox">
-    </div>
-    <div>
-        <label for="Volume" class="text-gray-300">Volume</label>
-        <input id="Volume" name="Volume" type="checkbox">
-    </div>
-    <div>
-        <label for="Moving_Average" class="text-gray-300">Moving Average</label>
-        <input id="Moving_Average" name="Moving_Average" type="checkbox">
-    </div>
-    <div>
-        <label for="Bill_Wiliams" class="text-gray-300">Bill Wiliams</label>
-        <input id="Bill_Wiliams" name="Bill_Wiliams" type="checkbox">
-    </div>
-  </div>
-
-  <div id="WAVE_ANALYSIS_CATEGORY">
-    <div>
-        <label for="Wave_Analysis" class="text-gray-300">Wave Analysis</label>
-        <input id="Wave_Analysis" name="Wave_Analysis" type="checkbox">
-    </div>
-    <div>
-        <label for="Neo_Wave" class="text-gray-300">Neo Wave</label>
-        <input id="Neo_Wave" name="Neo_Wave" type="checkbox">
-    </div>
-    <div>
-        <label for="Sine_Wave" class="text-gray-300">Sine Wave</label>
-        <input id="Sine_Wave" name="Sine_Wave" type="checkbox">
-    </div>
-    <div>
-        <label for="Wolfe_Wave" class="text-gray-300">Wolfe Wave</label>
-        <input id="Wolfe_Wave" name="Wolfe_Wave" type="checkbox">
+    <div class="flex">
+        <input id="Gan" name="chart_patterns" type="checkbox" value="Gan"
+        {% if  'Gan' in analysis.chart_patterns.value %} checked {% endif %} > 
+        <label for="Gan" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Gan</label>
     </div>
   </div>
 
 
-  <div id="FUNDAMENTAL_ANALYSIS_CATEGORY">
-    <div>
-        <label for="Fundamental_Analysis" class="text-gray-300">Fundamental Analysis</label>
-        <input id="Fundamental_Analysis" name="Fundamental_Analysis" type="checkbox">
+
+  <button type="button" id="TECHNICAL_INDICATOR_BTN" class="accordion border border-gray-300 outline-none w-full p-4 bg-gray-300 text-center block my-2 hover:bg-gray-200 transition-all duration-200">Technical Indicators</button>
+  <div id="TECHNICAL_INDICATOR_CATEGORY" class="hidden border mt-8">
+     <div class="flex">
+         <input id="Oscilators" name="technical_indicators" type="checkbox" value="Oscilators"
+         {% if  'Oscilators' in analysis.technical_indicators.value %} checked {% endif %} >
+         <label for="Oscilators" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Oscilators</label>
+    </div>
+    <div class="flex">
+        <input id="Volatility" name="technical_indicators" type="checkbox" value="Volatility"
+        {% if  'Volatility' in analysis.technical_indicators.value %} checked {% endif %} >
+        <label for="Volatility" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Volatility</label>
+    </div>
+    <div class="flex">
+        <input id="Volume" name="technical_indicators" type="checkbox" value="Volume"
+        {% if  'Volume' in analysis.technical_indicators.value %} checked {% endif %} >
+        <label for="Volume" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Volume</label>
+    </div>
+    <div class="flex">
+        <input id="Moving_Average" name="technical_indicators" type="checkbox" value="Moving_Average"
+        {% if  'Moving_Average' in analysis.technical_indicators.value %} checked {% endif %} >
+        <label for="Moving_Average" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Moving Average</label>
+    </div>
+    <div class="flex">
+        <input id="Bill_Wiliams" name="technical_indicators" type="checkbox" value="Bill_Wiliams"
+        {% if  'Bill_Wiliams' in analysis.technical_indicators.value %} checked {% endif %} >
+        <label for="Bill_Wiliams" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Bill Wiliams</label>
+    </div>
+  </div>
+
+
+
+<button type="button" id="WAVE_ANALYSIS_BTN" class="accordion border border-gray-300 outline-none w-full p-4 bg-gray-300 text-center block my-2 hover:bg-gray-200 transition-all duration-200">Wave Analysis</button>
+  <div id="WAVE_ANALYSIS_CATEGORY" class="hidden border mt-8">
+    <div class="flex">
+        <input id="Neo_Wave" name="wave_analysis" type="checkbox" value="Neo_Wave"
+            {% if  'Neo_Wave' in analysis.wave_analysis.value %} checked {% endif %} >
+        <label for="Neo_Wave" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Neo Wave</label>
+    </div>
+    <div class="flex">
+        <input id="Sine_Wave" name="wave_analysis" type="checkbox" value="Sine_Wave" 
+        {% if  'Sine_Wave' in analysis.wave_analysis.value %} checked {% endif %} >
+        <label for="Sine_Wave" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Sine Wave</label>
+    </div>
+    <div class="flex">
+        <input id="Wolfe_Wave" name="wave_analysis" type="checkbox" value="Wolfe_Wave" 
+        {% if  'Wolfe_Wave' in analysis.wave_analysis.value %} checked {% endif %} >
+        <label for="Wolfe_Wave" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Wolfe Wave</label>
+    </div>
+  </div>
+
+
+
+<button type="button" id="FUNDAMENTAL_ANALYSIS_BTN" class="accordion border border-gray-300 outline-none w-full p-4 bg-gray-300 text-center block my-2 hover:bg-gray-200 transition-all duration-200">Fundamental Analysis</button>
+  <div id="FUNDAMENTAL_ANALYSIS_CATEGORY" class="hidden border mt-8">
+    <div class="flex">
+        <input id="Fundamental_Analysis" name="fundamental_analysis" type="checkbox" value="Fundamental_Analysis"
+        {% if  'Fundamental_Analysis' in analysis.fundamental_analysis.value %} checked {% endif %} >
+        <label for="Fundamental_Analysis" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Fundamental Analysis</label>
     </div>
  </div>
 
- {% endcomment %}
 </div> 
 
 

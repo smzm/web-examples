@@ -52,9 +52,8 @@ class TradePosition(models.Model):
             self.save()
 
 
+
 class TrendAnalysis(models.Model):
-    owner = models.ForeignKey(
-        Profile, null=True, blank=True, on_delete=models.SET_NULL)
     id = models.UUIDField(default=uuid.uuid4,
                           unique=True,
                           primary_key=True,
@@ -70,15 +69,15 @@ class TrendAnalysis(models.Model):
     #                   ("Cycles", "Cycles")
     #                   )
 
-    value = models.CharField(max_length=5000, null=True, blank=True)
+    value = models.CharField(max_length=1000, null=True, blank=True)
 
     def __str__(self):
         return self.value
 
 
+
+
 class HarmonicPatterns(models.Model):
-    owner = models.ForeignKey(
-        Profile, null=True, blank=True, on_delete=models.SET_NULL)
     id = models.UUIDField(default=uuid.uuid4,
                           unique=True,
                           primary_key=True,
@@ -94,10 +93,87 @@ class HarmonicPatterns(models.Model):
     #     ("Five_Zero", "Five_Zero"),
     #     ("Shark", "Shark"),
     # )
-    value = models.CharField(max_length=5000, null=True, blank=True)
+    value = models.CharField(max_length=1000, null=True, blank=True)
 
     def __str__(self):
         return self.value
+
+
+
+
+class ChartPatterns(models.Model):
+    id = models.UUIDField(default=uuid.uuid4,
+                          unique=True,
+                          primary_key=True,
+                          editable=False)
+    # Chart_Patterns = (
+    #     ("Double_Top_or_Bottom", "Double Top or Bottom"),
+    #     ("Head_and_Shoulders", "Head and Shoulders"),
+    #     ("Cup_and_Handle", "Cup and Handle"),
+    #     ("Flag", "Flag"),
+    #     ("Rectangle", "Rectangle"),
+    #     ("Parallel_Channel", "Parallel Channel"),
+    #     ("Pitchforks", "Pitchforks"),
+    #     ("Triangle", "Triangle"),
+    #     ("Gan", "Gan"),
+    # )
+    value = models.CharField(max_length=1000, null=True, blank=True)
+
+    def __str__(self):
+        return self.value
+
+
+
+
+class TechnicalIndicators(models.Model):
+    id = models.UUIDField(default=uuid.uuid4,
+                          unique=True,
+                          primary_key=True,
+                          editable=False)
+    # Technical_Indicators = (
+    #     ("Oscilators", "Oscilators"),
+    #     ("Volatility", "Volatility"),
+    #     ("Volume", "Volume"),
+    #     ("Moving_Average", "Moving Average"),
+    #     ("Bill_Wiliams", "Bill Wiliams"),
+    # )
+    value = models.CharField(max_length=1000, null=True, blank=True)
+
+    def __str__(self):
+        return self.value
+
+
+
+
+class WaveAnalysis(models.Model):
+    id = models.UUIDField(default=uuid.uuid4,
+                          unique=True,
+                          primary_key=True,
+                          editable=False)
+    # Wave_Analysis = (
+    #     ("Neo_Wave", "Neo Wave"),
+    #     ("Sine_Wave", "Sine Wave"),
+    #     ("Wolfe_Wave", "Wolfe Wave"),
+    # )
+    value = models.CharField(max_length=1000, null=True, blank=True)
+
+    def __str__(self):
+        return self.value
+
+
+
+
+
+class FundamentalAnalysis(models.Model):
+    id = models.UUIDField(default=uuid.uuid4,
+                          unique=True,
+                          primary_key=True,
+                          editable=False)
+    value = models.CharField(max_length=1000, null=True, blank=True)
+    
+    def __str__(self):
+        return self.value
+
 
 
 
@@ -108,89 +184,31 @@ class Analysis(models.Model):
     trade = models.OneToOneField(TradePosition, on_delete=models.CASCADE, related_name="analysis")
     Trend_Analysis = models.OneToOneField(TrendAnalysis, on_delete=models.SET_NULL, null=True, blank=True, related_name="trend_analysis")
     Harmonic_Patterns = models.OneToOneField(HarmonicPatterns, on_delete=models.SET_NULL, null=True, blank=True, related_name="harmonic_patterns")
-    # Chart_Patterns = models.OneToOneField("ChartPatterns", blank=True)
-    # Technical_Indicators = models.OneToOneField("TechnicalIndicators", blank=True)
-    # WaveAnalysis = models.OneToOneField("WaveAnalysis", blank=True)
+    Chart_Patterns = models.OneToOneField("ChartPatterns",on_delete=models.SET_NULL, null=True, blank=True, related_name="chart_patterns")
+    Technical_Indicators = models.OneToOneField("TechnicalIndicators", on_delete=models.SET_NULL, null=True, blank=True, related_name="technical_indicators")
+    Wave_Analysis = models.OneToOneField("WaveAnalysis", on_delete=models.SET_NULL, null=True, blank=True, related_name="wave_analysis")
+    Fundamental_Analysis = models.OneToOneField("FundamentalAnalysis", on_delete=models.SET_NULL, null=True, blank=True, related_name="fundamental_analysis")
 
-    # Fundamental_Analysis = models.OneToOneField("FundamentalAnalysis",
-    #                                               blank=True,
-    #                                               null=True)
     def __str__(self):
         analysis_list = []
         if self.Trend_Analysis :
             analysis_list.append('Trend_Analysis') 
         if self.Harmonic_Patterns:
             analysis_list.append('Harmonic_Patterns')
+        if self.Chart_Patterns:
+            analysis_list.append('Chart_Patterns')
+        if self.Technical_Indicators:
+            analysis_list.append('Technical_Indicators')
+        if self.Wave_Analysis:
+            analysis_list.append('Wave_Analysis')            
+        if self.Fundamental_Analysis:
+            analysis_list.append('Fundamental_Analysis')            
 
         return f'{analysis_list}'
 
 
 
 
-
-
-
-# class ChartPatterns(models.Model):
-#     id = models.UUIDField(default=uuid.uuid4,
-#                           unique=True,
-#                           primary_key=True,
-#                           editable=False)
-#     Chart_Patterns = (
-#         ("Double_Top_or_Bottom", "Double Top or Bottom"),
-#         ("Head_and_Shoulders", "Head and Shoulders"),
-#         ("Cup_and_Handle", "Cup and Handle"),
-#         ("Flag", "Flag"),
-#         ("Rectangle", "Rectangle"),
-#         ("Parallel_Channel", "Parallel Channel"),
-#         ("Pitchforks", "Pitchforks"),
-#         ("Triangle", "Triangle"),
-#         ("Gan", "Gan"),
-#     )
-#     value = models.CharField(max_length=200, choices=Chart_Patterns)
-
-#     def __str__(self):
-#         return self.value
-
-
-# class TechnicalIndicators(models.Model):
-#     id = models.UUIDField(default=uuid.uuid4,
-#                           unique=True,
-#                           primary_key=True,
-#                           editable=False)
-#     Technical_Indicators = (
-#         ("Oscilators", "Oscilators"),
-#         ("Volatility", "Volatility"),
-#         ("Volume", "Volume"),
-#         ("Moving_Average", "Moving Average"),
-#         ("Bill_Wiliams", "Bill Wiliams"),
-#     )
-#     value = models.CharField(max_length=200, choices=Technical_Indicators)
-
-#     def __str__(self):
-#         return self.value
-
-
-# class WaveAnalysis(models.Model):
-#     id = models.UUIDField(default=uuid.uuid4,
-#                           unique=True,
-#                           primary_key=True,
-#                           editable=False)
-#     Wave_Analysis = (
-#         ("Neo_Wave", "Neo Wave"),
-#         ("Sine_Wave", "Sine Wave"),
-#         ("Wolfe_Wave", "Wolfe Wave"),
-#     )
-#     value = models.CharField(max_length=200, choices=Wave_Analysis)
-
-#     def __str__(self):
-#         return self.value
-
-# class FundamentalAnalysis(models.Model):
-#     id = models.UUIDField(default=uuid.uuid4,
-#                           unique=True,
-#                           primary_key=True,
-#                           editable=False)
-#     Fundamental = models.CharField(blank=True, null=True)
 
 
 class Review(models.Model):
