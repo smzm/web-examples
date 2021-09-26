@@ -7,7 +7,14 @@
 
 
 {% block content %}
+
 <div id="MAIN" class="flex flex-col flex-1 bg-color-light1 py-5 px-20">
+{% for strategy in strategies  %}
+    <div class="text-lg my-8">
+        {{strategy}}
+    </div>
+{% endfor %}
+
     <form method="POST">
         {% csrf_token %}
         {{strategyForm.as_p}}

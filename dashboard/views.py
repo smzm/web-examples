@@ -54,14 +54,15 @@ def dashboard(request):
 @login_required(login_url="/login/")
 def strategy(request):
     profile = request.user.profile
-
+    strategies = profile.strategy_set.all()
     strategy_form = StrategyForm()
-    context = {"sidebar": sidebar, "profile": profile, "strategyForm": strategy_form}       
+    context = {"sidebar": sidebar, "profile": profile, "strategies":strategies ,"strategyForm": strategy_form}       
 
     if request.method == "POST" : 
         strategy_form = StrategyForm(request.POST)
         if strategy_form.is_valid():
             strategy = strategy_form.save(commit=False)
+            strategy.owner = profile
             strategy.save()
             context['value_risk'] = strategy.value_risk
             
@@ -433,7 +434,6 @@ def trade_edit(request, trade_pk):
     profile = request.user.profile
     trade = profile.tradeposition_set.get(id=trade_pk)
 
-    print("=====================")
     if request.method == "POST":
         trade_form = NewTradeForm(request.POST)
         selected_trend_analysis = request.POST.getlist("trend_analysis")
@@ -448,7 +448,8 @@ def trade_edit(request, trade_pk):
             trade.date = trade_form.cleaned_data["date"]
             trade.time = trade_form.cleaned_data["time"]
             trade.strategy = trade_form.cleaned_data["strategy"]
-            strategy = Strategy.objects.get(name=trade.strategy)
+            if trade.strategy:
+                strategy = Strategy.objects.get(name=trade.strategy)
             trade.price = trade_form.cleaned_data["price"]
             trade.size = trade_form.cleaned_data["size"]
             trade.side = trade_form.cleaned_data["side"]

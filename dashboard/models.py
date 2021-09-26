@@ -18,7 +18,7 @@ class TradePosition(models.Model):
     # leverage = models.IntegerField(
     #     default=1, validators=[MinValueValidator(1), MaxValueValidator(500)])
     comment = models.TextField(max_length=1000, null=True, blank=True)
-    strategy = models.ForeignKey('Strategy',null=True, on_delete=models.SET_NULL, related_name="trade")
+    strategy = models.ForeignKey('Strategy',null=True,blank=True, on_delete=models.SET_NULL, related_name="trade")
 
     date = models.DateField()    #validators=[MaxValueValidator(limit_value=date.today)]
     time = models.TimeField()
@@ -251,6 +251,7 @@ class Message(models.Model):
 
 
 class Strategy(models.Model):
+    owner = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.SET_NULL)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=200)
