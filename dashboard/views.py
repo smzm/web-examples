@@ -272,7 +272,9 @@ def trade_detail(request, trade_pk):
         "msg_details": msg_details,
         'trade_edit_state' : trade_edit_state 
     }
+
     return render(request, "dashboard/trade/detail_trade.html", context)
+  
 
 
 

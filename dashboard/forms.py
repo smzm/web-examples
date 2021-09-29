@@ -23,7 +23,8 @@ class NewTradeForm(forms.ModelForm):
     time = forms.TimeField(label="Time", widget=forms.widgets.TimeInput(attrs={
         'name': 'time', 'type': 'time',  'spellcheck': 'False', 'class': 'text-center w-36 bg-color-darker p-2 m-2 text-gray-400 border-2 focus:border-blue-800 border-gray-700 border-opacity-60 rounded-3xl outline-none transition-all duration-200'}), initial=datetime.datetime.now(tz=pytz.timezone('Asia/Tehran')).time().strftime("%H:%M"))
 
-    strategy = forms.ModelChoiceField(queryset=Strategy.objects.all(),required=False, widget=forms.widgets.Select(attrs={'id':"STRATEGY", 'hx-post' : "/trade/trade_check_risk_hx/", 'hx-trigger' : 'change delay:500ms', 'hx-target' : '#FORM_CAONTAINER','hx-swap' : 'outerHTML'}))
+    strategy = forms.ModelChoiceField(queryset=Strategy.objects.all(),required=False, widget=forms.widgets.Select(attrs={
+        'id':"STRATEGY", 'hx-post' : "/trade/trade_check_hx/", 'hx-trigger' : 'change delay:500ms', 'hx-target' : '#FORM_CAONTAINER','hx-swap' : 'outerHTML'}))
 
     price = forms.FloatField(widget=forms.widgets.NumberInput(attrs={
         'name': 'price', 'type':'number', 'min':'0','spellcheck': 'False', 'class': 'text-center w-36 bg-color-darker m-2 p-2 text-gray-400 border-2 focus:border-blue-800 border-gray-700 border-opacity-60 rounded-3xl outline-none transition-all duration-200',
@@ -32,7 +33,7 @@ class NewTradeForm(forms.ModelForm):
 
     size = forms.FloatField(widget=forms.widgets.NumberInput(attrs={
         'name': 'size', "type":"number", "id":"SIZE", 'min':'0','spellcheck': 'False', 'class': 'text-center w-36 bg-color-darker m-2 p-2 text-gray-400 border-2 focus:border-blue-800 border-gray-700 border-opacity-60 rounded-3xl outline-none transition-all duration-200',
-        'onfocus':"cursor_at_end(this)" }))
+        'hx-post' : "/trade/trade_check_hx/", 'hx-trigger' : 'keyup changed delay:2000ms, change', 'hx-target' : '#FORM_CAONTAINER','hx-swap' : 'outerHTML', 'onfocus':"cursor_at_end(this)" }))
 
 
     side = forms.CharField(required=False, initial='Long', widget=forms.widgets.TextInput(attrs={
