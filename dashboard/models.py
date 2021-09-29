@@ -14,7 +14,9 @@ class TradePosition(models.Model):
     symbol = models.CharField(max_length=200)
     price = models.FloatField(validators=[MinValueValidator(0)])
     size = models.FloatField(validators=[MinValueValidator(0)])
-    side = models.CharField(max_length=200)
+    side_type = (('Long','Long'),
+                ('Short','Short'))
+    side = models.CharField(max_length=6, choices=side_type)
     # leverage = models.IntegerField(
     #     default=1, validators=[MinValueValidator(1), MaxValueValidator(500)])
     comment = models.TextField(max_length=1000, null=True, blank=True)
@@ -219,7 +221,7 @@ class Review(models.Model):
                     ('calm', 'Calm'),
                     ('happy', 'Happy'),
                     ('sad', 'Sad'))
-    emotion = models.CharField(max_length=200, choices=emotion_type)
+    emotion = models.CharField(max_length=10, choices=emotion_type)
     trade = models.ForeignKey(TradePosition, null=True,
                               blank=True, on_delete=models.CASCADE)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)

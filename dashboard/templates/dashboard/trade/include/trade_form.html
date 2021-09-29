@@ -1,7 +1,7 @@
 <div id="FORM_CAONTAINER">
 <form id="NEW_TRADE_FORM" method="POST"
     {% if trade_edit_state %} 
-        hx-post="{% url 'trade_edit' trade.id %}" hx-trigger="change, submit" hx-target="#TRADE_INFO" hx-swap="outerHTML" hx-indicator="#indicator"
+        hx-post="{% url 'trade_edit' trade.id %}" hx-trigger="change,click from:#SIDE, submit" hx-target="#TRADE_INFO" hx-swap="outerHTML" hx-indicator="#indicator"
     {% else %} 
          action="{% url 'trade_add' %}"
     {% endif %} 
@@ -40,10 +40,15 @@
                                 {{risk_error}}
                             </div>
                         </div>
-                    {% elif field.field.widget.attrs.id == 'CHECKBOX_SIDE' %}
-                        <label id="CHECKBOX_SLIDE_BTN" class="text-gray-300" for="CHECKBOX_SIDE">
+                    {% elif field.field.widget.attrs.id == 'SIDE' %}
+                        <div class="">
+                            
                             {{field}}
-                        </label>
+                            <label for="side" class="hover:text-gray-700 cursor-pointer" {% if trade.side == 'Long' %}checked{% endif %} ></label>
+                        </div>
+                        <!-- <label class="text-gray-300" for="SIDE">
+                            {{field}}
+                        </label> -->
                     {% elif field.field.widget.attrs.id == 'slider' %}
                         <input id="output" type="text" onchange="sliderChangeSet(this.value)" value="1" class="absolute text-sm focus:text-blue-700 bg-color-dark w-10 block text-gray-500 text-center focus:outline-none ">
                     {% else %}
@@ -78,4 +83,56 @@
         e.value = ''; 
         e.value = val; 
     }
+
+
+/* Click on Side options : Long and Short */
+    function ChangeValueSide() {
+        Side = document.getElementById('SIDE')
+        if (Side.value == "Long") {
+            Side.setAttribute('value', 'Short') ;
+            Side.classList.remove('bg-green-700')
+            Side.classList.add('bg-red-700')
+        } else if (Side.value == 'Short') {
+            Side.setAttribute('value', 'Long');
+            Side.classList.remove('bg-red-700')
+            Side.classList.add('bg-green-700')
+        }
+    }
+
+
+    // /* Range Slider for leverage*/
+    // function sliderChangeGet(val) {
+    //     document.getElementById('output').value = val;
+    // }
+
+    // function sliderChangeSet(val) {
+    //     if (val <= 500 && val >= 1) {
+    //         val = document.getElementById('output').value;
+    //         document.getElementById('slider').value = val;
+    //     } else if (val > 500) {
+    //         document.getElementById('output').value = 500
+    //         document.getElementById('slider').value = 500
+    //     } else if (val < 1) {
+    //         document.getElementById('output').value = 1
+    //         document.getElementById('slider').value = 1
+    //     }
+    // }
+
+    /* update output for range slider when page load  */
+    document.addEventListener("DOMContentLoaded", function () {
+        // val = document.getElementById('slider').value
+        // document.getElementById('output').value = val
+
+        /* Set Background Color for Slide */
+        Side = document.getElementById('SIDE')
+        if (Side.value == "Long") {
+            Side.classList.add('bg-green-700')
+            Side.classList.remove('bg-red-700')
+        } else if (Side.value == 'Short') {
+            Side.classList.add('bg-red-700')
+            Side.classList.remove('bg-green-700')
+        }
+    });
+
+
 </script>

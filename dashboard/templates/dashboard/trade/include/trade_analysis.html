@@ -19,47 +19,47 @@
   <div id="TREND_ANALYSIS_CATEGORY" class="hidden border mt-8">
     <div class="flex">
         <input id="Support_And_Resistance" name="trend_analysis" type="checkbox" value="Support_And_Resistance" 
-                {% if  'Support_And_Resistance' in analysis.trend_analysis.value %}checked{% endif %} >
+                {% if  'Support_And_Resistance' in trade.analysis.Trend_Analysis.value %}checked{% endif %} >
         <label for="Support_And_Resistance" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Support And Resistance</label>
     </div>
     <div class="flex">
         <input id="Supply_and_Demand" name="trend_analysis" type="checkbox" value="Supply_and_Demand" 
-                {% if  'Supply_and_Demand' in analysis.trend_analysis.value %} checked {% endif %} >
+                {% if  'Supply_and_Demand' in trade.analysis.Trend_Analysis.value %} checked {% endif %} >
         <label for="Supply_and_Demand" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Supply and Demand</label>
     </div>
     <div class="flex">
         <input id="Pivot_Points" name="trend_analysis" type="checkbox" value="Pivot_Points" 
-                {% if  'Pivot_Points' in analysis.trend_analysis.value %} checked {% endif %} >
+                {% if  'Pivot_Points' in trade.analysis.Trend_Analysis.value %} checked {% endif %} >
         <label for="Pivot_Points" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Pivot Points</label>
     </div>
     <div class="flex">
         <input id="Fibonacci" name="trend_analysis" type="checkbox" value="Fibonacci"
-                {% if  'Fibonacci' in analysis.trend_analysis.value %} checked {% endif %} >
+                {% if  'Fibonacci' in trade.analysis.Trend_Analysis.value %} checked {% endif %} >
         <label for="Fibonacci" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Fibonacci</label>
     </div>
     <div class="flex">
         <input id="Trend_Lines" name="trend_analysis" type="checkbox" value="Trend_Lines"
-                {% if  'Trend_Lines' in analysis.trend_analysis.value %} checked {% endif %} >
+                {% if  'Trend_Lines' in trade.analysis.Trend_Analysis.value %} checked {% endif %} >
         <label for="Trend_Lines" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Trend Lines</label>
     </div>
     <div class="flex">
         <input id="Candlestick_Analysis" name="trend_analysis" type="checkbox" value="Candlestick_Analysis"
-                {% if  'Candlestick_Analysis' in analysis.trend_analysis.value %} checked {% endif %} >
+                {% if  'Candlestick_Analysis' in trade.analysis.Trend_Analysis.value %} checked {% endif %} >
         <label for="Candlestick_Analysis" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Candlestick Analysis</label>
     </div>
     <div class="flex">
         <input id="Multiple_Time_Frame_Analysis" name="trend_analysis" type="checkbox" value="Multiple_Time_Frame_Analysis"
-              {% if  'Multiple_Time_Frame_Analysis' in analysis.trend_analysis.value %} checked {% endif %} >
+              {% if  'Multiple_Time_Frame_Analysis' in trade.analysis.Trend_Analysis.value %} checked {% endif %} >
         <label for="Multiple_Time_Frame_Analysis" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Multiple Time Frame Analysis</label>
     </div>
     <div class="flex">
         <input id="Fractals" name="trend_analysis" type="checkbox" value="Fractals"
-               {% if  'Fractals' in analysis.trend_analysis.value %} checked {% endif %} >
+               {% if  'Fractals' in trade.analysis.Trend_Analysis.value %} checked {% endif %} >
         <label for="Fractals" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Fractals</label>
     </div>
     <div class="flex">
         <input id="Cycles" name="trend_analysis" type="checkbox" value="Cycles"
-                {% if  'Cycles' in analysis.trend_analysis.value %} checked {% endif %} >
+                {% if  'Cycles' in trade.analysis.Trend_Analysis.value %} checked {% endif %} >
         <label for="Cycles" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Cycles</label>
     </div>
   </div>
@@ -70,47 +70,47 @@
   <div id="HARMONIC_PATTERNS_CATERGORY" class="hidden border mt-8">
     <div class="flex">
         <input id="ABCD" name="harmonic_patterns" type="checkbox" value="ABCD"
-                {% if  'ABCD' in analysis.harmonic_patterns.value %} checked {% endif %} >
+                {% if  'ABCD' in trade.analysis.Harmonic_Patterns.value %} checked {% endif %} >
         <label for="ABCD" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">AB=CD</label>
     </div>
     <div class="flex">
         <input id="Three_Drives" name="harmonic_patterns" type="checkbox" value="Three_Drives"
-                {% if  'Three_Drives' in analysis.harmonic_patterns.value %} checked {% endif %} >
+                {% if  'Three_Drives' in trade.analysis.Harmonic_Patterns.value %} checked {% endif %} >
         <label for="Three_Drives" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Three Drives</label>
     </div>
     <div class="flex">
         <input id="Gartley" name="harmonic_patterns" type="checkbox" value="Gartley"
-                {% if  'Gartley' in analysis.harmonic_patterns.value %} checked {% endif %} >
+                {% if  'Gartley' in trade.analysis.Harmonic_Patterns.value %} checked {% endif %} >
         <label for="Gartley" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Gartley</label>
     </div>
     <div class="flex">
         <input id="Bat" name="harmonic_patterns" type="checkbox" value="Bat"
-        {% if  'Bat' in analysis.harmonic_patterns.value %} checked {% endif %} >
+        {% if  'Bat' in trade.analysis.Harmonic_Patterns.value %} checked {% endif %} >
         <label for="Bat" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Bat</label>
     </div>
     <div class="flex">
         <input id="Butterfly" name="harmonic_patterns" type="checkbox" value="Butterfly"
-        {% if  'Butterfly' in analysis.harmonic_patterns.value %} checked {% endif %} >
+        {% if  'Butterfly' in trade.analysis.Harmonic_Patterns.value %} checked {% endif %} >
         <label for="Butterfly" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Butterfly</label>
     </div>
     <div class="flex">
         <input id="Crab" name="harmonic_patterns" type="checkbox" value="Crab"
-        {% if  'Crab' in analysis.harmonic_patterns.value %} checked {% endif %} >
+        {% if  'Crab' in trade.analysis.Harmonic_Patterns.value %} checked {% endif %} >
         <label for="Crab" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Crab</label>
     </div>
     <div class="flex">
         <input id="Cypher" name="harmonic_patterns" type="checkbox" value="Cypher"
-        {% if  'Cypher' in analysis.harmonic_patterns.value %} checked {% endif %} >
+        {% if  'Cypher' in trade.analysis.Harmonic_Patterns.value %} checked {% endif %} >
         <label for="Cypher" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Cypher</label>
     </div>
     <div class="flex">
         <input id="5_0" name="harmonic_patterns" type="checkbox" value="5_0"
-        {% if  '5_0' in analysis.harmonic_patterns.value %} checked {% endif %} >
+        {% if  '5_0' in trade.analysis.Harmonic_Patterns.value %} checked {% endif %} >
         <label for="5_0" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">5-0</label>
     </div>
     <div class="flex">
         <input id="Shark" name="harmonic_patterns" type="checkbox" value="Shark"
-        {% if  'Shark' in analysis.harmonic_patterns.value %} checked {% endif %} >
+        {% if  'Shark' in trade.analysis.Harmonic_Patterns.value %} checked {% endif %} >
         <label for="Shark" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Shark</label>
     </div>
   </div>
@@ -119,47 +119,47 @@
   <div id="CHART_PATTERNS_CATEGORY" class="hidden border mt-8">
     <div class="flex">
         <input id="Double_Top_or_Bottom" name="chart_patterns" type="checkbox" value="Double_Top_or_Bottom"
-        {% if  'Double_Top_or_Bottom' in analysis.chart_patterns.value %} checked {% endif %} >
+        {% if  'Double_Top_or_Bottom' in trade.analysis.Chart_Patterns.value %} checked {% endif %} >
         <label for="Double_Top_or_Bottom" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Double Top or Bottom</label>
     </div>
     <div class="flex">
         <input id="Head_and_Shoulders" name="chart_patterns" type="checkbox" value="Head_and_Shoulders"
-        {% if  'Head_and_Shoulders' in analysis.chart_patterns.value %} checked {% endif %} >
+        {% if  'Head_and_Shoulders' in trade.analysis.Chart_Patterns.value %} checked {% endif %} >
         <label for="Head_and_Shoulders" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Head and Shoulders</label>
     </div>
     <div class="flex">
         <input id="Cup_and_Handle" name="chart_patterns" type="checkbox" value="Cup_and_Handle"
-        {% if  'Cup_and_Handle' in analysis.chart_patterns.value %} checked {% endif %} >
+        {% if  'Cup_and_Handle' in trade.analysis.Chart_Patterns.value %} checked {% endif %} >
         <label for="Cup_and_Handle" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Cup and Handle</label>
     </div>
     <div class="flex">
         <input id="Flag" name="chart_patterns" type="checkbox" value="Flag"
-        {% if  'Flag' in analysis.chart_patterns.value %} checked {% endif %} >
+        {% if  'Flag' in trade.analysis.Chart_Patterns.value %} checked {% endif %} >
         <label for="Flag" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Flag</label>
     </div>
     <div class="flex">
         <input id="Rectangle" name="chart_patterns" type="checkbox" value="Rectangle"
-        {% if  'Rectangle' in analysis.chart_patterns.value %} checked {% endif %} >
+        {% if  'Rectangle' in trade.analysis.Chart_Patterns.value %} checked {% endif %} >
         <label for="Rectangle" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Rectangle</label>
     </div>
     <div class="flex">
         <input id="Parallel_Channel" name="chart_patterns" type="checkbox" value="Parallel_Channel"
-        {% if  'Parallel_Channel' in analysis.chart_patterns.value %} checked {% endif %} >
+        {% if  'Parallel_Channel' in trade.analysis.Chart_Patterns.value %} checked {% endif %} >
         <label for="Parallel_Channel" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Parallel Channel</label>
     </div>
     <div class="flex">
         <input id="Pitchforks" name="chart_patterns" type="checkbox" value="Pitchforks"
-        {% if  'Pitchforks' in analysis.chart_patterns.value %} checked {% endif %} >
+        {% if  'Pitchforks' in trade.analysis.Chart_Patterns.value %} checked {% endif %} >
         <label for="Pitchforks" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Pitchforks</label>
     </div>
     <div class="flex">
         <input id="Triangle" name="chart_patterns" type="checkbox" value="Triangle"
-        {% if  'Triangle' in analysis.chart_patterns.value %} checked {% endif %} >
+        {% if  'Triangle' in trade.analysis.Chart_Patterns.value %} checked {% endif %} >
         <label for="Triangle" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Triangle</label>
     </div>
     <div class="flex">
         <input id="Gan" name="chart_patterns" type="checkbox" value="Gan"
-        {% if  'Gan' in analysis.chart_patterns.value %} checked {% endif %} > 
+        {% if  'Gan' in trade.analysis.Chart_Patterns.value %} checked {% endif %} > 
         <label for="Gan" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Gan</label>
     </div>
   </div>
@@ -170,27 +170,27 @@
   <div id="TECHNICAL_INDICATOR_CATEGORY" class="hidden border mt-8">
      <div class="flex">
          <input id="Oscilators" name="technical_indicators" type="checkbox" value="Oscilators"
-         {% if  'Oscilators' in analysis.technical_indicators.value %} checked {% endif %} >
+         {% if  'Oscilators' in trade.analysis.Technical_Indicators.value %} checked {% endif %} >
          <label for="Oscilators" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Oscilators</label>
     </div>
     <div class="flex">
         <input id="Volatility" name="technical_indicators" type="checkbox" value="Volatility"
-        {% if  'Volatility' in analysis.technical_indicators.value %} checked {% endif %} >
+        {% if  'Volatility' in trade.analysis.Technical_Indicators.value %} checked {% endif %} >
         <label for="Volatility" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Volatility</label>
     </div>
     <div class="flex">
         <input id="Volume" name="technical_indicators" type="checkbox" value="Volume"
-        {% if  'Volume' in analysis.technical_indicators.value %} checked {% endif %} >
+        {% if  'Volume' in trade.analysis.Technical_Indicators.value %} checked {% endif %} >
         <label for="Volume" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Volume</label>
     </div>
     <div class="flex">
         <input id="Moving_Average" name="technical_indicators" type="checkbox" value="Moving_Average"
-        {% if  'Moving_Average' in analysis.technical_indicators.value %} checked {% endif %} >
+        {% if  'Moving_Average' in trade.analysis.Technical_Indicators.value %} checked {% endif %} >
         <label for="Moving_Average" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Moving Average</label>
     </div>
     <div class="flex">
         <input id="Bill_Wiliams" name="technical_indicators" type="checkbox" value="Bill_Wiliams"
-        {% if  'Bill_Wiliams' in analysis.technical_indicators.value %} checked {% endif %} >
+        {% if  'Bill_Wiliams' in trade.analysis.Technical_Indicators.value %} checked {% endif %} >
         <label for="Bill_Wiliams" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Bill Wiliams</label>
     </div>
   </div>
@@ -201,17 +201,17 @@
   <div id="WAVE_ANALYSIS_CATEGORY" class="hidden border mt-8">
     <div class="flex">
         <input id="Neo_Wave" name="wave_analysis" type="checkbox" value="Neo_Wave"
-            {% if  'Neo_Wave' in analysis.wave_analysis.value %} checked {% endif %} >
+            {% if  'Neo_Wave' in trade.analysis.Wave_Analysis.value %} checked {% endif %} >
         <label for="Neo_Wave" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Neo Wave</label>
     </div>
     <div class="flex">
         <input id="Sine_Wave" name="wave_analysis" type="checkbox" value="Sine_Wave" 
-        {% if  'Sine_Wave' in analysis.wave_analysis.value %} checked {% endif %} >
+        {% if  'Sine_Wave' in trade.analysis.Wave_Analysis.value %} checked {% endif %} >
         <label for="Sine_Wave" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Sine Wave</label>
     </div>
     <div class="flex">
         <input id="Wolfe_Wave" name="wave_analysis" type="checkbox" value="Wolfe_Wave" 
-        {% if  'Wolfe_Wave' in analysis.wave_analysis.value %} checked {% endif %} >
+        {% if  'Wolfe_Wave' in trade.analysis.Wave_Analysis.value %} checked {% endif %} >
         <label for="Wolfe_Wave" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Wolfe Wave</label>
     </div>
   </div>
@@ -222,7 +222,7 @@
   <div id="FUNDAMENTAL_ANALYSIS_CATEGORY" class="hidden border mt-8">
     <div class="flex">
         <input id="Fundamental_Analysis" name="fundamental_analysis" type="checkbox" value="Fundamental_Analysis"
-        {% if  'Fundamental_Analysis' in analysis.fundamental_analysis.value %} checked {% endif %} >
+        {% if  'Fundamental_Analysis' in trade.analysis.Fundamental_Analysis.value %} checked {% endif %} >
         <label for="Fundamental_Analysis" class="w-72 my-2 text-gray-300 bg-gray-800 p-2 rounded-lg cursor-pointer">Fundamental Analysis</label>
     </div>
  </div>

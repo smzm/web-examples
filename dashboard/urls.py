@@ -21,10 +21,8 @@ urlpatterns = [
     path('trade/edit/<str:trade_pk>/', views.trade_edit, name="trade_edit"),
     path('trades/delete/<str:trade_pk>/', views.trade_delete, name="trade_delete"),
 
-    path('trade/trade_check_risk_hx/', views.trade_check_risk_hx, name="trade_check_risk_hx"),  # Hard Link in form for size and price field. don't change it unless update all urls
-    path('trade/trade_check_symbol_hx/', views.trade_check_symbol_hx, name="trade_check_symbol_hx"),  # Hard Link in form for size and price field. don't change it unless update all urls
+    path('trade/trade_check_hx/', views.trade_check_hx, name="trade_check_hx"),  # Hard Link in form for size and price and ... field. don't change it unless update all urls
 
-    
     path('trade/review/add/<str:trade_pk>/', views.review_add_hx, name="review_add_hx"),
     path('trade/review/update/<str:review_pk>/', views.review_update_form_hx, name="review_update_form_hx"),
     path('trade/review/edit/<str:review_pk>/', views.review_update_sidebar_hx, name="review_update_sidebar_hx"),
