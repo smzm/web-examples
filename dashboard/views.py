@@ -42,9 +42,10 @@ def dashboard(request):
     profile = request.user.profile
     all_msg = profile.messages.all()
     unread_count = all_msg.filter(is_read=False).count()
+    trades = profile.tradeposition_set.all().order_by('-date', '-time')[:3]
     return render(
         request, "dashboard/dashboard.html", {
-            "sidebar": sidebar, "profile": profile, 'unread_count': unread_count}
+            "sidebar": sidebar, "profile": profile, 'unread_count': unread_count, 'trades': trades}
     )
 
 
@@ -454,7 +455,7 @@ def trade_check_hx(request):
                 if (price * size) > value_risk:
                     context['risk_error'] = "Risk strategy alert."
         # Check Symbol is not empty
-        if not request.POST['symbol'] :
+        if not request.POST.get('symbol') :
             context['symbol_error'] = "Symbol is requierd."
     return render(request, "dashboard/trade/include/trade_form.html", context)
 

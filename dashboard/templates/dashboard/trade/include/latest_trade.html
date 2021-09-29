@@ -16,33 +16,36 @@
             </a>
         </div>
 
-        <div class="grid grid-cols-5 text-center mx-2">
-            <h3 class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-gray-400 text-center whitespace-nowrap lg:font-medium text-sm md:text-base"> BTC / USD </h3>
-            <h3 class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-gray-400 text-center whitespace-nowrap lg:font-medium text-sm md:text-base">51241</h3>
-            <h3 class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-gray-400 text-center whitespace-nowrap lg:font-medium text-sm md:text-base">0.1 </h3>
-            <h3 class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-center whitespace-nowrap">
-                <div class="overflow-hidden h-7 text-green-500 z-0">
-                    <div class="spin_words"> 426.5 $</div>
-                    <div class="spin_words flex items-center justify-center">
-                        <svg class="stroke-current text-green-500" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4c4c4c" stroke-width="2.5"
-                            stroke-linecap="square" stroke-linejoin="round">
-                            <path d="M18 15l-6-6-6 6" />
-                        </svg>
-                        <span class=""> 5.6% </span>
-                    </div>
+        {% for trade in trades  %}
+            <div class="grid grid-cols-5 text-center mx-2">
+                    <a href="{% url 'trade_detail' trade.id %}" class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-gray-400 text-center whitespace-nowrap lg:font-medium text-sm md:text-base"> {{trade.symbol}} <span class="text-xs text-gray-400 opacity-60">/ USD </span> </a>
+                    <a href="{% url 'trade_detail' trade.id %}" class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-gray-400 text-center whitespace-nowrap lg:font-medium text-sm md:text-base"> {{trade.price}} </a>
+                    <a href="{% url 'trade_detail' trade.id %}" class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-gray-400 text-center whitespace-nowrap lg:font-medium text-sm md:text-base"> {{trade.size}} </a>
+                    <a href="{% url 'trade_detail' trade.id %}" class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-center whitespace-nowrap">
+                        <div class="overflow-hidden h-7 text-green-500 z-0">
+                            <div class="spin_words"> 426.5 $</div>
+                            <div class="spin_words flex items-center justify-center">
+                                <svg class="stroke-current text-green-500" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4c4c4c" stroke-width="2.5"
+                                    stroke-linecap="square" stroke-linejoin="round">
+                                    <path d="M18 15l-6-6-6 6" />
+                                </svg>
+                                <span class=""> 5.6% </span>
+                            </div>
+                        </div>
+                    </a>
+                <div class="border-b border-gray-300 py-4 border-opacity-50 text-gray-400 flex justify-center">
+                    <svg class="" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#4c4c4c" stroke-width="2.5" stroke-linecap="square"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="12" cy="5" r="1"></circle>
+                        <circle cx="12" cy="19" r="1"></circle>
+                    </svg>
                 </div>
-            </h3>
-            <div class="border-b border-gray-300 py-4 border-opacity-50 text-gray-400 flex justify-center">
-                <svg class="" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#4c4c4c" stroke-width="2.5" stroke-linecap="square"
-                    stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="1"></circle>
-                    <circle cx="12" cy="5" r="1"></circle>
-                    <circle cx="12" cy="19" r="1"></circle>
-                </svg>
             </div>
-        </div>
+        {% endfor %}
 
-        <div class="grid grid-cols-5 text-center mx-2">
+        {% comment %}
+         <div class="grid grid-cols-5 text-center mx-2">
             <h3 class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-gray-400 text-center whitespace-nowrap lg:font-medium text-sm md:text-base">ETH / USD</h3>
             <h3 class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-gray-400 text-center whitespace-nowrap lg:font-medium text-sm md:text-base">3916 </h3>
             <h3 class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-gray-400 text-center whitespace-nowrap lg:font-medium text-sm md:text-base">10</ /span></h3>
@@ -67,4 +70,5 @@
                 </svg>
             </div>
         </div>
+     {% endcomment %}
     </div>
