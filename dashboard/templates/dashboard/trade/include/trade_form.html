@@ -7,7 +7,7 @@
     {% endif %} 
 
     class="flex flex-col" autocomplete="off"
-    >
+>
     
     {% csrf_token %}
     {% comment %} <div id="indicator" class="htmx-indicator mx-auto sticky top-0 p-2 rounded-md bg-green-300">Updating...</div>  {% endcomment %}
@@ -73,8 +73,9 @@
 {% endif %}
 
 </form>
-
 </div>
+
+
 
 <script>
     // When request send and response backed keep the cursor at the end of input
@@ -133,4 +134,5 @@
             Side.classList.remove('bg-green-700')
         }
     });
+
 </script>

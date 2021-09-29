@@ -33,6 +33,6 @@ urlpatterns = [
     path('@<str:username>/message/<str:trade_pk>/', views.trade_message, name="trade_message"),
     
     path('search/trade_hx/', views.search_trade_hx, name='search_trade_hx'),
-    path('search/trade/', views.search_trade, name='search_trade')
+    path('search/trade/', views.search_trade, name='search_trade'),
 
     ]

@@ -274,7 +274,8 @@ def trade_detail(request, trade_pk):
     }
 
     return render(request, "dashboard/trade/detail_trade.html", context)
-  
+
+     
 
 
 
@@ -417,8 +418,6 @@ def trade_edit(request, trade_pk):
     )
 
 
-
-
 @login_required(login_url="/login/")
 def trade_delete(request, trade_pk):
     trade = TradePosition.objects.get(id=trade_pk)
@@ -445,9 +444,8 @@ def trade_check_hx(request):
             trade = profile.tradeposition_set.get(id=trade_id)
             context['trade'] = trade
         # Check Strategy Risk   
-        print(request.POST['price'] and request.POST['strategy'] and request.POST['size'])
-        if request.POST['price'] and request.POST['strategy'] and request.POST['size']: 
-            strategy_id = request.POST['strategy']
+        if request.POST.get('price') and request.POST.get('strategy') and request.POST.get('size'): 
+            strategy_id = request.POST.get('strategy')
             strategy = Strategy.objects.get(id=strategy_id)
             value_risk = float(strategy.value_risk)          
             price = float(request.POST['price'])
@@ -461,60 +459,6 @@ def trade_check_hx(request):
         else : 
             context['symbol_error'] = "Symbol is requierd."
     return render(request, "dashboard/trade/include/trade_form.html", context)
-
-
-
-# @login_required(login_url="/login/")
-# def trade_check_symbol_hx(request):
-#     profile = request.user.profile
-#     trade_form = NewTradeForm(request.POST)
-#     trade_edit_state = int(request.POST['trade_edit_state'])
-#     context = {
-#         "sidebar": sidebar,
-#         "profile": profile,
-#         "tradeForm": trade_form,
-#         "trade_edit_state" : trade_edit_state
-#     }
-#     if request.htmx : 
-#         if trade_edit_state : 
-#             trade_id = request.POST['trade_id']
-#             trade = profile.tradeposition_set.get(id=trade_id)
-#             context['trade'] = trade
-#         if request.POST['symbol'] :
-#            symbol = request.POST['symbol']
-#         else : 
-#             context['symbol_error'] = "Symbol is requierd."
-#     return render(request, "dashboard/trade/include/trade_form.html", context)
-
-
-
-# @login_required(login_url="/login/")
-# def trade_check_risk_hx(request):
-#     profile = request.user.profile
-#     trade_form = NewTradeForm(request.POST)
-#     trade_edit_state = int(request.POST['trade_edit_state'])
-#     context = {
-#         "sidebar": sidebar,
-#         "profile": profile,
-#         "tradeForm": trade_form,
-#         "trade_edit_state" : trade_edit_state
-#     }
-#     if request.htmx : 
-#         if trade_edit_state : 
-#             trade_id = request.POST['trade_id']
-#             trade = profile.tradeposition_set.get(id=trade_id)
-#             context['trade'] = trade
-#         if request.POST['price'] and request.POST['strategy'] and request.POST['size']: 
-#             strategy_id = request.POST['strategy']
-#             strategy = Strategy.objects.get(id=strategy_id)
-#             value_risk = float(strategy.value_risk)          
-#             price = float(request.POST['price'])
-#             size = float(request.POST['size'])
-#             if strategy and price and size : 
-#                 if (price * size) > value_risk:
-#                     context['risk_error'] = "Risk strategy alert."
-#     return render(request, "dashboard/trade/include/trade_form.html", context)
-
 
 
 
