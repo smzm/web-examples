@@ -57,7 +57,6 @@ def strategy(request):
     strategies = profile.strategy_set.all()
     strategy_form = StrategyForm()
     context = {"sidebar": sidebar, "profile": profile, "strategies":strategies ,"strategyForm": strategy_form}       
-
     if request.method == "POST" : 
         strategy_form = StrategyForm(request.POST)
         if strategy_form.is_valid():
@@ -65,8 +64,17 @@ def strategy(request):
             strategy.owner = profile
             strategy.save()
             context['value_risk'] = strategy.value_risk
-            
     return render(request, "dashboard/strategy/strategy.html", context)
+
+
+
+@login_required(login_url="/login/")
+def strategy_edit(request, strategy_id):
+    profile = request.user.profile
+    strategies = profile.strategy_set.all()
+    strategy = profile.strategy_set.get(id=strategy_id)
+    context = { "sidebar": sidebar, "profile": profile, "strategies":strategies, 'strategy' : strategy }
+    return render(request, 'dashboard/strategy/strategy_edit.html', context)
 
 
 
@@ -531,7 +539,9 @@ def review_add_hx(request, trade_pk):
         review_form = ReviewForm()
         if request.method == "POST":
             review_form = ReviewForm(request.POST)
+            print(review_form)
             if review_form.is_valid():
+                print(request.POST.get("emotion"))
                 review = Review(
                     owner=profile,
                     trade=trade,

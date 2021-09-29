@@ -57,7 +57,8 @@
                         <li class="p-2 text-gray-400 w-8 mx-auto"> {{day}} </li>
                     {% endif %}
                 {% elif date.year == date.today.year and date.month_num == date.today.month and day == date.today.day %} <!-- Today -->
-                    <li class="p-2 text-gray-600 bg-white rounded-lg w-8 mx-auto"> {{day}} </li>
+                    <li class="p-2 text-gray-600 bg-white rounded-lg w-8 mx-auto cursor-pointer" 
+                        hx-get="/history/date/{{day}}-{{date.month_num}}-{{date.year}}" hx-trriger="click" hx-target="#TRADES_IN_DAY"> {{day}} </li>
                 {% elif date.year >= date.today.year and date.month_num >= date.today.month and day > date.today.day    %} <!-- Future Days -->
                     <li class="p-2 text-gray-300 w-8 mx-auto"> {{day}} </li>
                 {% endif %}

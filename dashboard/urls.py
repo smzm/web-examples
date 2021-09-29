@@ -11,6 +11,7 @@ urlpatterns = [
     path('history/date/<str:date>/', views.filter_trades_by_date, name="filter_trades_by_date"),   # Hard Link in calendar. don't change it unless update all urls
 
     path('strategy/', views.strategy, name="strategy"),
+    path('strategy/detail/<str:strategy_id>', views.strategy_edit, name="strategy_edit"),
 
     path('analysis/', views.dashboard, name="analysis"),
 

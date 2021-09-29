@@ -5,24 +5,27 @@
 {% include 'include/menu.html' with active='strategy' %}
 {% endblock menu %}
 
-
-
 {% block content %}
 <div id="MAIN" class="flex flex-col flex-1 bg-color-light1 py-5 px-20">
-{% for strategy in strategies  %}
-    <a href="{% url 'strategy_edit' strategy.id %}" class="text-lg my-8">
-        {{strategy}}
-    </a>
-{% endfor %}
-
-    <form method="POST">
-        {% csrf_token %}
-        {{strategyForm.as_p}}
-        <input type="submit">
-    </form>
-{{value_risk}}
+    <div>
+        name : 
+        {{strategy.name}}
+    </div>
+    <div>
+        balance : 
+        {{strategy.balance}}
+    </div>
+    <div>
+        risk (%) : 
+        {{strategy.risk_on_balance}}
+    </div>
+    <div>
+        risk ($)
+        {{strategy.value_risk}}
+    </div>
 </div>
 {% endblock content %}
+
 
 
 
