@@ -454,9 +454,7 @@ def trade_check_hx(request):
                 if (price * size) > value_risk:
                     context['risk_error'] = "Risk strategy alert."
         # Check Symbol is not empty
-        if request.POST['symbol'] :
-           symbol = request.POST['symbol']
-        else : 
+        if not request.POST['symbol'] :
             context['symbol_error'] = "Symbol is requierd."
     return render(request, "dashboard/trade/include/trade_form.html", context)
 
