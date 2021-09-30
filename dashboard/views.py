@@ -23,6 +23,7 @@ from users.models import Profile
 from .utils import searchTrade, paginateTrades
 import calendar as cal
 import datetime
+from dateutil.relativedelta import relativedelta
 
 
 
@@ -42,12 +43,49 @@ def dashboard(request):
     profile = request.user.profile
     all_msg = profile.messages.all()
     unread_count = all_msg.filter(is_read=False).count()
-    trades = profile.tradeposition_set.all().order_by('-date', '-time')[:3]
-    return render(
-        request, "dashboard/dashboard.html", {
-            "sidebar": sidebar, "profile": profile, 'unread_count': unread_count, 'trades': trades}
-    )
 
+    trades = profile.tradeposition_set.all().order_by('-date', '-time')[:3]
+    return render( request, "dashboard/dashboard.html", {"sidebar": sidebar, "profile": profile, 'unread_count': unread_count, 'trades': trades})
+
+
+
+@login_required(login_url="/login/")
+def order_trades_hx(request):
+    if request.htmx:
+        profile = request.user.profile
+        trades = profile.tradeposition_set.all().order_by('-date', '-time')[:3]
+        # There is Hardlink with this names inside lates_trade and dashboard Pages. dont change these name and functions
+        _orderBy_ = request.GET.get('order_by')
+        _lastOrder_ = request.GET.get('last')
+        _toggle_ = request.GET.get('toggle')
+        if _toggle_ == 'False' : 
+            _toggle_ = False  
+        else :
+            _toggle_ = True
+
+        # Order Last 3 trades by Symbol
+        if _orderBy_ == "symbol" and not _lastOrder_ == "symbol" :
+            _toggle_ = True
+            trades = sorted(trades, key=lambda trade : trade.symbol, reverse=not _toggle_)
+        elif _orderBy_=="symbol" and _lastOrder_=="symbol" : 
+            trades = sorted(trades, key=lambda trade : trade.symbol, reverse=not _toggle_) 
+
+        # Order Last 3 trades by Date and Time
+        if _orderBy_ == "datetime" and not _lastOrder_ == "datetime" :
+            _toggle_ = True
+            trades = sorted(trades, key=lambda trade : (trade.date, trade.time), reverse=_toggle_)
+        elif _orderBy_ == "datetime" and _lastOrder_=="datetime"  : 
+            trades = sorted(trades, key=lambda trade : (trade.date, trade.time), reverse=_toggle_)
+        
+        # Order Last 3 trades by Size
+        if _orderBy_ == "size" and not _lastOrder_ == "size":
+            _toggle_ = True
+            trades = sorted(trades, key=lambda trade : trade.size, reverse=_toggle_)
+        elif _orderBy_ == "size" and _lastOrder_ == "size":
+            trades = sorted(trades, key=lambda trade : trade.size, reverse=_toggle_)
+
+        _toggle_ = not _toggle_
+    return render( request, "dashboard/trade/include/latest_trade.html", {'trades': trades, 'order_by':_orderBy_, 'toggle':_toggle_})
 
 
 
@@ -122,7 +160,7 @@ def history(request):
 
 
 @login_required(login_url="/login/")
-def next_month(request):
+def change_month(request, change):
     profile = request.user.profile
     if request.htmx : 
         data_year = int(request.POST.get('data-year'))
@@ -130,9 +168,11 @@ def next_month(request):
         data_day = int(request.POST.get('data-day'))
 
         today = datetime.date.today()
-        _ , this_month_range = cal.monthrange(data_year, data_month)
-        time_delta = datetime.timedelta(days=+this_month_range)     # Go forward as long as this month
-        new_date = datetime.date(data_year, data_month, data_day) + time_delta
+        if change == "Next" :
+            new_date = datetime.date(data_year, data_month, data_day) + relativedelta(months=1)
+        elif change == "Previous" :
+            new_date = datetime.date(data_year, data_month, data_day) - relativedelta(months=1)     
+        
         year = new_date.year
         month_num = new_date.month
         day_num = new_date.day
@@ -164,56 +204,6 @@ def next_month(request):
 
         trades_inforamtion = {'days': trades_days, 'id': trades_id, 'symbol':trades_symbol}   
         return render(request, 'dashboard/history/calendar.html', {'date':date, "trades_info": trades_inforamtion} )
-
-
-
-@login_required(login_url="/login/")
-def previous_month(request):
-    profile = request.user.profile
-    if request.htmx : 
-        data_year = int(request.POST.get('data-year'))
-        data_month = int(request.POST.get('data-month'))
-        data_day = int(request.POST.get('data-day'))
-
-        today = datetime.date.today()
-        _ , this_month_range = cal.monthrange(data_year, data_month)
-        time_delta = datetime.timedelta(days=-this_month_range)     # Go backward as long as this month
-        new_date = datetime.date(data_year, data_month, data_day) + time_delta
-        year = new_date.year
-        month_num = new_date.month
-        month_str = new_date.strftime('%B')
-        day_num = new_date.day
-
-        day_of_week, month_range = cal.monthrange(year, month_num)
-
-        date = {'year': year,
-                'month': month_str,
-                'month_num': month_num,
-                'day_num' : day_num, 
-                'month_range': range(1, month_range+1) ,
-                'day_of_week' : range(1, day_of_week+1),
-                'today': today
-        }
-
-        monthly_trades = profile.tradeposition_set.filter(date__year=year, 
-                                                         date__month=month_num).order_by("-date",'-time').values_list('id','date','symbol')
-        trades_days = []
-        trades_id = []
-        trades_symbol = []
-        for index in range(0,len(monthly_trades)) : 
-            trade = monthly_trades[index]
-            trade_id = trade[0]
-            trade_day = trade[1].day
-            trade_symbol = trade[2]
-            trades_id.append(trade_id)
-            trades_days.append(trade_day)
-            trades_symbol.append(trade_symbol)
-
-        trades_inforamtion = {'days': trades_days, 'id': trades_id, 'symbol':trades_symbol}   
-        return render(request, 'dashboard/history/calendar.html', {'date':date, "trades_info": trades_inforamtion} )
-
-
-
 
 
 @login_required(login_url="/login/")
