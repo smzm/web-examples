@@ -50,7 +50,8 @@
   </div>
 
 
-    {% include 'dashboard/trade/include/latest_trade.html' %}
+  {% include 'dashboard/trade/include/latest_trade.html' %}
+  <input hidden id="LATEST_TRADES_SORT" hx-get="/dashboard/latest_trades?order_by=datetime&last=&toggle=" hx-trigger="load from:#LATEST_TRADES_SORT" hx-target="#LATEST_TRADES" hx-swap="outerHTML">
 
 </div>
 {%endblock%}
