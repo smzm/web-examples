@@ -1,25 +1,18 @@
+
     <div id="LATEST_TRADES" class="">
         <h2 class="text-gray-600 text-2xl font-bold tracking-wider px-10 pb-10 antialiased"> LATEST TRADES </h2>
-
         <div class="grid grid-cols-5 text-center mx-2 ">
-            <h2 class="bg-color-light2 tracking-wider bg-opacity-20 font-bold text-gray-400 py-8 whitespace-nowrap rounded-l-lg">
-                <span class="lg:hover:bg-gray-100 py-2 px-3 rounded-lg cursor-pointer transition-all duration-200"> Symbol</span> </h2>
-            <h2 class="bg-color-light2 tracking-wider bg-opacity-20 font-bold text-gray-400  py-8 whitespace-nowrap"> <span
-                    class="lg:hover:bg-gray-100 py-2 px-6 rounded-lg cursor-pointer transition-all duration-200"> Price </span></h2>
-            <h2 class="bg-color-light2 tracking-wider bg-opacity-20 font-bold text-gray-400 py-8 whitespace-nowrap"> <span
-                    class="lg:hover:bg-gray-100 py-2 px-4 rounded-lg cursor-pointer transition-all duration-200"> Size </span> </h2>
-            <h2 class="bg-color-light2 tracking-wider bg-opacity-20 font-bold text-gray-400 py-8 whitespace-nowrap"> <span
-                    class="lg:hover:bg-gray-100 py-2 px-4 rounded-lg cursor-pointer transition-all duration-200"> P/L </span></h2>
-            <a href="{% url 'trade_add' %}"
-                class="bg-color-light2 rounded-r-lg tracking-wider font-semibold text-gray-200 py-8 whitespace-nowrap"> <span
-                    class="bg-blue-400 hover:bg-blue-600 py-2 px-3 rounded-lg cursor-pointer transition duration-200"> + <span class="hidden lg:inline">Add New</span>
-            </a>
+            <h2 class="bg-color-light2 tracking-wider bg-opacity-20 font-bold text-gray-400 py-8 whitespace-nowrap rounded-l-lg"><span hx-get="/dashboard/latest_trades?order_by=symbol&last={{order_by}}&toggle={{toggle}}" hx-trigger="click" hx-target="#LATEST_TRADES" hx-swap="outerHTML" class="{% if order_by == 'symbol' %} bg-gray-100 {% endif %} inline lg:hover:bg-gray-200 py-2 px-3 rounded-lg cursor-pointer transition-all duration-200"> Symbol</span> </h2>
+            <h2 class="bg-color-light2 tracking-wider bg-opacity-20 font-bold text-gray-400  py-8 whitespace-nowrap"> <span hx-get="/dashboard/latest_trades?order_by=datetime&last={{order_by}}&toggle={{toggle}}" hx-trigger="click" hx-target="#LATEST_TRADES" hx-swap="outerHTML" class="inline {% if order_by == 'datetime' %} bg-gray-100 {% endif %} inline lg:hover:bg-gray-200 py-2 px-6 rounded-lg cursor-pointer transition-all duration-200"> Date </span></h2>
+            <h2 class="bg-color-light2 tracking-wider bg-opacity-20 font-bold text-gray-400 py-8 whitespace-nowrap"> <span hx-get="/dashboard/latest_trades?order_by=size&last={{order_by}}&toggle={{toggle}}" hx-trigger="click" hx-target="#LATEST_TRADES" hx-swap="outerHTML" class="inline {% if order_by == 'size' %} bg-gray-100 {% endif %} inline lg:hover:bg-gray-200 py-2 px-4 rounded-lg cursor-pointer transition-all duration-200"> Size </span> </h2>
+            <h2 class="bg-color-light2 tracking-wider bg-opacity-20 font-bold text-gray-400 py-8 whitespace-nowrap"> <span hx-get="/dashboard/latest_trades?order_by=p/l&last={{order_by}}&toggle={{toggle}}" hx-trigger="click" hx-target="#LATEST_TRADES" hx-swap="outerHTML" class="inline {% if order_by == 'p/l' %} bg-gray-100 {% endif %} inline lg:hover:bg-gray-200 py-2 px-4 rounded-lg cursor-pointer transition-all duration-200"> P/L </span></h2>
+            <a href="{% url 'trade_add' %}" class="bg-color-light2 rounded-r-lg tracking-wider font-semibold text-gray-200 py-8 whitespace-nowrap"> <span class="bg-blue-400 hover:bg-blue-600 py-2 px-3 rounded-lg cursor-pointer transition duration-200"> + <span class="hidden lg:inline">Add New</span></a>      
         </div>
 
         {% for trade in trades  %}
             <div class="grid grid-cols-5 text-center mx-2">
                     <a href="{% url 'trade_detail' trade.id %}" class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-gray-400 text-center whitespace-nowrap lg:font-medium text-sm md:text-base"> {{trade.symbol}} <span class="text-xs text-gray-400 opacity-60">/ USD </span> </a>
-                    <a href="{% url 'trade_detail' trade.id %}" class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-gray-400 text-center whitespace-nowrap lg:font-medium text-sm md:text-base"> {{trade.price}} </a>
+                    <a href="{% url 'trade_detail' trade.id %}" class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-center whitespace-nowrap "> <div class="lg:font-base text-sm md:text-xs text-gray-400">{{trade.date}}</div> <div class="lg:font-base text-sm md:text-xs text-gray-400 opacity-60" text-sm md:text-base> {{trade.time}}</div> </a>
                     <a href="{% url 'trade_detail' trade.id %}" class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-gray-400 text-center whitespace-nowrap lg:font-medium text-sm md:text-base"> {{trade.size}} </a>
                     <a href="{% url 'trade_detail' trade.id %}" class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-center whitespace-nowrap">
                         <div class="overflow-hidden h-7 text-green-500 z-0">
