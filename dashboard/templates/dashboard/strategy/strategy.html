@@ -15,8 +15,8 @@
         <a href="{% url 'strategy_edit' strategy.id %}" class="text-lg text-blue-400 mx-8">
             {{strategy}}
         </a>
+        {% endfor %}
 </div>
-{% endfor %}
 
     <form method="POST">
         {% csrf_token %}
