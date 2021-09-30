@@ -1,5 +1,3 @@
-from django.http import request
-from django.http import response
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from .forms import NewTradeForm, ReviewForm, MessageForm, StrategyForm
@@ -37,15 +35,13 @@ sidebar = {
 
 
 
-
 @login_required(login_url="/login/")
 def dashboard(request):
     profile = request.user.profile
     all_msg = profile.messages.all()
     unread_count = all_msg.filter(is_read=False).count()
+    return render( request, "dashboard/dashboard.html", {"sidebar": sidebar, "profile": profile, 'unread_count': unread_count})
 
-    trades = profile.tradeposition_set.all().order_by('-date', '-time')[:3]
-    return render( request, "dashboard/dashboard.html", {"sidebar": sidebar, "profile": profile, 'unread_count': unread_count, 'trades': trades})
 
 
 
@@ -62,30 +58,28 @@ def order_trades_hx(request):
             _toggle_ = False  
         else :
             _toggle_ = True
-
         # Order Last 3 trades by Symbol
         if _orderBy_ == "symbol" and not _lastOrder_ == "symbol" :
             _toggle_ = True
             trades = sorted(trades, key=lambda trade : trade.symbol, reverse=not _toggle_)
         elif _orderBy_=="symbol" and _lastOrder_=="symbol" : 
             trades = sorted(trades, key=lambda trade : trade.symbol, reverse=not _toggle_) 
-
         # Order Last 3 trades by Date and Time
         if _orderBy_ == "datetime" and not _lastOrder_ == "datetime" :
             _toggle_ = True
             trades = sorted(trades, key=lambda trade : (trade.date, trade.time), reverse=_toggle_)
         elif _orderBy_ == "datetime" and _lastOrder_=="datetime"  : 
             trades = sorted(trades, key=lambda trade : (trade.date, trade.time), reverse=_toggle_)
-        
         # Order Last 3 trades by Size
         if _orderBy_ == "size" and not _lastOrder_ == "size":
             _toggle_ = True
             trades = sorted(trades, key=lambda trade : trade.size, reverse=_toggle_)
         elif _orderBy_ == "size" and _lastOrder_ == "size":
             trades = sorted(trades, key=lambda trade : trade.size, reverse=_toggle_)
-
         _toggle_ = not _toggle_
     return render( request, "dashboard/trade/include/latest_trade.html", {'trades': trades, 'order_by':_orderBy_, 'toggle':_toggle_})
+
+
 
 
 
@@ -107,6 +101,8 @@ def strategy(request):
 
 
 
+
+
 @login_required(login_url="/login/")
 def strategy_edit(request, strategy_id):
     profile = request.user.profile
@@ -114,8 +110,6 @@ def strategy_edit(request, strategy_id):
     strategy = profile.strategy_set.get(id=strategy_id)
     context = { "sidebar": sidebar, "profile": profile, "strategies":strategies, 'strategy' : strategy }
     return render(request, 'dashboard/strategy/strategy_edit.html', context)
-
-
 
 
 
@@ -129,7 +123,6 @@ def history(request):
     month_str = today.strftime('%B')    # Month of today in letters
     day_num = today.day                 # Day of Today
     day_of_week, month_range = cal.monthrange(year, month_num)      # day_of_week : after many day month begins     month_range: how many days month have
-       
     date = {'year': year,
             'month': month_str,
             'month_num': month_num,
@@ -139,7 +132,7 @@ def history(request):
             'today': today
             }
     monthly_trades = profile.tradeposition_set.filter(date__year=year, 
-                                              date__month=month_num).order_by("-date",'-time').values_list('id','date','symbol')        # Get all trade of this month
+                                                      date__month=month_num).order_by("-date",'-time').values_list('id','date','symbol')        # Get all trade of this month
     trades_days = []
     trades_id = []
     trades_symbol = []
@@ -151,7 +144,6 @@ def history(request):
         trades_id.append(trade_id)          # All trade id for this month
         trades_days.append(trade_day)       # All days user has trade 
         trades_symbol.append(trade_symbol)  # All symbol trades in this month
-
     trades_inforamtion = {'days': trades_days, 'id': trades_id, 'symbol':trades_symbol}   
     return render(
         request, "dashboard//history/history.html", {"sidebar": sidebar, "profile": profile, "date": date, "trades_info": trades_inforamtion}
@@ -166,20 +158,16 @@ def change_month(request, change):
         data_year = int(request.POST.get('data-year'))
         data_month = int(request.POST.get('data-month'))
         data_day = int(request.POST.get('data-day'))
-
         today = datetime.date.today()
         if change == "Next" :
             new_date = datetime.date(data_year, data_month, data_day) + relativedelta(months=1)
         elif change == "Previous" :
             new_date = datetime.date(data_year, data_month, data_day) - relativedelta(months=1)     
-        
         year = new_date.year
         month_num = new_date.month
         day_num = new_date.day
-
         day_of_week, month_range = cal.monthrange(year, month_num)
         month_str = new_date.strftime('%B')
-
         date = {'year': year,
                 'month': month_str,
                 'month_num': month_num,
@@ -201,9 +189,10 @@ def change_month(request, change):
             trades_id.append(trade_id)
             trades_days.append(trade_day)
             trades_symbol.append(trade_symbol)
-
         trades_inforamtion = {'days': trades_days, 'id': trades_id, 'symbol':trades_symbol}   
         return render(request, 'dashboard/history/calendar.html', {'date':date, "trades_info": trades_inforamtion} )
+
+
 
 
 @login_required(login_url="/login/")
@@ -211,10 +200,9 @@ def filter_trades_by_date(request, date):
     profile = request.user.profile
     day, month, year = date.split('-')
     trades = profile.tradeposition_set.filter(date__year=year, 
-                                            date__month=month,
-                                            date__day=day).order_by("-date",'-time')
+                                              date__month=month,
+                                              date__day=day).order_by("-date",'-time')
     trades, customRange = paginateTrades(request, trades, 2)
-
     return render(request, 'dashboard/history/trades_by_date.html', {'trades':trades, 'customRange': customRange, 'day':day, 'month':month, 'year':year})
 
 
@@ -226,7 +214,6 @@ def trades(request):
     profile = request.user.profile
     trades = profile.tradeposition_set.all().order_by("-date", "-time")
     trades, customRange = paginateTrades(request, trades, 5)
-
     context = {
         "sidebar": sidebar,
         "profile": profile,
@@ -238,12 +225,13 @@ def trades(request):
 
 
 
+
 @login_required(login_url="/login/")
 def trade_detail(request, trade_pk):
     profile = request.user.profile
     trade_edit_state = 1
     trade = profile.tradeposition_set.get(id=trade_pk)
-    trade_form = NewTradeForm(instance=trade)
+    trade_form = NewTradeForm(instance=trade, profile=profile)
     review_form = ReviewForm()
     reviews = trade.review_set.all().order_by("-created")
     trade.calcualteEmotionRatio
@@ -252,7 +240,6 @@ def trade_detail(request, trade_pk):
     latest_msg = all_msg.last()
     msg_details = {"all_msg": all_msg,
                    "msg_count": msg_count, "latest_msg": latest_msg}
-
     context = {
         "sidebar": sidebar,
         "profile": profile,
@@ -263,18 +250,17 @@ def trade_detail(request, trade_pk):
         "msg_details": msg_details,
         'trade_edit_state' : trade_edit_state 
     }
-
     return render(request, "dashboard/trade/detail_trade.html", context)
 
      
-
 
 
 @login_required(login_url="/login/")
 def trade_add(request):
     trade_edit_state = 0
     profile = request.user.profile
-    trade_form = NewTradeForm()
+    trade_form = NewTradeForm(profile=profile)
+    print(trade_form)
     context = {
         "sidebar": sidebar,
         "profile": profile,
@@ -293,47 +279,37 @@ def trade_add(request):
         if trade_form.is_valid():
             new_trade = trade_form.save(commit=False)
             new_trade.owner = request.user.profile
-            new_trade.save()
- 
-                        
+            new_trade.save() 
             analysis = Analysis(
                 owner=profile,
                 trade=new_trade,
             )
-
             if selected_trend_analysis :
                 trend_analysis = TrendAnalysis(value=selected_trend_analysis)
                 trend_analysis.save()
                 analysis.Trend_Analysis = trend_analysis
-
             if selected_harmonic_patterns :
                 harmonic_patterns = HarmonicPatterns(value=selected_harmonic_patterns)
                 harmonic_patterns.save()
                 analysis.Harmonic_Patterns = harmonic_patterns
-
             if selected_chart_patterns :
                 chart_patterns = ChartPatterns(value=selected_chart_patterns)
                 chart_patterns.save()
                 analysis.Chart_Patterns = chart_patterns
-
             if selected_technical_indicators :
                 technical_indicators = TechnicalIndicators(value=selected_technical_indicators)
                 technical_indicators.save()
                 analysis.Technical_Indicators = technical_indicators
-
             if selected_wave_analysis :
                 wave_analysis = WaveAnalysis(value=selected_wave_analysis)
                 wave_analysis.save()
                 analysis.Wave_Analysis = wave_analysis
-
             if selected_fundamental_analysis :
                 fundamental_analysis = FundamentalAnalysis(value=selected_fundamental_analysis)
                 fundamental_analysis.save()
                 analysis.Fundamental_Analysis = fundamental_analysis
-            
             analysis.save()
             new_trade.analysis = analysis
-
             messages.success(request, "Your trade position was updated.")            
             return redirect("trade_detail", new_trade.id)
         else : 
@@ -344,14 +320,15 @@ def trade_add(request):
 
 
 
+
+
 @login_required(login_url="/login/")
 def trade_edit(request, trade_pk):
     trade_edit_state = 1
     profile = request.user.profile
     trade = profile.tradeposition_set.get(id=trade_pk)
-
     if request.method == "POST":
-        trade_form = NewTradeForm(request.POST, instance=trade)
+        trade_form = NewTradeForm(request.POST, profile=profile, instance=trade)
         selected_trend_analysis = request.POST.getlist("trend_analysis")
         selected_harmonic_patterns = request.POST.getlist("harmonic_patterns")
         selected_chart_patterns = request.POST.getlist("chart_patterns")
@@ -360,7 +337,6 @@ def trade_edit(request, trade_pk):
         selected_fundamental_analysis = request.POST.getlist("fundamental_analysis")
         if trade_form.is_valid():
             trade_form.save()
-
             trade.analysis.delete()
             analysis = Analysis(
                 owner=profile,
@@ -371,27 +347,22 @@ def trade_edit(request, trade_pk):
                 trend_analysis = TrendAnalysis(value=selected_trend_analysis)
                 trend_analysis.save()
                 analysis.Trend_Analysis = trend_analysis
-
             if selected_harmonic_patterns :
                 harmonic_patterns = HarmonicPatterns(value=selected_harmonic_patterns)
                 harmonic_patterns.save()
                 analysis.Harmonic_Patterns = harmonic_patterns
-
             if selected_chart_patterns :
                 chart_patterns = ChartPatterns(value=selected_chart_patterns)
                 chart_patterns.save()
                 analysis.Chart_Patterns = chart_patterns
-
             if selected_technical_indicators :
                 technical_indicators = TechnicalIndicators(value=selected_technical_indicators)
                 technical_indicators.save()
                 analysis.Technical_Indicators = technical_indicators
-
             if selected_wave_analysis :
                 wave_analysis = WaveAnalysis(value=selected_wave_analysis)
                 wave_analysis.save()
                 analysis.Wave_Analysis = wave_analysis
-
             if selected_fundamental_analysis :
                 fundamental_analysis = FundamentalAnalysis(value=selected_fundamental_analysis)
                 fundamental_analysis.save()
@@ -399,7 +370,6 @@ def trade_edit(request, trade_pk):
             
             analysis.save()
             trade.analysis = analysis
-
             messages.success(request, "Your trade position was updated.")
             return render(request, "dashboard/trade/include/trade_info.html", {"trade": trade})
     return render(
@@ -407,6 +377,8 @@ def trade_edit(request, trade_pk):
         "dashboard/trade/include/trade_form.html",
         {"tradeForm": trade_form, "trade_edit_state": trade_edit_state},
     )
+
+
 
 
 @login_required(login_url="/login/")
@@ -418,10 +390,12 @@ def trade_delete(request, trade_pk):
 
 
 
+
+
 @login_required(login_url="/login/")
 def trade_check_hx(request):
     profile = request.user.profile
-    trade_form = NewTradeForm(request.POST)
+    trade_form = NewTradeForm(request.POST, profile=profile)
     trade_edit_state = int(request.POST['trade_edit_state'])
     context = {
         "sidebar": sidebar,
@@ -451,6 +425,8 @@ def trade_check_hx(request):
 
 
 
+
+
 # ================================================ Trade -> Review
 @login_required(login_url="/login/")
 def review_add_hx(request, trade_pk):
@@ -463,7 +439,6 @@ def review_add_hx(request, trade_pk):
         if request.method == "POST":
             review_form = ReviewForm(request.POST)
             if review_form.is_valid():
-                print(request.POST.get("emotion"))
                 review = Review(
                     owner=profile,
                     trade=trade,
@@ -479,7 +454,6 @@ def review_add_hx(request, trade_pk):
                 )
             else : 
                 return HttpResponse("Wrong data")    
-
     return render(
         request,
         "dashboard/trade/review/review_form.html",
@@ -493,6 +467,7 @@ def review_add_hx(request, trade_pk):
 
 
 
+
 @login_required(login_url="/login/")
 def review_update_form_hx(request, review_pk):
     if request.htmx:
@@ -501,7 +476,6 @@ def review_update_form_hx(request, review_pk):
         review = profile.review_set.get(id=review_pk)
         review_form = ReviewForm(
             {"emotion": review.emotion, "body": review.body})
-        print(review_form.data["emotion"])
         trade_id = review.trade_id
         trade = profile.tradeposition_set.get(id=trade_id)
         reviews = trade.review_set.all().order_by("-created")
@@ -573,13 +547,11 @@ def trade_inbox(request, msg_pk):
         message.is_read = True
         message.save()
     trade = message.trade
-
     all_msg = trade.msg.all()
     msg_count = all_msg.count()
-
     msg_details = {"all_msg": all_msg,
-                   "msg_count": msg_count, "message": message}
-
+                   "msg_count": msg_count, "message": message
+                   }
     context = {
         "sidebar": sidebar,
         "profile": profile,
@@ -605,7 +577,6 @@ def trades_inbox(request):
         "all_msg": all_msg,
         "msg_count": msg_count,
     }
-
     context = {
         "sidebar": sidebar,
         "profile": profile,
@@ -630,9 +601,10 @@ def trade_message(request, username, trade_pk):
             msg.trade = trade
             msg.save()
             return redirect("profile", username=username)
-
     context = {"profile": profile, "trade": trade, "form": form}
     return render(request, "dashboard/trade/message/message_form.html", context)
+
+
 
 
 
@@ -657,8 +629,10 @@ def search_trade_hx(request):
 
         context = {"querysets": querysets, "continuous": continuous}
         template = "search/results.html"
-
     return render(request, template, context)
+
+
+
 
 
 @login_required(login_url="/login/")
@@ -668,9 +642,7 @@ def search_trade(request):
     search_query = ""
     if request.GET.get("search_query"):
         trades, search_query = searchTrade(request)
-
     trades, custumRange = paginateTrades(request, trades, 5)
-
     return render(request, "dashboard/trade/trades.html",
         {
             "sidebar": sidebar,
