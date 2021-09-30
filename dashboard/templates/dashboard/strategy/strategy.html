@@ -9,16 +9,24 @@
 
 {% block content %}
 <div id="MAIN" class="flex flex-col flex-1 bg-color-light1 py-5 px-20">
-{% for strategy in strategies  %}
-    <a href="{% url 'strategy_edit' strategy.id %}" class="text-lg my-8">
-        {{strategy}}
-    </a>
+<div class="my-10">
+    Your Strategies : 
+    {% for strategy in strategies  %}
+        <a href="{% url 'strategy_edit' strategy.id %}" class="text-lg text-blue-400 mx-8">
+            {{strategy}}
+        </a>
+</div>
 {% endfor %}
 
     <form method="POST">
         {% csrf_token %}
-        {{strategyForm.as_p}}
-        <input type="submit">
+        {% for field in strategyForm  %}
+                {{field.label}} : 
+            <div class="my-2">
+                {{field}}
+            </div>
+        {% endfor %}
+        <input type="submit" class="bg-blue-100 rounded-lg p-4 my-4 cursor-pointer">
     </form>
 {{value_risk}}
 </div>

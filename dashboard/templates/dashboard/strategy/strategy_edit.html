@@ -7,21 +7,38 @@
 
 {% block content %}
 <div id="MAIN" class="flex flex-col flex-1 bg-color-light1 py-5 px-20">
-    <div>
-        name : 
-        {{strategy.name}}
+    <a href="{% url 'strategy' %}" class="text-indigo-400 mb-8"> Back To Strategy </a>
+    <div class="m-4">
+        <span class="bg-white p-4 rounded-lg">
+            name : 
+        </span>    
+        <span class="mx-4">
+            {{strategy.name}}
+        </span>
     </div>
-    <div>
-        balance : 
-        {{strategy.balance}}
+    <div class="m-4">
+        <span class="bg-white p-4 rounded-lg">
+            balance : 
+        </span>
+        <span class="mx-4">
+            {{strategy.balance}}
+        </span>
     </div>
-    <div>
-        risk (%) : 
-        {{strategy.risk_on_balance}}
+    <div class="m-4">
+        <span class="bg-white p-4 rounded-lg">
+            risk (%) : 
+        </span>
+        <span class="mx-4">
+            {{strategy.risk_on_balance}}
+        </span>
     </div>
-    <div>
-        risk ($)
-        {{strategy.value_risk}}
+    <div class="m-4">
+        <span class="bg-white p-4 rounded-lg">
+            risk ($)
+        </span>
+        <span class="mx-4">
+            {{strategy.value_risk}}
+        </span>
     </div>
 </div>
 {% endblock content %}
