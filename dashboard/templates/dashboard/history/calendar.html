@@ -1,6 +1,6 @@
 <div id="CALENDAR" class="w-full border">
     <ul class="flex justify-between items-center text-white h-52 bg-indigo-300 rounded-t-lg">
-        <form method="POST" hx-post="{% url 'previous_month' %}" hx-target="#CALENDAR" hx-swap="outerHTML" 
+        <form method="POST" hx-post="{% url 'change_month' 'Previous' %}" hx-target="#CALENDAR" hx-swap="outerHTML" 
             class="text-lg m-4 text-blue-100">
             {% csrf_token %}
             <input type="submit" value="previous" name="another_month" class="bg-indigo-300 cursor-pointer">
@@ -14,7 +14,7 @@
             <div class="block text-sm"> {{date.year}} </div>
         </li>
 
-        <form method="POST" hx-post="{% url 'next_month' %}" hx-target="#CALENDAR" hx-swap="outerHTML" 
+        <form method="POST" hx-post="{% url 'change_month' 'Next' %}" hx-target="#CALENDAR" hx-swap="outerHTML" 
             class="text-lg m-4 text-blue-100">
             {% csrf_token %}
             <input type="submit" value="next" data-month="{{date.month_num}}" name="another_month" class="bg-indigo-300 cursor-pointer">
