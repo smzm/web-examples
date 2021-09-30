@@ -24,7 +24,7 @@ class NewTradeForm(forms.ModelForm):
         'name': 'time', 'type': 'time', 'spellcheck': 'False', 'class': 'text-center w-36 bg-color-darker p-2 m-2 text-gray-400 border-2 focus:border-blue-800 border-gray-700 border-opacity-60 rounded-3xl outline-none transition-all duration-200'}), initial=datetime.datetime.now(tz=pytz.timezone('Asia/Tehran')).time().strftime("%H:%M"))
 
     strategy = forms.ModelChoiceField(queryset=Strategy.objects.all(),required=False, widget=forms.widgets.Select(attrs={
-        'id':"STRATEGY", 'hx-post' : "/trade/trade_check_hx/", 'hx-trigger' : 'change delay:500ms, click', 'hx-target' : '#FORM_CAONTAINER','hx-swap' : 'outerHTML'}))
+        'id':"STRATEGY", 'hx-post' : "/trade/trade_check_hx/", 'hx-trigger' : 'change delay:500ms', 'hx-target' : '#FORM_CAONTAINER','hx-swap' : 'outerHTML'}))
 
     price = forms.FloatField(widget=forms.widgets.NumberInput(attrs={
         'name': 'price', 'type':'number', 'min':'0','spellcheck': 'False', 'class': 'text-center w-36 bg-color-darker m-2 p-2 text-gray-400 border-2 focus:border-blue-800 border-gray-700 border-opacity-60 rounded-3xl outline-none transition-all duration-200',
