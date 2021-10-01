@@ -47,11 +47,11 @@
       </a>
 
      {% include 'search/search.html' %}
-  </div>
-
-
-  {% include 'dashboard/trade/include/latest_trade.html' %}
+    </div>
+    
+    
   <input hidden id="LATEST_TRADES_SORT" hx-get="/dashboard/latest_trades?order_by=datetime&last=&toggle=" hx-trigger="load from:#LATEST_TRADES_SORT" hx-target="#LATEST_TRADES" hx-swap="outerHTML">
+  {% include 'dashboard/trade/include/latest_trade.html' %}
 
 </div>
 {%endblock%}

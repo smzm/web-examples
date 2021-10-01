@@ -50,7 +50,7 @@ class NewTradeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         profile = kwargs.pop('profile','')
         super(NewTradeForm, self).__init__(*args, **kwargs)
-        self.fields['strategy']=forms.ModelChoiceField(queryset=Strategy.objects.filter(owner=profile))
+        self.fields['strategy']=forms.ModelChoiceField(queryset=Strategy.objects.filter(owner=profile), required=False)
         strategy_data = {
             # 'placeholder' : f'TradePosition {str(strategy)}' ,
             'name': 'strategy',

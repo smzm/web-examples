@@ -275,7 +275,7 @@ def trade_add(request):
         selected_wave_analysis = request.POST.getlist("wave_analysis")
         selected_fundamental_analysis = request.POST.getlist("fundamental_analysis")
 
-        trade_form = NewTradeForm(request.POST)
+        trade_form = NewTradeForm(request.POST, profile=profile)
         if trade_form.is_valid():
             new_trade = trade_form.save(commit=False)
             new_trade.owner = request.user.profile
