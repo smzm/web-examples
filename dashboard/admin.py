@@ -9,7 +9,7 @@ from .models import (TradePosition,
                     TechnicalIndicators,
                     WaveAnalysis,
                     FundamentalAnalysis,
-                    Strategy
+                    Strategy,
                     )
 
 
@@ -22,7 +22,7 @@ class TradePositionAdmin(admin.ModelAdmin):
 
 @admin.register(Strategy)
 class StrategyAdmin(admin.ModelAdmin):
-    list_display = ['name', 'balance', 'risk_on_balance']
+    list_display = ['name', 'balance', 'risk_balance']
 
 admin.site.register(Review)
 admin.site.register(Message)

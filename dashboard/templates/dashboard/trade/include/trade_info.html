@@ -70,9 +70,9 @@
                                     <div class="text-sm text-gray-500"> {{trade.size}} </div>
                                 </td>
                                 
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                     <div class="text-sm text-gray-500"> {{trade.leverage}} </div>
-                                </td>
+                                </td> -->
 
 
                             </tr>
@@ -81,7 +81,13 @@
                 </div>
             </div>
         </div>
-
+    {% if messages %}
+        {% for message in messages  %}
+            <div id="FLASH_MESSAGE" class="{% if message.tags == 'success' %} bg-green-500 {% endif %} p-2 rounded-lg absolute text-gray-100">
+                {{message}}
+            </div>
+        {% endfor %}
+    {% endif %}
 
 <script type="text/javascript">
     function myFunction(e){
@@ -89,4 +95,8 @@
             e.remove()
         }, 500)
     }
+    const flash_msg = document.getElementById('FLASH_MESSAGE')
+    flash_msg.addEventListener("click", () => {
+            flash_msg.remove()
+    })
 </script>        

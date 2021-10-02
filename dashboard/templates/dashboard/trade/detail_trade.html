@@ -6,7 +6,7 @@
 
 
 {% block content %}
-<input hidden id="PAGE_LOAD_TRADE_CHECK_HX" hx-post="{% url 'trade_check_hx' %}" hx-include="#NEW_TRADE_FORM" hx-headers='{"X-CSRFToken":"{{csrf_token}}"}' hx-trigger="load from:#PAGE_LOAD_TRADE_CHECK_HX" hx-target="#NEW_TRADE_FORM"/>
+<input hidden id="PAGE_LOAD_TRADE_CHECK_HX" hx-post="{% url 'trade_check_hx' %}" hx-target="#FORM_CAONTAINER" hx-include="#NEW_TRADE_FORM" hx-headers='{"X-CSRFToken":"{{csrf_token}}"}' hx-trigger="load from:#PAGE_LOAD_TRADE_CHECK_HX" hx-swap="innerHTML"/>
 
 <div id="DETAIL_TRADE" class="overflow-y-auto flex flex-grow">
 

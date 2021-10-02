@@ -1,7 +1,8 @@
 <div id="FORM_CAONTAINER">
 <form id="NEW_TRADE_FORM" method="POST"
     {% if trade_edit_state %} 
-        hx-post="{% url 'trade_edit' trade.id %}" hx-trigger="change,click from:#SIDE, submit" hx-target="#TRADE_INFO" hx-swap="outerHTML" hx-indicator="#indicator"
+        hx-post="{% url 'trade_edit' trade.id %}" hx-trigger="submit"  {% comment %} click from:#SIDE {% endcomment %}
+         hx-target="#TRADE_INFO" hx-swap="outerHTML" hx-indicator="#indicator"
     {% else %} 
          action="{% url 'trade_add' %}"
     {% endif %} 
@@ -11,21 +12,22 @@
     
     {% csrf_token %}
     {% comment %} <div id="indicator" class="htmx-indicator mx-auto sticky top-0 p-2 rounded-md bg-green-300">Updating...</div>  {% endcomment %}
-
     <div id="FORM_DATA">
             {% for field in tradeForm %}
                 <label id="FORM_LABEL" class="place-self-end m-4 flex items-center text-gray-500 p-1 text-base focus:text-blue-600">
                     {{field.label | title}} :
                 </label>
         
-                <div id="FORM_INPUT" class="flex flex-col items-center ">                               
+                <div id="FORM_INPUT" class="flex flex-col items-center ">       
+
                     {% if field.field.widget.attrs.id == 'SYMBOL' %}
-                        <div class="relative mb-4"> 
+                        <div class="relative mb-4">
                             {{field}}
-                            <div class="text-xs text-red-500 absolute left-4 ">
-                                {{symbol_error}}
+                            <div id="SYMBOL_ERROR" class="text-xs text-red-500 absolute left-4 ">
+                                {{tradeForm.symbol.errors}}
                             </div>
-                        </div> 
+                        </div>
+
                     {% elif field.field.widget.attrs.id == 'DATE' %}
                         <div class="relative">
                             {{field}}
@@ -33,38 +35,66 @@
                                 {{tradeForm.date.errors}} 
                             </div>
                         </div>
-                    {% elif field.field.widget.attrs.id == 'SIZE' %}
-                        <div class="relative mb-4">
-                            {{field}}
-                            <div class="text-xs text-yellow-500 absolute left-4 ">
-                                {{risk_error}}
-                            </div>
-                        </div>
+
                     {% elif field.field.widget.attrs.id == 'SIDE' %}
                         <div class="">
-                            
                             {{field}}
-                            <label for="side" class="hover:text-gray-700 cursor-pointer" {% if trade.side == 'Long' %}checked{% endif %} ></label>
+                            <label for="side" class="hover:text-gray-700 cursor-pointer" {% if trade.side == 'Long' %}checked{% endif %}></label>
                         </div>
-                        <!-- <label class="text-gray-300" for="SIDE">
+
+
+                        {% elif field.field.widget.attrs.id == 'SIZE' %}
+                        <div class="relative mb-4">
                             {{field}}
-                        </label> -->
+                        </div>
+                                           
+                        {% elif field.field.widget.attrs.id == 'TAKEPROFIT' %}
+                        <div class="relative mb-4">
+                            {{field}}
+                            <div class="text-xs text-red-500 absolute left-4 w-full ">
+                                {{tradeForm.takeprofit.errors}}
+                            </div>
+                        </div>
+
+                        {% elif field.field.widget.attrs.id == 'STOPLOSS' %}
+                        <div class="relative mb-4">
+                            {{field}}
+                            <div class="text-xs text-red-500 absolute left-4 w-full ">
+                                {{tradeForm.stoploss.errors}}
+                            </div>
+                            <div id="STRATEGY_ALERT" class="min-w-full text-xs text-yellow-500 absolute left-4 ">
+                                {% include "dashboard/trade/include/strategy_alert.html" %}
+                            </div>
+                        </div>
+
+                        {% comment %}
                     {% elif field.field.widget.attrs.id == 'slider' %}
-                        <input id="output" type="text" onchange="sliderChangeSet(this.value)" value="1" class="absolute text-sm focus:text-blue-700 bg-color-dark w-10 block text-gray-500 text-center focus:outline-none ">
+                        <input id="output" type="text" onchange="sliderChangeSet(this.value)" value="1" class="absolute text-sm focus:text-blue-700 bg-color-dark w-10 block text-gray-500 text-center focus:outline-none "> 
+                        {% endcomment %}
+
                     {% else %}
+
                         {{field}}
+
                     {% endif %}
                 </div>
             {% endfor %}
 
     </div>
 
-    {% include 'dashboard/trade/include/trade_analysis.html' %}
 
-    {% if not tradeForm.errors and not trade_edit_state%}
+    {% include 'dashboard/trade/include/trade_analysis.html' %}
+    {% if not tradeForm.errors%}
+        {% if trade_edit_state %}
+        <button name="tradeForm" type="submit" form="NEW_TRADE_FORM" value="submit" class="w-64 self-center my-10 text-gray-200 bg-blue-700 rounded-lg p-4 hover:bg-blue-800">
+                Update
+
+        </button>
+        {% else %}
         <button name="tradeForm" type="submit" form="NEW_TRADE_FORM" value="submit" class="w-64 self-center my-10 text-gray-200 bg-blue-700 rounded-lg p-4 hover:bg-blue-800">
                 Submit
         </button>
+        {% endif %}
     {% endif %}
 
 <input hidden name="trade_edit_state" value="{{trade_edit_state}}">

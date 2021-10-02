@@ -17,11 +17,15 @@ class TradePosition(models.Model):
     side_type = (('Long','Long'),
                 ('Short','Short'))
     side = models.CharField(max_length=6, choices=side_type)
-    # leverage = models.IntegerField(
-    #     default=1, validators=[MinValueValidator(1), MaxValueValidator(500)])
+    leverage = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(1000)])
+    takeprofit = models.FloatField(validators=[MinValueValidator(0)],null=True, blank=True)
+    stoploss = models.FloatField(validators=[MinValueValidator(0)], null=True, blank=True)
     comment = models.TextField(max_length=1000, null=True, blank=True)
     strategy = models.ForeignKey('Strategy',null=True,blank=True, on_delete=models.SET_NULL, related_name="trade")
-
+    # strategy_alert_type = (('risk_on_balance', 'risk on balance'),
+    #                        ('risk_on_position', 'risk on position'))
+    strategyAlert = models.CharField(max_length=1000, null=True)
+    rewardRisk = models.FloatField(null=True, blank=True)
     date = models.DateField()    #validators=[MaxValueValidator(limit_value=date.today)]
     time = models.TimeField()
 
@@ -55,6 +59,33 @@ class TradePosition(models.Model):
             self.calm_ratio = 0
             self.fear_ratio = 0
             self.save()
+
+    def strategy_calculation(self, trades):        
+        if trades : 
+            n_trade = trades.count()
+            balance = [ trades[0].strategy.balance ]
+            new_position_risk = []
+            for i in range(1, n_trade+1) :  
+                trade = trades[i-1]
+                remain_balance =  balance[i-1] - ( abs(trade.price - trade.stoploss) * trade.size)
+                balance.append(remain_balance)
+                new_position_risk.append(remain_balance * (trade.strategy.risk_position / 100 ))
+
+            self.strategy.new_position_risk = new_position_risk[-1]
+            self.strategy.save()
+
+    def reward_risk(self):
+        return float(self.takeprofit / self.stoploss)
+
+
+    def save(self, *args, **kwargs):
+        if self.strategy : 
+            self.rewardRisk = self.reward_risk()
+        super(TradePosition, self).save(*args, **kwargs)
+        
+
+
+
 
 
 
@@ -258,16 +289,28 @@ class Strategy(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=200)
     balance = models.FloatField(validators=[MinValueValidator(0)], null=True)
-    risk_on_balance = models.PositiveIntegerField(validators=[MaxValueValidator(100)], null=True)
-    value_risk = models.FloatField(null=True)
+    # equity = models.FloatField(validators=[MinValueValidator(0)], null=True)
+    risk_balance = models.PositiveIntegerField(validators=[MaxValueValidator(100)], null=True)
+    value_risk_balance = models.FloatField(null=True)
+    risk_position = models.PositiveIntegerField(validators=[MaxValueValidator(100)], null=True)
+    new_position_risk = models.FloatField(null=True)
 
-    def value_risk_on_balance(self):
-        value_risk_on_balance = float((self.risk_on_balance / 100) * self.balance)
-        return value_risk_on_balance
+    def calculate_value_risk_balance(self):
+        return float((self.risk_balance / 100) * self.balance)
 
     def save(self, *args, **kwargs):
-        self.value_risk = self.value_risk_on_balance()
+        self.value_risk_balance = self.calculate_value_risk_balance()
         super(Strategy, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
+
+
+# class RemainRisk(models.Model):
+#     value = models.FloatField(validators=[MinValueValidator(0)], null=True)
+#     owner = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL)
+#     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+#     strategy = models.ForeignKey(Strategy,null=True,blank=True, on_delete=models.CASCADE, related_name="remainrisk")
+#     trade = models.OneToOneField(TradePosition, on_delete=models.CASCADE, related_name="remainrisk")
+
+

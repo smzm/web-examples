@@ -26,20 +26,26 @@
     </div>
     <div class="m-4">
         <span class="bg-white p-4 rounded-lg">
-            risk (%) : 
+            risk on Balance: 
         </span>
         <span class="mx-4">
-            {{strategy.risk_on_balance}}
+            {{strategy.risk_balance}} %
+        </span>
+        <span class="mx-4"></span>
+            {{strategy.value_risk_balance}} $
         </span>
     </div>
-    <div class="m-4">
-        <span class="bg-white p-4 rounded-lg">
-            risk ($)
-        </span>
-        <span class="mx-4">
-            {{strategy.value_risk}}
-        </span>
-    </div>
+        <div class="m-4">
+            <span class="bg-white p-4 rounded-lg">
+                risk per position
+            </span>
+            <span class="mx-4">
+                {{strategy.risk_position}} %
+            </span>
+            <span class="mx-4"></span>
+                {{strategy.value_risk_position}} $
+            </span>
+        </div>
 </div>
 {% endblock content %}
 

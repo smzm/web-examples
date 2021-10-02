@@ -95,8 +95,7 @@ def strategy(request):
         if strategy_form.is_valid():
             strategy = strategy_form.save(commit=False)
             strategy.owner = profile
-            strategy.save()
-            context['value_risk'] = strategy.value_risk
+            strategy.save()        
     return render(request, "dashboard/strategy/strategy.html", context)
 
 
@@ -260,7 +259,6 @@ def trade_add(request):
     trade_edit_state = 0
     profile = request.user.profile
     trade_form = NewTradeForm(profile=profile)
-    print(trade_form)
     context = {
         "sidebar": sidebar,
         "profile": profile,
@@ -310,6 +308,11 @@ def trade_add(request):
                 analysis.Fundamental_Analysis = fundamental_analysis
             analysis.save()
             new_trade.analysis = analysis
+
+            trades = TradePosition.objects.filter(strategy=new_trade.strategy)
+            if new_trade.strategy : 
+                new_trade.strategy_calculation(trades)
+
             messages.success(request, "Your trade position was updated.")            
             return redirect("trade_detail", new_trade.id)
         else : 
@@ -370,14 +373,14 @@ def trade_edit(request, trade_pk):
             
             analysis.save()
             trade.analysis = analysis
+            
+            if trade.strategy : 
+                trades = TradePosition.objects.filter(strategy=trade.strategy)
+                trade.strategy_calculation(trades)
+
             messages.success(request, "Your trade position was updated.")
             return render(request, "dashboard/trade/include/trade_info.html", {"trade": trade})
-    return render(
-        request,
-        "dashboard/trade/include/trade_form.html",
-        {"tradeForm": trade_form, "trade_edit_state": trade_edit_state},
-    )
-
+    return render(request, "dashboard/trade/include/trade_form.html", {"tradeForm": trade_form, "trade_edit_state": trade_edit_state})
 
 
 
@@ -385,9 +388,10 @@ def trade_edit(request, trade_pk):
 def trade_delete(request, trade_pk):
     trade = TradePosition.objects.get(id=trade_pk)
     trade.delete()
+    trades = TradePosition.objects.filter(strategy=trade.strategy)
+    trade.strategy_calculation(trades or None)
     dynamicPath_newtrade = reverse("trades")
     return HttpResponseRedirect(dynamicPath_newtrade)
-
 
 
 
@@ -398,29 +402,51 @@ def trade_check_hx(request):
     trade_form = NewTradeForm(request.POST, profile=profile)
     trade_edit_state = int(request.POST['trade_edit_state'])
     context = {
-        "sidebar": sidebar,
-        "profile": profile,
         "tradeForm": trade_form,
         "trade_edit_state" : trade_edit_state
     }
     if request.htmx : 
+        price = float(request.POST.get('price') or 0)
+        strategy_id = request.POST.get('strategy')
+        try : 
+            strategy = Strategy.objects.get(id=(strategy_id or None))
+            strategy.calculate_value_risk_balance              
+        except Strategy.DoesNotExist :             
+            strategy = False
+        size = float(request.POST.get('size') or 0)
+        stoploss = float(request.POST.get('stoploss') or 0)
+
         if trade_edit_state : 
-            trade_id = request.POST['trade_id']
+            trade_id = request.POST['trade_id'] 
             trade = profile.tradeposition_set.get(id=trade_id)
+            trade.strategyAlert = []
             context['trade'] = trade
-        # Check Strategy Risk   
-        if request.POST.get('price') and request.POST.get('strategy') and request.POST.get('size'): 
-            strategy_id = request.POST.get('strategy')
-            strategy = Strategy.objects.get(id=strategy_id)
-            value_risk = float(strategy.value_risk)          
-            price = float(request.POST['price'])
-            size = float(request.POST['size'])
-            if strategy and price and size : 
-                if (price * size) > value_risk:
-                    context['risk_error'] = "Risk strategy alert."
-        # Check Symbol is not empty
-        if not request.POST.get('symbol') :
-            context['symbol_error'] = "Symbol is requierd."
+
+        # Check Strategy Risk On Balance
+        if strategy and price:
+            if size :
+                if (price * size) > strategy.value_risk_balance:
+                    context['risk_balance_alert'] = "Risk on balance is over"
+                    if trade_edit_state :
+                        trade.strategyAlert.append('risk_on_balance')
+                else : 
+                    if trade_edit_state and ('risk_on_balance' in trade.strategyAlert) :
+                        trade.strategyAlert.remove('risk_on_balance')
+
+            # Check Strategy Risk On position
+            if stoploss:
+                if abs(price - stoploss) >= strategy.new_position_risk :
+                    context['risk_position_alert'] = "Risk on position is over"
+                    if trade_edit_state :
+                        trade.strategyAlert.append('risk_on_position')
+                else : 
+                    if trade_edit_state and ('risk_on_position' in trade.strategyAlert) :
+                        trade.strategyAlert = trade.strategyAlert.remove('risk_on_position')
+
+
+            if trade_edit_state : 
+                trade.save()          
+
     return render(request, "dashboard/trade/include/trade_form.html", context)
 
 
