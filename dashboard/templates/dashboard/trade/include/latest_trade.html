@@ -1,4 +1,4 @@
-<div id="LATEST_TRADES" class="relative">
+<div id="LATEST_TRADES" class="">
 
     <h2 class="text-gray-600 text-2xl font-bold tracking-wider px-10 pb-10 antialiased"> LATEST TRADES </h2>
     <div class="grid grid-cols-5 text-center">
@@ -9,13 +9,20 @@
         <a href="{% url 'trade_add' %}" class="bg-color-light2 rounded-r-lg tracking-wider font-semibold text-gray-200 py-8 whitespace-nowrap"> <span class="bg-blue-400 hover:bg-blue-600 py-2 px-3 rounded-lg cursor-pointer transition duration-200"> + <span class="hidden lg:inline">Add New</span></a>      
     </div>
 
-    <div class="htmx-indicator text-center bg-gray-200 text-gray-400 rounded-lg p-6 w-full absolute">
+    {% comment %} 
+    <div class="htmx-indicator text-center bg-gray-200 text-gray-400 rounded-lg p-6 w-full absolute ">
                 Loading...
     </div>
+     {% endcomment %}
     {% if trades %}
         {% for trade in trades  %}
             <div class="grid grid-cols-5 text-center">
-                    <a href="{% url 'trade_detail' trade.id %}" class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-gray-400 text-center whitespace-nowrap lg:font-medium text-sm md:text-base"> {{trade.symbol}} {% if not trade.strategyAlert == '[]' %} <span class="text-red-400"> Break </span> {% endif %}  </a>
+                    <a href="{% url 'trade_detail' trade.id %}" class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-gray-400 text-center whitespace-nowrap lg:font-medium text-sm md:text-base">
+                         {{trade.symbol}}
+                          {% if not trade.strategyAlert == '[]' %} 
+                            <span class="text-red-400"> Break </span>
+                           {% endif %} 
+                    </a>
                     <a href="{% url 'trade_detail' trade.id %}" class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-center whitespace-nowrap "> <div class="lg:font-base text-sm md:text-xs text-gray-400">{{trade.date}}</div> <div class="lg:font-base text-sm md:text-xs text-gray-400 opacity-60" text-sm md:text-base> {{trade.time}}</div> </a>
                     <a href="{% url 'trade_detail' trade.id %}" class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-gray-400 text-center whitespace-nowrap lg:font-medium text-sm md:text-base"> {{trade.size}} </a>
                     <a href="{% url 'trade_detail' trade.id %}" class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-center whitespace-nowrap">
@@ -78,7 +85,9 @@
 </div>
 
 <script type="text/javascript">
+
 setTimeout(function () {
         document.getElementById('NO_TRADE').classList.remove('-translate-y-full');
 }, 1000);    
+
 </script>
