@@ -2,32 +2,6 @@
 
 
 
-{% block style %}
-<style>
-/* ======================  Spin Word*/
-    .spin_words{
-      animation: spin_words 5s infinite alternate ;
-      animation-timing-function: ease-in-out;
-    }
-    @keyframes spin_words{
-      0%{
-        transform: translateY(0%);
-      }
-      50%{
-        transform: translateY(0%);
-      }
-      55%{
-        transform: translateY(-100%);
-      }
-      100%{
-        transform: translateY(-100%);
-      }
-    }
-</style>
-{% endblock style %}
-
-
-
 {% block menu %}
     {% include 'include/menu.html' with active='dashboard' %}
 {% endblock menu %}
@@ -50,12 +24,11 @@
     </div>
     
     
-  <input hidden id="LATEST_TRADES_SORT" hx-get="/dashboard/latest_trades?order_by=datetime&last=&toggle=" hx-trigger="load from:#LATEST_TRADES_SORT" hx-target="#LATEST_TRADES" hx-swap="outerHTML">
+  <input hidden id="LATEST_TRADES_SORT" hx-get="/dashboard/latest_trades?order_by=datetime&last=&toggle=&page=dashboard" hx-trigger="load from:#LATEST_TRADES_SORT" hx-target="#LATEST_TRADES" hx-swap="outerHTML">
   {% include 'dashboard/trade/include/latest_trade.html' %}
 
 </div>
 {%endblock%}
-
 
 
 {% block user_sidebar %}

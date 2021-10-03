@@ -26,6 +26,7 @@ class TradePosition(models.Model):
     #                        ('risk_on_position', 'risk on position'))
     strategyAlert = models.CharField(max_length=1000, null=True)
     rewardRisk = models.FloatField(null=True, blank=True)
+    ispublic = models.BooleanField(default=True)
     date = models.DateField()    #validators=[MaxValueValidator(limit_value=date.today)]
     time = models.TimeField()
 

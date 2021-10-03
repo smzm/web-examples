@@ -43,13 +43,18 @@ def dashboard(request):
     return render( request, "dashboard/dashboard.html", {"sidebar": sidebar, "profile": profile, 'unread_count': unread_count})
 
 
-
-
 @login_required(login_url="/login/")
 def order_trades_hx(request):
     if request.htmx:
-        profile = request.user.profile
-        trades = profile.tradeposition_set.all().order_by('-date', '-time')[:3]
+        page = request.GET.get('page')
+        username = request.GET.get('username')
+        if username and page=="profile": 
+            profile = Profile.objects.get(username=username)
+            trades = profile.tradeposition_set.filter(ispublic=True).order_by('-date', '-time')[:3]
+        else :
+            profile = request.user.profile
+            trades = profile.tradeposition_set.all().order_by('-date', '-time')[:3]
+
         # There is Hardlink with this names inside lates_trade and dashboard Pages. dont change these name and functions
         _orderBy_ = request.GET.get('order_by')
         _lastOrder_ = request.GET.get('last')
@@ -77,7 +82,7 @@ def order_trades_hx(request):
         elif _orderBy_ == "size" and _lastOrder_ == "size":
             trades = sorted(trades, key=lambda trade : trade.size, reverse=_toggle_)
         _toggle_ = not _toggle_
-    return render( request, "dashboard/trade/include/latest_trade.html", {'trades': trades, 'order_by':_orderBy_, 'toggle':_toggle_})
+    return render( request, "dashboard/trade/include/latest_trade.html", {'profile':profile, 'trades': trades, 'order_by':_orderBy_, 'toggle':_toggle_, 'page':page})
 
 
 

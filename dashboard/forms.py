@@ -9,7 +9,7 @@ from .models import Message, Strategy, TradePosition
 class NewTradeForm(forms.ModelForm): 
     class Meta : 
         model = TradePosition
-        fields = ['symbol', 'date', 'time', 'side', 'strategy', 'price', 'size', 'leverage', 'takeprofit', 'stoploss', 'comment']
+        fields = ['symbol', 'date', 'time', 'side', 'strategy', 'price', 'size', 'leverage', 'takeprofit', 'stoploss', 'comment', 'ispublic']
 
 
     symbol = forms.CharField(
@@ -65,6 +65,9 @@ class NewTradeForm(forms.ModelForm):
 
     comment = forms.CharField(required=False, label="comment", widget=forms.widgets.TextInput(attrs={
         'name': 'comment', 'class': 'text-center w-36 bg-color-darker m-2 p-2 text-gray-400 border-2 focus:border-blue-800 border-gray-700 border-opacity-60 rounded-3xl outline-none transition-all duration-200'}))
+
+    # comment = forms.CharField(required=False, label="comment", widget=forms.widgets.TextInput(attrs={
+    #     'name': 'comment', 'class': 'text-center w-36 bg-color-darker m-2 p-2 text-gray-400 border-2 focus:border-blue-800 border-gray-700 border-opacity-60 rounded-3xl outline-none transition-all duration-200'}))
 
     def __init__(self, *args, **kwargs):
         profile = kwargs.pop('profile','')

@@ -13,12 +13,11 @@ class Profile(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     email = models.EmailField(max_length=200, null=True, blank=True)
     username = models.CharField(max_length=200, blank=True, null=True)
-    biography = models.TextField(max_length=500,blank=True, null=True)
+    biography = models.TextField(max_length=200,blank=True, null=True)
     profile_image = models.ImageField(
         null=True, blank=True, upload_to='static/images/profiles/', default='static/images/profiles/default/default_profile.jpg')
     github_account = models.CharField(max_length=200, null=True, blank=True)
     twitter_account = models.CharField(max_length=200, null=True, blank=True)
-    linkedin_account = models.CharField(max_length=200, null=True, blank=True)
     youtube_account = models.CharField(max_length=200, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 

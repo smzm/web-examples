@@ -12,8 +12,8 @@ from django.contrib.auth.decorators import login_required
 login_required(login_url="/login/")
 def profile(request, username):
     profile = Profile.objects.get(username=username)   
-    public_trades = profile.tradeposition_set.all().order_by('-date', '-time')
-    context = {'profile': profile, 'public_trades': public_trades}
+    public_trades = profile.tradeposition_set.filter(ispublic=True).order_by('-date', '-time')
+    context = {'profile': profile, 'trades': public_trades}
     return render(request, 'users/profiles.html', context)
 
 def profile_edit(request):
