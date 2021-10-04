@@ -118,7 +118,7 @@ def strategy_edit(request, strategy_id):
 
 # ================================================ History
 @login_required(login_url="/login/")
-def history(request):
+def history(request):   
     profile = request.user.profile
     today = datetime.date.today()
     year = today.year                   # Year of today
@@ -149,23 +149,36 @@ def history(request):
             'previous_month_str': previous_month_str
             }
 
-    monthly_trades = profile.tradeposition_set.filter(date__year=year, 
-                                                      date__month=month_num).order_by("-date",'-time').values_list('id','date','symbol')        # Get all trade of this month
-    trades_days = []
-    trades_id = []
-    trades_symbol = []
-    for index in range(0,len(monthly_trades)) : 
-        trade = monthly_trades[index]
-        trade_id = trade[0]
-        trade_day = trade[1].day
-        trade_symbol = trade[2]
-        trades_id.append(trade_id)          # All trade id for this month
-        trades_days.append(trade_day)       # All days user has trade 
-        trades_symbol.append(trade_symbol)  # All symbol trades in this month
-    trades_inforamtion = {'days': trades_days, 'id': trades_id, 'symbol':trades_symbol}   
-    return render(request, "dashboard//history/history.html", {"sidebar": sidebar, "profile": profile, "date": date, "trades_info": trades_inforamtion})
 
+    filters = {'trades': True}
+    trades_inforamtion = None
+    if request.htmx : 
+        if request.POST : 
+            enable_filter = request.POST.get('filters')
+            filters = {'enable_filter': enable_filter}
+            if enable_filter == 'trades' : 
+                monthly_trades = profile.tradeposition_set.filter(date__year=year, date__month=month_num).order_by("-date",'-time').values_list('id','date','symbol')        # Get all trade of this month
+                trades_days = []
+                trades_id = []
+                trades_symbol = []
+                for index in range(0,len(monthly_trades)) : 
+                    trade = monthly_trades[index]
+                    trade_id = trade[0]
+                    trade_day = trade[1].day
+                    trade_symbol = trade[2]
+                    trades_id.append(trade_id)          # All trade id for this month
+                    trades_days.append(trade_day)       # All days user has trade 
+                    trades_symbol.append(trade_symbol)  # All symbol trades in this month
+                trades_inforamtion = {'days': trades_days, 'id': trades_id, 'symbol':trades_symbol}   
 
+    time = range(0,24)
+    return render(request, "dashboard//history/history.html", { "sidebar": sidebar,
+                                                                "profile": profile,
+                                                                "date": date,
+                                                                "trades_info": trades_inforamtion,
+                                                                'time' : time,
+                                                                'filters': filters 
+                                                               })
 
 
 @login_required(login_url="/login/")
@@ -233,14 +246,30 @@ def change_month(request, change):
 
 
 @login_required(login_url="/login/")
-def filter_trades_by_date(request, date):
+def filter_by_date(request, date):
     profile = request.user.profile
+    time = range(0,24)
     day, month, year = date.split('-')
     trades = profile.tradeposition_set.filter(date__year=year, 
                                               date__month=month,
                                               date__day=day).order_by("-date",'-time')
-    trades, customRange = paginateTrades(request, trades, 2)
-    return render(request, 'dashboard/history/trades_by_date.html', {'trades':trades, 'customRange': customRange, 'day':day, 'month':month, 'year':year})
+
+    event=[]
+    trades_hour=[]
+    trades_minutes=[]
+    trades_symbol=[]
+    trades_price=[]
+    trades_side=[]
+    for trade in trades : 
+        event.append(trade.time.hour)
+        trades_hour.append(trade.time.hour)
+        trades_minutes.append(trade.time.minute)
+        trades_symbol.append(trade.symbol)
+        trades_price.append(trade.price)
+        trades_side.append(trade.side)
+    
+    trades_timeline = zip(trades_hour, trades_minutes,trades_symbol, trades_price, trades_side)
+    return render(request, 'dashboard/history/history_timeline.html', {'time':time, 'event': event,'trades':trades, 'trades_timeline':trades_timeline, 'day':day, 'month':month, 'year':year})
 
 
 

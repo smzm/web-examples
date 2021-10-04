@@ -7,7 +7,7 @@ urlpatterns = [
     path('dashboard/latest_trades', views.order_trades_hx, name="order_trades_hx"),
     path('history/', views.history, name="history"),
     path('history/change_month/<str:change>', views.change_month, name="change_month"),
-    path('history/date/<str:date>/', views.filter_trades_by_date, name="filter_trades_by_date"),   # Hard Link in calendar. don't change it unless update all urls
+    path('history/date/<str:date>/', views.filter_by_date, name="filter_by_date"),   # Hard Link in calendar. don't change path url unless update all urls in Calendar
 
     path('strategy/', views.strategy, name="strategy"),
     path('strategy/detail/<str:strategy_id>', views.strategy_edit, name="strategy_edit"),

@@ -7,27 +7,34 @@
 
 
 {% block content %}
-<div id="MAIN" class="flex flex-col flex-1 bg-color-light1 ">
+<div id="MAIN_HISTORY" class="flex flex-col flex-1 bg-color-light1 ">
     
     {% include "dashboard/history/calendar.html" %}    
-
+    
     <div class="flex flex-1">
-        <div id="HISTORY_SETTING" class="w-1/5 min-h-full p-4 bg-white border-l border-r border-b">  
-            <div class="mt-20">
-                <div class="m-4">
+        <form id="HISTORY_SETTING" class="w-1/5 min-h-full p-4 bg-white border-r border-l border-b border-t" hx-post="" hx-target="#CONTAINER" hx-swap="outerHTML" hx-trigger="change">  
+            {% csrf_token %}
+            <div class="mt-20 flex flex-col">
+                <label class="m-4">
                     Trades
-                </div>
-                <div class="m-4">
+                    <input id="trades_filter" name="filters" value="trades" type="radio" {% if filters.enable_filter == 'trades' %} checked {% endif %} >
+                </label>
+                <label class="m-4">
                     Review
-                </div>
-                <div class="m-4">
+                    <input id="review_filter" name="filters" value="reviews" type="radio" {% if filters.enable_filter == 'reviews' %} checked {% endif %}>
+                </label>
+                <label class="m-4">
                     Messeges
+                    <input id="messages_filter" name="filters" value="messages" type="radio" {% if filters.enable_filter == 'messages' %} checked {% endif %} >
+                </label>
+                <div class="mt-16 flex justify-center ">
+                    <input type="text" class="p-2 border rounded-lg" placeholder="search">
                 </div>
             </div>
-        </div>
-        <div id="TRADES_IN_DAY" class="w-4/5 p-10"></div>
-    </div>
+        </form>
 
+    {% include 'dashboard/history/history_timeline.html' %}
+
+    </div>
 </div>
 {% endblock content %}
-
