@@ -426,8 +426,9 @@ def trade_edit(request, trade_pk):
 def trade_delete(request, trade_pk):
     trade = TradePosition.objects.get(id=trade_pk)
     trade.delete()
-    trades = TradePosition.objects.filter(strategy=trade.strategy)
-    trade.strategy_calculation(trades or None)
+    if trade.strategy : 
+        trades = TradePosition.objects.filter(strategy=trade.strategy)
+        trade.strategy_calculation(trades or None)
     dynamicPath_newtrade = reverse("trades")
     return HttpResponseRedirect(dynamicPath_newtrade)
 

@@ -1,21 +1,21 @@
-<div id="CALENDAR" class="w-full border">
-    <ul class="flex justify-between items-center text-white h-52 bg-indigo-300 rounded-t-lg">
-        <form method="POST" hx-post="{% url 'change_month' 'Previous' %}" hx-target="#CALENDAR" hx-swap="outerHTML" class="text-lg m-4 text-blue-100">
+<div id="CALENDAR" class="w-full ">
+    <ul class="flex justify-between items-center text-gray-400 py-16 px-10 border bg-white rounded-t-lg">
+        <form method="POST" hx-post="{% url 'change_month' 'Previous' %}" hx-target="#CALENDAR" hx-swap="outerHTML" class="transition-transform transform hover:-translate-x-1 text-lg m-4">
             {% csrf_token %}
-            <input type="submit" value=" < {{date.previous_month_str}}" name="another_month" class="bg-indigo-300 cursor-pointer">
+            <input type="submit" value=" < {{date.previous_month_str}}" name="another_month" class="bg-white text-gray-300 cursor-pointer hover:text-gray-400">
             <input hidden value="{{date.year}}" name="data-year">
             <input hidden value="{{date.month_num}}" name="data-month">
             <input hidden value="{{date.day_num}}" name="data-day">
         </form>
 
-        <li class="text-2xl flex flex-col items-center ">
+        <li class="text-2xl flex flex-col text-gray-500 items-center font-black antialiased uppercase">
             {{date.month}}
-            <div class="block text-sm"> {{date.year}} </div>
+            <div class="block text-sm text-gray-400"> {{date.year}} </div>
         </li>
 
-        <form method="POST" hx-post="{% url 'change_month' 'Next' %}" hx-target="#CALENDAR" hx-swap="outerHTML" class="text-lg m-4 text-blue-100">
+        <form method="POST" hx-post="{% url 'change_month' 'Next' %}" hx-target="#CALENDAR" hx-swap="outerHTML" class="transition-transform transform hover:translate-x-1  text-lg m-4">
             {% csrf_token %}
-            <input type="submit" value="{{date.next_month_str}} > " name="another_month" class="bg-indigo-300 cursor-pointer">
+            <input type="submit" value="{{date.next_month_str}} > " name="another_month" class="bg-white text-gray-300 cursor-pointer hover:text-gray-400">
             <input hidden value="{{date.year}}" name="data-year">
             <input hidden value="{{date.month_num}}" name="data-month">
             <input hidden value="{{date.day_num}}" name="data-day">
@@ -25,27 +25,31 @@
 
 
 
-    <div id="weekdays" class="flex bg-gray-200 text-center ">
+    <div id="weekdays" class="flex bg-white ">
         {% for weekName, zip in date.weeks.items %}
-        <div class="grid grid-cols-7 border border-gray-500">
+        <div class="grid grid-flow-col auto-cols-auto {% if weekName == 'date.weekday_1' %} justify-end {%else%} justify-start {%endif%} w-full border-l border-b">
             {% for day in zip %}
             {% if day.0 %}
-            <div class="flex flex-col">
+            <div class="flex flex-col justify-center justify-items-center align-middle">
                 {% if date.year == date.today.year and date.month_num == date.today.month and day.0 == date.today.day %}
                 <!-- Today -->
-                <span class=" text-blue-700 bg-white font-medium rounded-lg w-12 mx-auto p-2"> {{day.1}} </span>
-                <span class=" text-blue-700 bg-white font-medium rounded-lg w-12 mx-auto p-2"> {{day.0}} </span>
+                <div class="h-full grid grid-rows-2 p-2 w-12">
+                    <span class=" text-blue-300 font-medium rounded-lg mx-auto p-2 "> {{day.1}} </span>
+                    <span class=" text-blue-400 font-medium rounded-lg mx-auto p-2 "> {{day.0}} </span>
+                </div>
                 {% else %}
                 {% if day.0 in trades_info.days  %}
                 <!-- any trade was registered on the day -->
-                <span class=" text-gray-500 bg-red-100 font-medium rounded-lg w-12 mx-auto p-2" hx-get="/history/date/{{day.0}}-{{date.month_num}}-{{date.year}}" hx-trriger="click"
-                    hx-target="#TRADES_IN_DAY"> {{day.1}} </span>
-                <span class=" text-gray-500 bg-red-100 font-medium rounded-lg w-12 mx-auto p-2" hx-get="/history/date/{{day.0}}-{{date.month_num}}-{{date.year}}" hx-trriger="click"
-                    hx-target="#TRADES_IN_DAY"> {{day.0}} </span>
+                <div class="w-12 h-full text-red-300 hover:text-red-500 hover:translate-y-2 transform transition-all grid grid-rows-2 p-2 cursor-pointer -ml-px -mr-px " hx-get="/history/date/{{day.0}}-{{date.month_num}}-{{date.year}}" hx-trriger="click" hx-target="#TRADES_IN_DAY">
+                    <div class="font-medium rounded-lg mx-auto p-2"> {{day.1}} </div>
+                    <div class="font-medium rounded-lg mx-auto p-2"> {{day.0}} </div>
+                </div>
                 {% else %}
                 <!-- NOT trade on this day -->
-                <span class=" text-gray-500 font-medium rounded-lg w-12 mx-auto p-2"> {{day.1}} </span>
-                <span class=" text-gray-500 font-medium rounded-lg w-12 mx-auto p-2"> {{day.0}} </span>
+                <div class="w-12 -ml-px -mr-px h-full grid grid-rows-2 p-2">
+                    <span class=" text-gray-300 font-medium rounded-lg mx-auto p-2"> {{day.1}} </span>
+                    <span class=" text-gray-300 font-medium rounded-lg mx-auto p-2"> {{day.0}} </span>
+                </div>
                 {% endif %}
                 {% endif %}
             </div>
@@ -54,3 +58,4 @@
         </div>
         {% endfor %}
     </div>
+</div>

@@ -45,7 +45,7 @@
             <div class="grid grid-cols-5 text-center">
                     <a href="{% url 'trade_detail' trade.id %}" class="pl-4 border-b border-gray-300 border-opacity-50 py-4 text-gray-400 text-center whitespace-nowrap lg:font-medium text-sm md:text-base">
                          {{trade.symbol}}
-                          {% if not trade.strategyAlert == '[]' %} 
+                          {% if  trade.strategy and not trade.strategyAlert == '[]' %} 
                             <span class="text-red-400"> Break </span>
                            {% endif %} 
                     </a>

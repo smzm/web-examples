@@ -11,7 +11,7 @@
             {{icon|safe}}
           </span>
         </a>
-        <span id="{{item}}_tooltip" class="antialiased absolute shadow-lg bg-color-light3 text-gray-400 text-center rounded-lg opacity-0 top-0 left-full ml-4 w-28 whitespace-nowrap font-normal transition-all duration-200">{{item|title}}</span>
+        <span id="{{item}}_tooltip" class="antialiased invisible absolute shadow-lg bg-color-light3 text-gray-400 text-center rounded-lg opacity-0 top-0 left-full ml-4 w-28 whitespace-nowrap font-normal transition-all duration-200">{{item|title}}</span>
       </li>
   {% endfor %} 
   </ul>
@@ -26,14 +26,14 @@ let {{item}} = document.querySelector('#{{item|upper}}')
 let tooltip_{{item}} = document.querySelector('#{{item}}_tooltip')
 
 {{item}}_trigger.addEventListener('mouseenter', () => {  
-    tooltip_{{item}}.classList.remove('opacity-0')
+    tooltip_{{item}}.classList.remove('opacity-0', 'invisible')
     tooltip_{{item}}.classList.add('opacity-1')
     tooltip_{{item}}.classList.remove('-top-4')
     tooltip_{{item}}.classList.add('top-0')
 })
 {{item}}.addEventListener('mouseleave', () => {
     tooltip_{{item}}.classList.remove('opacity-1')
-    tooltip_{{item}}.classList.add('opacity-0')
+    tooltip_{{item}}.classList.add('opacity-0', 'invisible')
     tooltip_{{item}}.classList.remove('top-0')
     tooltip_{{item}}.classList.add('-top-4')
 })
