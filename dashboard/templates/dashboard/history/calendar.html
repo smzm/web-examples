@@ -3,7 +3,7 @@
         <form method="POST" hx-post="{% url 'change_month' 'Previous' %}" hx-target="#CALENDAR" hx-swap="outerHTML" 
             class="text-lg m-4 text-blue-100">
             {% csrf_token %}
-            <input type="submit" value="previous" name="another_month" class="bg-indigo-300 cursor-pointer">
+            <input type="submit" value=" < {{date.previous_month_str}}" name="another_month" class="bg-indigo-300 cursor-pointer">
             <input hidden value="{{date.year}}" name="data-year">
             <input hidden value="{{date.month_num}}" name="data-month">
             <input hidden value="{{date.day_num}}" name="data-day">
@@ -17,91 +17,37 @@
         <form method="POST" hx-post="{% url 'change_month' 'Next' %}" hx-target="#CALENDAR" hx-swap="outerHTML" 
             class="text-lg m-4 text-blue-100">
             {% csrf_token %}
-            <input type="submit" value="next" data-month="{{date.month_num}}" name="another_month" class="bg-indigo-300 cursor-pointer">
+            <input type="submit" value="{{date.next_month_str}} > " name="another_month" class="bg-indigo-300 cursor-pointer">
             <input hidden value="{{date.year}}" name="data-year">
             <input hidden value="{{date.month_num}}" name="data-month">
             <input hidden value="{{date.day_num}}" name="data-day">
-
         </form>
     </ul>
     
-    <ul>
-        <ul id="weekdays" class="grid grid-cols-7 p-6 bg-gray-300 rounded-b-lg text-center">
-        <li class=" text-gray-500 font-medium rounded-lg w-12 mx-auto p-2"> Mon </li>
-        <li class=" text-gray-500 font-medium rounded-lg w-12 mx-auto p-2"> Tue </li>
-        <li class=" text-gray-500 font-medium rounded-lg w-12 mx-auto p-2"> Wed </li>
-        <li class=" text-gray-500 font-medium rounded-lg w-12 mx-auto p-2"> Thu </li>
-        <li class=" text-gray-500 font-medium rounded-lg w-12 mx-auto p-2"> Fri </li>
-        <li class=" text-gray-500 font-medium rounded-lg w-12 mx-auto p-2"> Sat </li>
-        <li class=" text-gray-500 font-medium rounded-lg w-12 mx-auto p-2"> Sun </li>
-    </ul>
 
-    <div>
 
-    </div>
-    {% if date.year == date.today.year and date.month_num == date.today.month %}         <!-- if showing the month we are inside it -->
-    <ul id="days" class="p-4 text-center">
-        <div class="grid grid-cols-7">
-            {% for empty_day in date.day_of_week %}         <!-- put empty li for days aren't in this month-->
-                <li class="p-2 text-gray-600 w-8 mx-auto"></li>
-            {% endfor %}
 
-            {% for day in date.month_range %}   <!-- For all days of this month-->
-                {% if  date.year <= date.today.year and date.month_num <= date.today.month and day < date.today.day  %} <!-- Past Days -->
-                    {% if day in trades_info.days  %}  <!-- any trade was registered on the day -->
-                        <li class="cursor-pointer p-2 text-gray-600 bg-red-200 rounded-lg w-8 mx-auto"
-                             hx-get="/history/date/{{day}}-{{date.month_num}}-{{date.year}}" hx-trriger="click" hx-target="#TRADES_IN_DAY"> 
-                            {{day}}
-                        </li>
-                    {% else %}    <!-- NOT trade on this day -->
-                        <li class="p-2 text-gray-400 w-8 mx-auto"> {{day}} </li>
-                    {% endif %}
-                {% elif date.year == date.today.year and date.month_num == date.today.month and day == date.today.day %} <!-- Today -->
-                    <li class="p-2 text-gray-600 bg-white rounded-lg w-8 mx-auto cursor-pointer" 
-                        hx-get="/history/date/{{day}}-{{date.month_num}}-{{date.year}}" hx-trriger="click" hx-target="#TRADES_IN_DAY"> {{day}} </li>
-                {% elif date.year >= date.today.year and date.month_num >= date.today.month and day > date.today.day    %} <!-- Future Days -->
-                    <li class="p-2 text-gray-300 w-8 mx-auto"> {{day}} </li>
-                {% endif %}
-            {% endfor %}
-
-        </div>
-    </ul>
-    
-{% else %}   <!-- if showing the month is different from right now : previous or next month -->
-    <ul id="days" class="p-4 text-center">
-        <div class="grid grid-cols-7">
-            {% for empty_day in date.day_of_week %}   <!-- put empty li for days aren't in this month-->
-                <li class="p-2 text-gray-600 w-8 mx-auto"></li>
-            {% endfor %}
-
-            {% for day in date.month_range %}       <!-- For all days of this month-->
-                {% if  date.year == date.today.year and date.month_num < date.today.month  %} <!-- Past Days of this year -->
-                    {% if day in trades_info.days  %}  <!-- any trade was registered on the day -->
-                        <li class="cursor-pointer p-2 text-gray-600 bg-red-200 rounded-lg w-8 mx-auto"
-                             hx-get="/history/date/{{day}}-{{date.month_num}}-{{date.year}}" hx-trriger="click" hx-target="#TRADES_IN_DAY"> 
-                            {{day}}
-                        </li>
-                    {% else %}    <!-- NOT trade on this day -->
-                        <li class="p-2 text-gray-400 w-8 mx-auto"> {{day}} </li>
-                    {% endif %}
-                {% elif date.year < date.today.year %}  <!-- Past years -->
-                        {% if day in trades_info.days  %}  <!-- any trade was registered on the day -->
-                            <li class="cursor-pointer p-2 text-gray-600 bg-red-200 rounded-lg w-8 mx-auto"
-                                hx-get="/history/date/{{day}}-{{date.month_num}}-{{date.year}}" hx-trriger="click" hx-target="#TRADES_IN_DAY"> 
-                                {{day}}
-                           </li>
-                         {% else %}    <!-- NOT trade on this day -->
-                            <li class="p-2 text-gray-400 w-8 mx-auto"> {{day}} </li>
+<div id="weekdays" class="flex bg-gray-200 text-center ">
+    {% for weekName, zip in date.weeks.items %}
+        <div class="grid grid-cols-7 border border-gray-500">
+        {% for day in zip %}
+            {% if day.0 %}
+            <div class="flex flex-col">
+               {% if date.year == date.today.year and date.month_num == date.today.month and day.0 == date.today.day %} <!-- Today -->
+                        <span class=" text-blue-700 bg-white font-medium rounded-lg w-12 mx-auto p-2"> {{day.1}} </span> 
+                        <span class=" text-blue-700 bg-white font-medium rounded-lg w-12 mx-auto p-2"> {{day.0}} </span> 
+                {% else %}
+                        {% if day.0 in trades_info.days  %}  <!-- any trade was registered on the day -->
+                            <span class=" text-gray-500 bg-red-100 font-medium rounded-lg w-12 mx-auto p-2" hx-get="/history/date/{{day.0}}-{{date.month_num}}-{{date.year}}" hx-trriger="click" hx-target="#TRADES_IN_DAY"> {{day.1}} </span> 
+                            <span class=" text-gray-500 bg-red-100 font-medium rounded-lg w-12 mx-auto p-2" hx-get="/history/date/{{day.0}}-{{date.month_num}}-{{date.year}}" hx-trriger="click" hx-target="#TRADES_IN_DAY"> {{day.0}} </span> 
+                        {% else %}    <!-- NOT trade on this day -->
+                            <span class=" text-gray-500 font-medium rounded-lg w-12 mx-auto p-2"> {{day.1}} </span> 
+                            <span class=" text-gray-500 font-medium rounded-lg w-12 mx-auto p-2"> {{day.0}} </span> 
                         {% endif %}
-                {% elif date.year == date.today.year and date.month_num > date.today.month %} <!-- Future Days of this year-->
-                    <li class="p-2 text-gray-300 w-8 mx-auto"> {{day}} </li>
-                {% elif date.year > date.today.year%} <!-- Future Days of next years -->
-                    <li class="p-2 text-gray-300 w-8 mx-auto"> {{day}} </li>
                 {% endif %}
-            {% endfor %}
-
+            </div>
+            {% endif %}
+        {% endfor %}
         </div>
-    </ul>
-{%endif%}
+    {% endfor %}
 </div>
-

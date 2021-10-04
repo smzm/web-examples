@@ -19,7 +19,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from users.models import Profile
 from .utils import searchTrade, paginateTrades
-import calendar as cal
+import calendar
 import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -116,7 +116,6 @@ def strategy_edit(request, strategy_id):
     return render(request, 'dashboard/strategy/strategy_edit.html', context)
 
 
-
 # ================================================ History
 @login_required(login_url="/login/")
 def history(request):
@@ -125,16 +124,31 @@ def history(request):
     year = today.year                   # Year of today
     month_num = today.month             # Month of today
     month_str = today.strftime('%B')    # Month of today in letters
+    next_month_str = (datetime.date.today() + relativedelta(months=1)).strftime('%B')
+    previous_month_str = (datetime.date.today() - relativedelta(months=1)).strftime('%B')
     day_num = today.day                 # Day of Today
-    day_of_week, month_range = cal.monthrange(year, month_num)      # day_of_week : after many day month begins     month_range: how many days month have
+
+    days_of_month = calendar.monthcalendar(year, month_num)
+
+    weekdays_list = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+    weekdays_list = weekdays_list * len(days_of_month)
+
+    weekday = {}
+    for i in range(0,len(days_of_month)):  
+        weekday[f'date.weekday_{i+1}'] = zip([ j for j in days_of_month[i] if days_of_month[i]], weekdays_list)
+
+
     date = {'year': year,
             'month': month_str,
             'month_num': month_num,
-            'day_num' : day_num, 
-            'month_range': range(1, month_range + 1 ) ,
-            'day_of_week' : range(1, day_of_week + 1 ),
-            'today': today
+            'day_num' : day_num,
+            'today': today,
+            'weeks' : weekday,
+            'number_of_weeks' : len(days_of_month),
+            'next_month_str' : next_month_str, 
+            'previous_month_str': previous_month_str
             }
+
     monthly_trades = profile.tradeposition_set.filter(date__year=year, 
                                                       date__month=month_num).order_by("-date",'-time').values_list('id','date','symbol')        # Get all trade of this month
     trades_days = []
@@ -149,9 +163,8 @@ def history(request):
         trades_days.append(trade_day)       # All days user has trade 
         trades_symbol.append(trade_symbol)  # All symbol trades in this month
     trades_inforamtion = {'days': trades_days, 'id': trades_id, 'symbol':trades_symbol}   
-    return render(
-        request, "dashboard//history/history.html", {"sidebar": sidebar, "profile": profile, "date": date, "trades_info": trades_inforamtion}
-    )
+    return render(request, "dashboard//history/history.html", {"sidebar": sidebar, "profile": profile, "date": date, "trades_info": trades_inforamtion})
+
 
 
 
@@ -162,24 +175,44 @@ def change_month(request, change):
         data_year = int(request.POST.get('data-year'))
         data_month = int(request.POST.get('data-month'))
         data_day = int(request.POST.get('data-day'))
+
         today = datetime.date.today()
         if change == "Next" :
             new_date = datetime.date(data_year, data_month, data_day) + relativedelta(months=1)
         elif change == "Previous" :
             new_date = datetime.date(data_year, data_month, data_day) - relativedelta(months=1)     
+
         year = new_date.year
         month_num = new_date.month
-        day_num = new_date.day
-        day_of_week, month_range = cal.monthrange(year, month_num)
         month_str = new_date.strftime('%B')
+        day_num = new_date.day
+
+        next_month_str = (datetime.date(year, month_num, day_num) + relativedelta(months=1)).strftime('%B')
+        previous_month_str = (datetime.date(year, month_num, day_num) - relativedelta(months=1)).strftime('%B')
+
+        days_of_month = calendar.monthcalendar(year, month_num)
+
+        weekdays_list = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+        weekdays_list = weekdays_list * len(days_of_month)
+
+        weekday = {}
+        for i in range(0,len(days_of_month)):  
+            weekday[f'date.weekday_{i+1}'] = zip([ j for j in days_of_month[i] if days_of_month[i]], weekdays_list)
+
+        # day_of_week, month_range = calendar.monthrange(year, month_num)      # day_of_week : after many day month begins     month_range: how many days month have
+        
+
         date = {'year': year,
-                'month': month_str,
-                'month_num': month_num,
-                'day_num' : day_num, 
-                'month_range': range(1, month_range+1) ,
-                'day_of_week' : range(1, day_of_week+1),
-                'today': today
+            'month': month_str,
+            'month_num': month_num,
+            'day_num' : day_num,
+            'today': today,
+            'weeks' : weekday,
+            'number_of_weeks' : len(days_of_month),
+            'next_month_str' : next_month_str, 
+            'previous_month_str': previous_month_str
         }
+
         monthly_trades = profile.tradeposition_set.filter(date__year=year, 
                                                       date__month=month_num).order_by("-date",'-time').values_list('id','date','symbol')
         trades_days = []
