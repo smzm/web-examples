@@ -34,21 +34,21 @@
                     {% if date.year == date.today.year and date.month_num == date.today.month and day.0 == date.today.day %}
                         <!-- Today -->
                         <div class="grid grid-rows-2 m-auto ">
-                            <span class=" bg-blue-50 text-blue-300 rounded-full p-2 font-thin text-sm w-9 h-9 text-center"> {{day.1}} </span>
+                            <span class=" bg-blue-100 text-blue-300 rounded-full p-2 font-thin text-sm w-9 h-9 text-center"> {{day.1}} </span>
                             <span class=" text-blue-300 font-medium rounded-lg mx-auto p-2 "> {{day.0}} </span>
                         </div>
                     {% else %}
                         {% if day.0 in trades_info.days  %}
                             <!-- any trade was registered on the day -->
                             <div class="text-red-300 hover:text-red-500 hover:translate-y-2 transform transition-all grid grid-rows-2 m-auto text-center cursor-pointer" hx-get="/history/date/{{day.0}}-{{date.month_num}}-{{date.year}}" hx-trriger="click" hx-target="#HISTORY_TIMELINE" hx-swap="outerHTML">
-                                <div class="bg-red-50 rounded-full p-2 font-thin text-sm w-9 h-9"> {{day.1}} </div>
+                                <div class="bg-red-100 rounded-full p-2 font-thin text-sm w-9 h-9"> {{day.1}} </div>
                                 <div class="font-medium rounded-lg mx-auto p-2"> {{day.0}} </div>
                             </div>
                         {% else %}
                             <!-- NOT trade on this day -->
                             <div class="grid grid-rows-2 text-center m-auto">
-                                <span class=" text-gray-300 bg-gray-50 rounded-full p-2 font-thin text-sm w-9 h-9 "> {{day.1}} </span>
-                                <span class=" text-gray-300 font-medium rounded-lg mx-auto p-2"> {{day.0}} </span>
+                                <span class=" text-gray-400 text-opacity-60 bg-gray-100 rounded-full p-2 font-thin text-sm w-9 h-9 "> {{day.1}} </span>
+                                <span class=" text-gray-400 text-opacity-70 font-medium rounded-lg mx-auto p-2"> {{day.0}} </span>
                             </div>
                         {% endif %}
                     {% endif %}
