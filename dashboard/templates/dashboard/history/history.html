@@ -7,12 +7,12 @@
 
 
 {% block content %}
-<div id="MAIN_HISTORY" class="flex flex-col flex-1 bg-color-light1 ">
-    
+<div id="MAIN_HISTORY" class="flex flex-col flex-1 bg-color-light1">
+
     {% include "dashboard/history/calendar.html" %}    
-    
-    <div class="flex flex-1">
-        <form id="HISTORY_SETTING" class="w-1/5 min-h-full p-4 bg-white border-r border-l border-b border-t" hx-post="" hx-target="#CONTAINER" hx-swap="outerHTML" hx-trigger="change">  
+
+    <div class="flex flex-1 overflow-y-hidden">
+        <form id="HISTORY_SETTING" class="w-1/5 p-4 bg-white border-r border-l border-b border-t border-4 " hx-post="" hx-target="#CONTAINER" hx-swap="outerHTML" hx-trigger="change">  
             {% csrf_token %}
             <div class="mt-20 flex flex-col">
                 <label class="m-4">
@@ -31,10 +31,11 @@
                     <input type="text" class="p-2 border rounded-lg" placeholder="search">
                 </div>
             </div>
-        </form>
-
-    {% include 'dashboard/history/history_timeline.html' %}
+            </form>
+        
+        {% include 'dashboard/history/history_timeline.html' %}
 
     </div>
+
 </div>
 {% endblock content %}

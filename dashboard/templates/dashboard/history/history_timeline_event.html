@@ -1,0 +1,117 @@
+{% block style %}
+<style>
+.event-am, .event-pm{
+    overflow: hidden;
+}
+
+.event-am:hover div:last-child{
+    transform : translateX(0%) ;
+}
+.event-am div:last-child{
+    transform : translateX(-100%) ;
+}
+
+.event-pm:hover div:last-child{
+    transform : translateX(0%) ;
+}
+.event-pm div:last-child{
+    transform : translateX(+100%) ;
+}
+</style>
+{% endblock style %}
+
+
+
+<div class="flex flex-col text-red-500 text-opacity-60 text-sm font-semibold relative z-50 transition-all duration-300">
+    <div class="my-4">
+        {{hour}}
+    </div>
+
+    <div id="TIMELINE_RULLER" class="border-l-2 border-red-300 border-dotted h-full transform translate-x-1/2 transition-all opacity-100 relative z-0 drop-shadow-lg">
+        <div class="absolute">
+           
+            {% for trade in trades %}
+                <div id="EVENT_CONTAINER" class="z-30 max-h-full min-h-full flex flex-col">
+                
+                    {% if hour == trade.time.hour and hour < 12 %}
+                        <div class="transform -translate-x-5">
+                            <div data-onparse="set-height"  data-time="{{trade.time.minute}}" class="flex transition-all duration-1000 ease-out event-am rounded-lg">
+                                    <div class="flex items-center justify-center w-10 h-10 text-center p-2 bg-white border-2 border-red-300  antialiased z-20 relative  rounded-lg cursor-pointer ">
+                                        <span>
+                                            {{trade.time.hour}}
+                                        </span>:
+                                        <span>
+                                            {{trade.time.minute}}
+                                        </span>
+                                    </div>
+                                    <div class="border-2 border-white bg-red-100 h-10 antialiased p-2 flex items-center justify-center z-10 relative rounded-lg cursor-pointer transition-all duration-500 ease-out text-center">
+                                        <a href="{% url 'trade_detail' trade.id %}">
+                                            {{trade.symbol}}&nbsp;&nbsp;{{trade.side}}&nbsp;&nbsp;{{trade.price}}
+                                        </a>
+                                    </div>
+                            </div>
+                    </div>
+                
+                    {% elif hour == trade.time.hour and hour >= 12  %}
+                        <div class="left-5 transform -translate-x-full">
+                            <div data-onparse="set-height" data-time="{{trade.time.minute}}" class="flex flex-row-reverse transition-all duration-1000 ease-out event-pm rounded-lg">
+                                    <div class="flex items-center justify-center w-10 h-10 text-center p-2 bg-white border-2 border-red-300  antialiased z-20 relative  rounded-lg cursor-pointer ">
+                                        <span>
+                                            {{trade.time.hour}}
+                                        </span>:
+                                        <span>
+                                            {{trade.time.minute}}
+                                        </span>
+                                    </div>
+                                    <div class="border-2 border-white bg-red-100 h-10 antialiased p-2 flex items-center justify-center z-10 relative rounded-lg cursor-pointer transition-all duration-500 ease-out text-center">
+                                        <a href="{% url 'trade_detail' trade.id %}">
+                                            {{trade.symbol}}&nbsp;&nbsp;{{trade.side}}&nbsp;&nbsp;{{trade.price}}
+                                        </a>
+                                    </div>
+                                </div>
+                        </div>
+                    {% endif %}
+                </div>
+                
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+ 
+    // ================== SET HEIGHT OF EVENT LIKE TRADE AS THEIR MINUTE THEY HAVE 
+    // Create (homemade) parse event
+    let parseEvent = new Event('parse');
+    // Create Initialising Function which can be run at any time
+    const initialiseParseableElements = () => {
+        // Get all the elements which need to respond to an onparse event
+        let elementsWithParseEventListener = document.querySelectorAll('[data-onparse]');
+        // Attach Event Listeners and Dispatch Events
+        elementsWithParseEventListener.forEach((elementWithParseEventListener) => {
+            elementWithParseEventListener.addEventListener('parse', updateParseEventTarget, false);
+            elementWithParseEventListener.dataset.onparsed = elementWithParseEventListener.dataset.onparse;
+            elementWithParseEventListener.removeAttribute('data-onparse');
+            elementWithParseEventListener.dispatchEvent(parseEvent);
+        });
+    }
+    // Callback function for the Parse Event Listener
+    const updateParseEventTarget = (e) => {
+        let minute = e.target.dataset.time
+        
+        let clientHeight = document.getElementById('TIMELINE_RULLER').clientHeight;
+
+        e.target.setAttribute("style", `transform:translateY(calc( (${clientHeight}px/60) * (${minute})-10) ) ;`);
+    }
+    // Run Initialising Function
+    initialiseParseableElements();
+
+
+
+
+
+</script>

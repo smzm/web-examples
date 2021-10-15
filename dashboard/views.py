@@ -249,27 +249,18 @@ def change_month(request, change):
 def filter_by_date(request, date):
     profile = request.user.profile
     time = range(0,24)
+    sixty_minutes = range(1, 61)
     day, month, year = date.split('-')
     trades = profile.tradeposition_set.filter(date__year=year, 
                                               date__month=month,
-                                              date__day=day).order_by("-date",'-time')
-
-    event=[]
+                                              date__day=day).order_by("date",'time')
     trades_hour=[]
-    trades_minutes=[]
-    trades_symbol=[]
-    trades_price=[]
-    trades_side=[]
+    trades_minute=[]
     for trade in trades : 
-        event.append(trade.time.hour)
         trades_hour.append(trade.time.hour)
-        trades_minutes.append(trade.time.minute)
-        trades_symbol.append(trade.symbol)
-        trades_price.append(trade.price)
-        trades_side.append(trade.side)
-    
-    trades_timeline = zip(trades_hour, trades_minutes,trades_symbol, trades_price, trades_side)
-    return render(request, 'dashboard/history/history_timeline.html', {'time':time, 'event': event,'trades':trades, 'trades_timeline':trades_timeline, 'day':day, 'month':month, 'year':year})
+        trades_minute.append(trade.time.minute)
+    trades_info = [trades_hour, trades_minute]
+    return render(request, 'dashboard/history/history_timeline.html', {'time':time, 'sixty_minutes':sixty_minutes, 'trades_hour': trades_hour,'trades':trades, 'trades_info':trades_info, 'day':day, 'month':month, 'year':year})
 
 
 

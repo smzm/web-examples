@@ -1,41 +1,81 @@
-<div id="HISTORY_TIMELINE" class="w-4/5 p-10 border-t">
-    <div class="flex flex-1 h-full justify-between ">
-        {% for hour in time %}
-        {% if hour == 0 or hour == 12  %}
-            <div class="flex flex-col text-gray-400 text-opacity-60 text-sm font-semibold">
-                <span class="my-4">
-                    {{hour}}:00
-                </span>
-                <span class="border-l-2 border-gray-300 border-dotted h-full transform translate-x-1/2"></span>
+<div id="HISTORY_TIMELINE" class="w-full p-14 border-t overflow-y-auto border-4">
+    
+    {% for hour in time %}
+
+        <div class="flex items-center justify-center m-10">
+            <div id="EVENT" class="text-gray-300 mx-10">
+                {{hour}}:00
             </div>
-        {% elif hour == 23 %}
-            <div class="flex flex-col text-gray-400 text-opacity-60 text-sm font-semibold">
-                <span class="my-4">
-                    {{hour}}:59
-                </span>
-                <span class="border-l-2 border-gray-300 border-dotted h-full transform translate-x-1/2"></span>
-            </div>
-        {% elif hour in event %}
-            <div class="flex flex-col relative text-red-500 text-opacity-60 text-sm font-semibold">
-                <span class="my-4">
-                    {{hour}}
-                </span>
-                <span class="border-l-2 border-red-300 border-dotted h-full transform translate-x-1/2"></span>
-                {% for trade in trades_timeline %}
-                <div class="bg-white rounded-lg p-3 absolute left-0 top-28 w-96">
-                    <span class="">{{trade.0}}:{{trade.1}}</span>
-                    <span class="">{{trade.2}}</span>
+            <span class="border-t-2 border-dotted border-gray-300 w-full "></span>
+        </div>
+
+        {% if hour in trades_hour %}
+            {% for trade in trades  %}
+                <div class="grid grid-cols-2">
+                    {% if hour == trade.time.hour and trade.side == "Long" %}
+                        <div class="bg-green-100 p-4 border-2 border-white text-gray-400 rounded-lg m-2">
+                            {{trade}} - {{trade.time.hour}}:{{trade.time.minute}}
+                        </div>
+                    {% elif hour == trade.time.hour and trade.side == "Short" %}
+                        <div class="bg-red-100 p-4 border-2 border-white text-gray-400 rounded-lg m-2">
+                            {{trade}} - {{trade.time.hour}}:{{trade.time.minute}}
+                        </div>
+                    {% endif %}
                 </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div class="flex flex-col text-yellow-500 text-opacity-60 text-sm font-semibold invisible opacity-0">
-                <span class="my-4">
-                    {{hour}}
-                </span>
-                <span class="border-l-2 border-yellow-300 border-dotted h-full transform translate-x-1/2"></span>
-            </div>
+            {% endfor %} 
         {% endif %}
-        {% endfor %}
-    </div>
+
+
+    {% endfor %}
+
 </div>
+
+
+
+
+{% comment %} 
+   <div class="flex flex-1 h-full justify-between ">
+
+    {% for hour in time  %}
+        
+        {% if hour == 0 or hour == 12 %}      <!-- If hour is 00:00 or 12:00 -->
+            {% if hour in trades_info.0 %}          <!-- If was a trade in this hour -->
+                {% include 'dashboard/history/history_timeline_event.html' %}
+            {% else %}                              <!-- If wasn't any trade in this hour -->
+                <div class="flex flex-col text-gray-400 text-opacity-60 text-sm font-semibold transition-all duration-300 relative z-0">
+                    <div class="my-4">
+                        {{hour}}:00
+                    </div>
+                    <div id="TIMELINE_RULLER" class="border-l-2 border-gray-300 border-dotted h-full transform translate-x-1/2 transition-all"></div>
+                </div>
+            {% endif %}
+
+
+        {% elif hour == 23 %}               <!-- If hour is 23 -->
+                <div class="flex flex-col text-gray-400 text-opacity-60 text-sm font-semibold transition-all duration-300 relative z-0">
+                    <div class="my-4">
+                        {{hour}}:59
+                    </div>
+                    <div id="TIMELINE_RULLER" class="border-l-2 border-gray-300 border-dotted h-full transform translate-x-1/2 transition-all "></div>
+                </div>
+            {% if hour in trades_info.0 %}
+                {% include 'dashboard/history/history_timeline_event.html' %}
+            {% endif %}
+
+
+        {% else %}                         <!-- For other hours -->         
+            {% if hour in trades_info.0 %}
+                {% include 'dashboard/history/history_timeline_event.html' %}
+            {% else %}
+                <div class="flex flex-col text-red-500 text-opacity-60 text-sm font-semibold transition-all duration-300 opacity-0 invisible relative z-0">
+                    <div class="my-4 opacity-0">
+                        {{hour}}
+                    </div>
+                    <div id="TIMELINE_RULLER" class="border-l-2 border-red-300 border-dotted h-full transform translate-x-1/2 transition-all opacity-0"></div>
+                </div>
+            {% endif %}
+
+        {% endif %}
+    {% endfor %}
+
+    </div>  {% endcomment %}

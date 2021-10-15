@@ -1,4 +1,4 @@
-<div id="CALENDAR" class="w-full ">
+<div id="CALENDAR" class="w-full">
     <ul class="flex justify-between items-center text-gray-400 py-16 px-10 border bg-white rounded-t-lg">
         <form method="POST" hx-post="{% url 'change_month' 'Previous' %}" hx-target="#CALENDAR" hx-swap="outerHTML" class="transition-transform transform hover:-translate-x-1 text-lg m-4">
             {% csrf_token %}
