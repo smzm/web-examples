@@ -1,0 +1,7 @@
+Metatrader5
+datetime
+numpy
+pandas 
+plotly
+rich
+ta
