@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 export default function Converter({ currencies }) {
 	const [amount, setAmount] = useState(1);
+
+	// Initiate state with Lazy Callback
 	const [base, setBase] = useState(function () {
 		return currencies[0];
 	});
@@ -67,7 +69,9 @@ export default function Converter({ currencies }) {
 	// fetch data from API whenever [[amount input]], [[base currency]] and [[quote currency]] changed
 	useEffect(
 		function () {
+      // Create a new AbortController instance for each request
 			const controller = new AbortController();
+
 			async function FetchRatio() {
 				try {
 					// if [[amount input]] is zero
@@ -98,6 +102,7 @@ export default function Converter({ currencies }) {
 			}
 			FetchRatio();
 			return function () {
+        // effect cleanup function :  Cancel the fetch request if new request is made 
 				controller.abort();
 			};
 		},
