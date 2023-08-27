@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+// App Component
 export default function App() {
 	const [amount, setAmount] = useState(1);
 	const [base, setBase] = useState("USD");
