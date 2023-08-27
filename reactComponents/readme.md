@@ -1,2 +1,2 @@
 # React Components 
-### [Converter](./src/conveverter.js)
+### [Converter](./src/converter.js)
