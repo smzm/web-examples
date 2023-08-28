@@ -1,44 +1,77 @@
-import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 
 export default function Converter({ currencies }) {
 	const [amount, setAmount] = useState(1);
 
 	// Initiate state with Lazy Callback
 	const [base, setBase] = useState(function () {
-		return currencies[0];
+    // If there is a [[base]] currency in local storage, use it. Otherwise, use the first currency in the list
+		return localStorage.getItem("base") ? localStorage.getItem("base") : currencies[0];
 	});
 	const [quote, setQuote] = useState(function () {
-		return currencies[1];
+    // If there is a [[quote]] currency in local storage, use it. Otherwise, use the second currency in the list
+		return localStorage.getItem("quote") ? localStorage.getItem("quote") : currencies[1];
 	});
+
 	const [ratio, setRatio] = useState();
 
+	// use ref hook to store input element and use it for add event listener
+	const inputEl = useRef(null);
+  // Create an effect hook to focus on input element when [[Enter]] key is pressed
+	useEffect(function () {
+		const callback = function (e) {
+      // if [[Enter]] key is pressed
+			if (e.code === "Enter") {
+				inputEl.current.focus();
+			}
+		};
+		document.addEventListener("keydown", callback);
+		// Clean up function : remove event listener when component unmount. it's because we don't want to add multiple event listener
+		return () => document.removeEventListener("keydown", callback);
+	}, []);
+
+  // Store previous [[base]] to handle when [[base]] currency changed to what [[quote]] currency is
+	const prevBase = useRef("");
+	useEffect(
+		function () {
+			prevBase.current = base;
+		},
+		[base],
+	);
 	function handleBase(e) {
 		const base = e.target.value;
-
 		// If [[base]] currency changed to what [[quote]] currency is, change [[quote]] to what was [[base]] before
 		if (base === "USD" && quote === "USD") {
-			setQuote(localStorage.getItem("base"));
+			setQuote(prevBase.current);
 		}
 		if (base === "EUR" && quote === "EUR") {
-			setQuote(localStorage.getItem("base"));
+			setQuote(prevBase.current);
 		}
 		if (base === "GBP" && quote === "GBP") {
-			setQuote(localStorage.getItem(""));
+			setQuote(prevBase.current);
 		}
 		setBase(e.target.value);
 	}
 
+  // Store previous [[quote]] to handle when [[quote]] currency changed to what [[base]] currency is
+	const prevQuote = useRef("");
+	useEffect(
+		function () {
+			prevQuote.current = quote;
+		},
+		[quote],
+	);
 	function handleQuote(e) {
 		const quote = e.target.value;
 		// If [[quote]] currency changed to what [[base]] currency is, change [[base]] to what was [[quote]] before
 		if (base === "USD" && quote === "USD") {
-			setBase(localStorage.getItem("quote"));
+			setBase(prevQuote.current);
 		}
 		if (base === "EUR" && quote === "EUR") {
-			setBase(localStorage.getItem("quote"));
+			setBase(prevQuote.current);
 		}
 		if (base === "GBP" && quote === "GBP") {
-			setBase(localStorage.getItem("quote"));
+			setBase(prevQuote.current);
 		}
 		setQuote(e.target.value);
 	}
@@ -69,7 +102,7 @@ export default function Converter({ currencies }) {
 	// fetch data from API whenever [[amount input]], [[base currency]] and [[quote currency]] changed
 	useEffect(
 		function () {
-      // Create a new AbortController instance for each request
+			// Create a new AbortController instance for each request
 			const controller = new AbortController();
 
 			async function FetchRatio() {
@@ -102,7 +135,7 @@ export default function Converter({ currencies }) {
 			}
 			FetchRatio();
 			return function () {
-        // effect cleanup function :  Cancel the fetch request if new request is made 
+				// effect cleanup function :  Cancel the fetch request if new request is made
 				controller.abort();
 			};
 		},
@@ -118,9 +151,20 @@ export default function Converter({ currencies }) {
 		[base, quote],
 	);
 
+  // Retrieve [[base]] and [[quote]] from local storage in the first render
+  useEffect(function () {
+    setBase(localStorage.getItem("base"));
+    setQuote(localStorage.getItem("quote"));
+  }, []);
+
 	return (
 		<div>
-			<input type="text" value={amount} onChange={(e) => handleAmount(e)} />
+			<input
+				ref={inputEl}
+				type="text"
+				value={amount}
+				onChange={(e) => handleAmount(e)}
+			/>
 			<select name="" id="" value={base} onChange={(e) => handleBase(e)}>
 				<option value="USD">USD</option>
 				<option value="EUR">EUR</option>
