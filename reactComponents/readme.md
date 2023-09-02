@@ -5,6 +5,8 @@
 ```
 <br>
 <br>
-<hr>
 
 ## [CompleteCalculator](./src/calculator.js)
+```js
+<Calculator/>
+```
