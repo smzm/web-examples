@@ -1,12 +1,12 @@
 # React Components 
-## [Converter](./src/converter.js)
+## [Converter](./src/Converter.js)
 ```js
 <Converter currencies={["USD", "EUR", "GBP"]} />
 ```
 <br>
 <br>
 
-## [CompleteCalculator](./src/calculator.js)
+## [CompleteCalculator](./src/Calculator.js)
 ```js
 <Calculator/>
 ```
