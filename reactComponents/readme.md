@@ -3,3 +3,5 @@
 ```js
 <Converter currencies={["USD", "EUR", "GBP"]} />
 ```
+
+## [CompleteCalculator](./src/calculator.js)
