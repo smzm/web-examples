@@ -1,0 +1,152 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id                         String                  @id @default(cuid())
+  name                       String?
+  username                   String?                 @unique
+  email                      String?                 @unique
+  cleanEmail                 String?                 @unique
+  emailVerified              DateTime?
+  phoneNumber                String?                 @unique
+  phoneVerified              DateTime?
+  password                   String?
+  createdAt                  DateTime                @default(now())
+  updatedAt                  DateTime                @updatedAt
+  image                      String?
+  otpByAuthenticator         Boolean                 @default(false)
+  otpByAuthenticatorVerified Boolean                 @default(false)
+  otpByAuthenticatorSecret   String?
+  otpByAuthenticatorUrl      String?
+  otpByPhone                 Boolean                 @default(false)
+  otpByPhoneVerified         DateTime?
+  Accounts                   Account[]
+  Profile                    Profile?
+  PasswordResetToken         PasswordResetToken?
+  EmailVerificationToken     EmailVerificationToken?
+  JwtToken                   JwtToken[]
+  ConversationMemberOne      Conversation[]          @relation("memberOne")
+  ConversationMemberTwo      Conversation[]          @relation("memberTwo")
+  Message                    Message[]
+  Notification               Notification[]
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  updatedAt DateTime @updatedAt
+  role      UserRole @default(USER)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @unique
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  email             String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  expiresAt DateTime
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @unique
+
+  @@unique([userId, token])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  expiresAt DateTime
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @unique
+
+  @@unique([userId, token])
+}
+
+model PhoneNumberToken {
+  id          String   @id @default(cuid())
+  token       String
+  phoneNumber String   @unique
+  expiresAt   DateTime
+
+  @@unique([phoneNumber, token])
+}
+
+model JwtToken {
+  id      String   @id @default(cuid())
+  token   String   @unique
+  expires DateTime
+  userId  String   @unique
+  User    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Conversation {
+  id           String         @id @default(cuid())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  memberOne    User           @relation("memberOne", fields: [memberOneId], references: [id], onDelete: Cascade)
+  memberOneId  String
+  memberTwo    User           @relation("memberTwo", fields: [memberTwoId], references: [id], onDelete: Cascade)
+  memberTwoId  String
+  Message      Message[]
+  isSeen       Boolean        @default(false)
+  Notification Notification[]
+
+  @@unique([memberOneId, memberTwoId])
+  @@index([memberOneId, memberTwoId])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  content        String       @db.Text
+  fileUrl        String?      @db.Text
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  senderId       String
+
+  @@index([conversationId])
+}
+
+model Notification {
+  id             String       @id @default(cuid())
+  createdAt      DateTime     @default(now())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([conversationId, userId])
+}

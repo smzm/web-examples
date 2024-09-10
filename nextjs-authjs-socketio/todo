@@ -1,0 +1,19 @@
+// TODO Long Term :
+
+- Create email smtp in server for sending emails
+- Rate limiter with user restriction instead of ip
+- Set username and password for redis
+- Create official google oauth client id and secret
+- Error handling with error files
+- Ceate metadata
+- Write a script in bash to connect to DB and delete all token are expired
+- Add last logined time to user model
+- sign in with jwt is just necessary for oauth because there is no clear process to signup and signin in authjs for oauth. but i use jwt for credentials after set name and username to signin user again. if i don't have oauth i can handle this in own login form for email signin and signup form in signup state in their server actions.
+  the process is create a state for showing name and username if it's not set. so when name and username is not set in db it get back from server action to the form but this time name and username field shown and again signin or signup with the form again.
+
+// TODO Short Term :
+
+- login with username and password for emailless acount ?
+- change phone number in profile page
+- change username in profile page
+- add authentication with apple(oauth)

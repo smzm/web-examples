@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* Change Autocomplete styles in Chrome*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 2px solid #25252d;
+  -webkit-text-fill-color: #c7c7d1;
+  -webkit-box-shadow: 0 0 0px 1000px #151519 inset;
+  box-shadow: 0 0 0px 1000px #09090b inset;
+  transition: background-color 5000s ease-in-out 0s;
+  color: white;
+  caret-color: white;
+}
+
+@layer components {
+  .debug {
+    @apply border border-red-500;
+  }
+}
